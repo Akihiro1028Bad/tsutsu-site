@@ -33,8 +33,8 @@ export default function Footer() {
   // 案1: ミニマル・エレガント
   const MinimalDesign = () => (
     <footer className="bg-black text-gray-300">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+      <div className="container mx-auto px-4 sm:px-6 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8 md:mb-12">
           {/* ロゴセクション */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -76,7 +76,7 @@ export default function Footer() {
                   <a
                     key={item.name}
                     href={item.href}
-                    className="group flex items-center space-x-2 text-sm text-gray-400 hover:text-white transition-colors duration-300"
+                    className="group flex items-center space-x-2 text-sm text-gray-400 hover:text-white transition-colors duration-300 min-h-[44px]"
                   >
                     <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                     <span className="relative">
@@ -109,7 +109,7 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`group flex items-center space-x-2 text-sm text-gray-400 ${social.color} transition-colors duration-300`}
+                    className={`group flex items-center space-x-2 text-sm text-gray-400 ${social.color} transition-colors duration-300 min-h-[44px]`}
                   >
                     <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
                     <span>{social.name}</span>

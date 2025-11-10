@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex items-center justify-center overflow-hidden bg-white min-h-[92dvh] md:min-h-[90dvh] lg:min-h-[100vh] py-20 md:py-32"
+      className="relative flex items-center justify-center overflow-hidden bg-white min-h-[92dvh] md:min-h-[90dvh] lg:min-h-[100vh] py-12 md:py-32"
     >
       {/* Subtle Grid Background */}
       <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true" data-parallax>
@@ -24,7 +24,7 @@ export default function Hero() {
       </div>
 
       {/* コンテンツを中央に配置し、最大幅を制限して余白を確保 */}
-      <div className="w-full max-w-[800px] mx-auto px-8 sm:px-12 md:px-16 lg:px-20 relative z-10">
+      <div className="w-full max-w-[800px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -40,7 +40,7 @@ export default function Hero() {
             className="mb-8 md:mb-10"
             {...({} as any)}
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-5 md:mb-6 leading-[1.2] text-slate-950 tracking-tight break-words">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-light mb-4 md:mb-6 leading-[1.2] text-slate-950 tracking-tight break-words">
               {titleLines.map((line, lineIndex) => (
                 <motion.span
                   key={lineIndex}
@@ -130,7 +130,7 @@ export default function Hero() {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               whileFocus={{ scale: 1.02, y: -2 }}
-              className="px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 bg-slate-950 text-white rounded-none font-normal tracking-[0.08em] hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group overflow-hidden w-full sm:w-auto text-center"
+              className="px-8 sm:px-10 md:px-12 py-3 sm:py-3 md:py-4 min-h-[44px] flex items-center justify-center bg-slate-950 text-white rounded-none font-normal tracking-[0.08em] hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group overflow-hidden w-full sm:w-auto text-center"
               aria-label="サービス一覧へ移動"
               {...({} as any)}
             >
@@ -149,7 +149,7 @@ export default function Hero() {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               whileFocus={{ scale: 1.02, y: -2 }}
-              className="px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-4 bg-transparent text-slate-950 rounded-none font-normal tracking-[0.08em] border border-slate-950 hover:bg-slate-50 focus:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group w-full sm:w-auto text-center"
+              className="px-8 sm:px-10 md:px-12 py-3 sm:py-3 md:py-4 min-h-[44px] flex items-center justify-center bg-transparent text-slate-950 rounded-none font-normal tracking-[0.08em] border border-slate-950 hover:bg-slate-50 focus:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group w-full sm:w-auto text-center"
               aria-label="お問い合わせフォームへ移動"
               {...({} as any)}
             >
@@ -159,12 +159,12 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - モバイルでは非表示、デスクトップでは中央下に配置 */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 2.2, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed bottom-8 right-8 z-50"
+        className="hidden md:flex fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
         aria-label="スクロールインジケーター"
         {...({} as any)}
       >
@@ -172,7 +172,7 @@ export default function Hero() {
           href="#services"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center text-slate-400 hover:text-slate-600 focus:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 rounded-full p-2 transition-colors group"
+          className="flex flex-col items-center text-slate-400 hover:text-slate-600 focus:text-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 rounded-full p-2 min-h-[44px] min-w-[44px] justify-center transition-colors group"
           aria-label="次のセクションへスクロール"
           {...({} as any)}
         >

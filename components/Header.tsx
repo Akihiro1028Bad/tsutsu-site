@@ -53,7 +53,7 @@ export default function Header() {
       }`}
       {...({} as any)}
     >
-      <nav className="container mx-auto px-6 py-3 md:py-4">
+      <nav className="container mx-auto px-4 sm:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <motion.a
             href="#home"
@@ -72,7 +72,7 @@ export default function Header() {
                 alt="tsutsu"
                 width={240}
                 height={96}
-                className="h-20 md:h-24 lg:h-28 w-auto transition-all duration-300"
+                className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto transition-all duration-300"
                 priority
               />
             </motion.div>
@@ -105,7 +105,7 @@ export default function Header() {
           </div>
 
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-slate-100/50 transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-slate-100/50 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="メニュー"
           >
@@ -147,7 +147,7 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block py-3 text-sm font-medium transition-colors duration-200 ${
+                  className={`block py-3 min-h-[44px] flex items-center text-sm font-medium transition-colors duration-200 ${
                     activeSection === item.id
                       ? 'text-slate-950 border-l-2 border-slate-950 pl-4'
                       : 'text-slate-600 hover:text-slate-950 pl-4'
@@ -224,7 +224,7 @@ export default function Header() {
                 alt="tsutsu"
                 width={240}
                 height={96}
-                className="h-20 md:h-24 lg:h-28 w-auto transition-all duration-300"
+                className="h-12 sm:h-16 md:h-24 lg:h-28 w-auto transition-all duration-300"
                 priority
               />
             </motion.div>
@@ -260,14 +260,14 @@ export default function Header() {
           {/* Mobile: Logo Left, Menu Right */}
           <div className="lg:hidden flex items-center justify-between w-full">
             <a href="#home" className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="tsutsu"
-                width={240}
-                height={96}
-                className="h-16 w-auto"
-                priority
-              />
+            <Image
+              src="/logo.png"
+              alt="tsutsu"
+              width={240}
+              height={96}
+              className="h-12 sm:h-16 w-auto"
+              priority
+            />
             </a>
             <button
               className="p-2 rounded-lg hover:bg-slate-100/50 transition-colors"
@@ -313,7 +313,7 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block py-3 text-sm font-medium transition-colors duration-200 ${
+                  className={`block py-3 min-h-[44px] flex items-center text-sm font-medium transition-colors duration-200 ${
                     activeSection === item.id
                       ? 'text-slate-950 border-l-2 border-slate-950 pl-4'
                       : 'text-slate-600 hover:text-slate-950 pl-4'
@@ -1113,7 +1113,7 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block py-3 text-sm font-medium transition-colors duration-200 ${
+                  className={`block py-3 min-h-[44px] flex items-center text-sm font-medium transition-colors duration-200 ${
                     activeSection === item.id
                       ? 'text-slate-950 border-l-2 border-slate-950 pl-4'
                       : 'text-slate-600 hover:text-slate-950 pl-4'
@@ -1342,7 +1342,7 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block py-3 text-sm font-medium transition-colors duration-200 ${
+                  className={`block py-3 min-h-[44px] flex items-center text-sm font-medium transition-colors duration-200 ${
                     activeSection === item.id
                       ? 'text-slate-950 border-l-2 border-slate-950 pl-4'
                       : 'text-slate-600 hover:text-slate-950 pl-4'

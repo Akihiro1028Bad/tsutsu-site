@@ -6,7 +6,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-20 md:py-32"
+      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-12 md:py-32"
     >
       {/* Subtle Grid Background */}
       <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
@@ -19,7 +19,7 @@ export default function About() {
         />
       </div>
 
-      <div className="w-full max-w-[1600px] mx-auto px-8 sm:px-12 md:px-16 lg:px-20 relative z-10">
+      <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -29,7 +29,7 @@ export default function About() {
           className="text-center mb-12 md:mb-16"
           {...({} as any)}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
             プロフィール
           </h2>
           <motion.div
@@ -62,7 +62,7 @@ export default function About() {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full md:w-80 lg:w-96 bg-slate-50/30 border-r border-slate-200/40 p-8 md:p-12 flex flex-col justify-center"
+              className="w-full md:w-80 lg:w-96 bg-slate-50/30 border-r border-slate-200/40 p-6 sm:p-8 md:p-12 flex flex-col justify-center"
               {...({} as any)}
             >
               {/* Basic Info - Minimal */}
@@ -88,7 +88,7 @@ export default function About() {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="flex-1 bg-white p-10 md:p-16"
+              className="flex-1 bg-white p-6 sm:p-10 md:p-16"
               {...({} as any)}
             >
               <div className="space-y-8 max-w-3xl">
@@ -96,12 +96,12 @@ export default function About() {
                   <div className="mb-2">
                     <span className="text-xs text-slate-400 font-normal tracking-[0.15em] uppercase">tsutsu</span>
                   </div>
-                  <h3 className="text-4xl md:text-6xl font-light text-slate-950 tracking-tight leading-[0.95] mb-6">
+                  <h3 className="text-3xl sm:text-4xl md:text-6xl font-light text-slate-950 tracking-tight leading-[0.95] mb-6">
                     堤　暁寛
                   </h3>
                 </div>
 
-                <div className="space-y-6 text-base md:text-lg text-slate-600 leading-relaxed font-light">
+                <div className="space-y-4 sm:space-y-6 text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed font-light">
                     <p>元消防士のフリーランスエンジニア。</p>
                     <p>4年間の現場経験を経て、3年前にエンジニアへ転身。</p>
                     <p>複数プロジェクトの設計・実装・運用を担当し、2025年8月に独立。</p>

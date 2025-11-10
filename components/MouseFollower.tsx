@@ -6,6 +6,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 export default function MouseFollower() {
   const [isHovering, setIsHovering] = useState(false)
   const [isClickable, setIsClickable] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   // Smooth spring animation for cursor position
   const cursorX = useSpring(0, { stiffness: 150, damping: 25 })
@@ -14,8 +15,47 @@ export default function MouseFollower() {
   const ringOpacity = useSpring(0.4, { stiffness: 200, damping: 25 })
   const innerRingScale = useTransform(ringScale, (scale) => scale * 0.64)
 
+  // スマホ検出（タッチデバイス OR 画面幅768px以下）
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const checkMobile = () => {
+      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      const isPointerCoarse = window.matchMedia('(pointer: coarse)').matches
+      const isSmallScreen = window.matchMedia('(max-width: 768px)').matches
+      
+      setIsMobile(hasTouch || isPointerCoarse || isSmallScreen)
+    }
+
+    checkMobile()
+
+    // リサイズ時に再チェック
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    const handleResize = () => checkMobile()
+    
+    // モダンブラウザではaddEventListener、古いブラウザではaddListener
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleResize)
+    } else {
+      mediaQuery.addListener(handleResize)
+    }
+
+    window.addEventListener('resize', checkMobile)
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleResize)
+      } else {
+        mediaQuery.removeListener(handleResize)
+      }
+      window.removeEventListener('resize', checkMobile)
+    }
+  }, [])
+
   // Mouse tracking
   useEffect(() => {
+    // スマホの場合はイベントリスナーを登録しない
+    if (isMobile) return
     let animationFrameId: number
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -70,13 +110,14 @@ export default function MouseFollower() {
       document.removeEventListener('mouseover', handleMouseOver)
       if (animationFrameId) cancelAnimationFrame(animationFrameId)
     }
-  }, [cursorX, cursorY, ringScale, ringOpacity])
+  }, [cursorX, cursorY, ringScale, ringOpacity, isMobile])
 
   // Check for reduced motion preference
   const prefersReducedMotion =
     typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  if (prefersReducedMotion || !isHovering) {
+  // スマホまたはアニメーション無効化設定の場合は表示しない
+  if (prefersReducedMotion || !isHovering || isMobile) {
     return null
   }
 

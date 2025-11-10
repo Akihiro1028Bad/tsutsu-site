@@ -99,7 +99,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-20 md:py-32"
+      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-12 md:py-32"
     >
       {/* Subtle Grid Background */}
       <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
@@ -112,7 +112,7 @@ export default function Contact() {
         />
       </div>
 
-      <div className="w-full max-w-[1600px] mx-auto px-8 sm:px-12 md:px-16 lg:px-20 relative z-10">
+      <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -122,7 +122,7 @@ export default function Contact() {
           className="text-center mb-12 md:mb-16"
           {...({} as any)}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
             お問い合わせ
           </h2>
           <motion.div
@@ -155,7 +155,7 @@ export default function Contact() {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full md:w-80 lg:w-96 bg-slate-50/30 border-r border-slate-200/40 p-8 md:p-12 flex flex-col justify-center"
+              className="w-full md:w-80 lg:w-96 bg-slate-50/30 border-r border-slate-200/40 p-6 sm:p-8 md:p-12 flex flex-col justify-center"
               {...({} as any)}
             >
               <div className="relative z-10 w-full space-y-8">
@@ -225,7 +225,7 @@ export default function Contact() {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="flex-1 bg-white p-10 md:p-16"
+              className="flex-1 bg-white p-6 sm:p-10 md:p-16"
               {...({} as any)}
             >
               <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
@@ -242,7 +242,7 @@ export default function Contact() {
                     id="name"
                     value={formData.name}
                     onChange={handleChange('name')}
-                    className={`w-full px-4 py-3 bg-transparent border-b ${
+                    className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
                       errors.name
                         ? 'border-red-300 focus:border-red-500'
                         : 'border-slate-200 focus:border-slate-950'
@@ -274,7 +274,7 @@ export default function Contact() {
                     id="email"
                     value={formData.email}
                     onChange={handleChange('email')}
-                    className={`w-full px-4 py-3 bg-transparent border-b ${
+                    className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
                       errors.email
                         ? 'border-red-300 focus:border-red-500'
                         : 'border-slate-200 focus:border-slate-950'
@@ -306,7 +306,7 @@ export default function Contact() {
                     id="subject"
                     value={formData.subject}
                     onChange={handleChange('subject')}
-                    className={`w-full px-4 py-3 bg-transparent border-b ${
+                    className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
                       errors.subject
                         ? 'border-red-300 focus:border-red-500'
                         : 'border-slate-200 focus:border-slate-950'
@@ -338,7 +338,7 @@ export default function Contact() {
                     value={formData.message}
                     onChange={handleChange('message')}
                     rows={6}
-                    className={`w-full px-4 py-3 bg-transparent border-b ${
+                    className={`w-full px-4 py-3 min-h-[120px] bg-transparent border-b ${
                       errors.message
                         ? 'border-red-300 focus:border-red-500'
                         : 'border-slate-200 focus:border-slate-950'
@@ -364,7 +364,7 @@ export default function Contact() {
                     disabled={isSubmitting}
                     whileHover={{ scale: isSubmitting ? 1 : 1.02, y: isSubmitting ? 0 : -2 }}
                     whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                    className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-3 md:py-4 bg-slate-950 text-white rounded-none font-normal tracking-[0.08em] hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-3 md:py-4 min-h-[44px] flex items-center justify-center bg-slate-950 text-white rounded-none font-normal tracking-[0.08em] hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
                     {...({} as any)}
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
