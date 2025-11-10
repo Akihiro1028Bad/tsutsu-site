@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 type Service = {
   title: string
@@ -24,8 +24,9 @@ const services: Service[] = [
       'お問い合わせ・予約導線の改善',
     ],
     targetAudience: [
-      '「自分の事業をきちんと形にしたい」',
-      '「信頼感のあるサイトを持ちたい」',
+      '自分の事業をきちんと形にしたい方',
+      '信頼感のあるサイトを持ちたい方',
+      '既存サイトの使いやすさを改善したい方',
     ],
     number: '01',
     gradient: 'from-slate-400 via-slate-500 to-slate-600',
@@ -43,6 +44,7 @@ const services: Service[] = [
     targetAudience: [
       '「スプレッドシートや手作業が限界…」',
       '「業務をスムーズに回せる仕組みが欲しい」',
+      '小さく試しながら、相談しながら進めたい方',
     ],
     number: '02',
     gradient: 'from-slate-500 via-slate-600 to-slate-700',
@@ -51,15 +53,16 @@ const services: Service[] = [
   },
   {
     title: '業務改善・自動化（AI/ツール活用）',
-    description: 'AIだけに依存するのではなく、現場に合わせて「続けられる形」で改善を行います。小さな一歩から一緒に整えていきます。',
+    description: '現場の業務に合わせて、無理なく続けられる改善を設計します。手間を減らし、作業の見える化や標準化を一緒に進めていきます。',
     capabilities: [
       '業務フローの整理・可視化',
       'Notion / Google Workspace / Zapier などの導入・構築',
       '必要に応じた生成AIの活用（FAQ、自動応答、文章整理など）',
     ],
     targetAudience: [
-      '「毎日の作業を少しでも楽にしたい」',
-      '「まずは相談しながら進めたい」',
+      '毎日の作業を少しでも楽にしたい方',
+      'ツールは知っているが、何から始めればいいかわからない方',
+      '小さく試しながら、相談しながら進めたい方',
     ],
     number: '03',
     gradient: 'from-slate-400 via-slate-500 to-slate-600',
@@ -70,13 +73,14 @@ const services: Service[] = [
     title: '学習支援・キャリア支援',
     description: '未経験〜初中級エンジニアの方に向けて、学習〜実践〜キャリアの段階を、一緒に並走しながら進めます。「ただ教わる」ではなく、「自分で考えて作れる力」を育てます。',
     capabilities: [
-      '個別の学習プラン作成',
-      '実装支援・コードレビュー',
-      'ポートフォリオ制作・転職 / 案件獲得の相談',
+      '個別の学習プラン作成・進捗サポート',
+      'ポートフォリオ制作支援',
+      '転職活動・案件獲得に向けた実践的なアドバイス',
     ],
     targetAudience: [
-      '「一人だと学習が続かない…」',
-      '「現場レベルの考え方を身につけたい」',
+      '一人だと学習が続かない方',
+      '教材は終えたが、実際に何を作ればいいかわからない方',
+      '現場レベルの考え方・実践力を身につけたい方',
     ],
     number: '04',
     gradient: 'from-slate-500 via-slate-600 to-slate-700',
@@ -110,7 +114,7 @@ function ImageBlock({
           initial={{ opacity: 0, scale: 1.05 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0 group-hover:opacity-[0.5] transition-opacity duration-500 z-0"
           style={{
             backgroundImage: `url(${service.backgroundImage})`,
@@ -119,6 +123,7 @@ function ImageBlock({
             backgroundRepeat: 'no-repeat',
             opacity: 0.5,
             filter: 'saturate(0.4) brightness(0.92)',
+            willChange: 'opacity, transform',
           }}
           aria-hidden="true"
           {...({} as any)}
@@ -161,9 +166,25 @@ function ImageBlock({
 function ServiceCard({ service, index }: ServiceCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [activeTab, setActiveTab] = useState<TabType>('capabilities')
+  const [isMobile, setIsMobile] = useState(false)
   
+  // スマホ検出
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    const checkMobile = () => {
+      const isSmallScreen = window.matchMedia('(max-width: 768px)').matches
+      setIsMobile(isSmallScreen)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+  
+  // スマホではスクロール連動アニメーションを無効化
   const { scrollYProgress } = useScroll({
-    target: ref as React.RefObject<HTMLElement>,
+    target: isMobile ? undefined : (ref as React.RefObject<HTMLElement>),
     offset: ['start end', 'end start']
   })
 
@@ -176,7 +197,11 @@ function ServiceCard({ service, index }: ServiceCardProps) {
   return (
     <motion.div
       ref={ref}
-      style={{ y, opacity, scale }}
+      style={{ 
+        y: isMobile ? 0 : y, 
+        opacity: isMobile ? 1 : opacity, 
+        scale: isMobile ? 1 : scale 
+      }}
       className="relative"
       {...({} as any)}
     >
@@ -184,11 +209,12 @@ function ServiceCard({ service, index }: ServiceCardProps) {
       <div className={`flex flex-col-reverse md:flex-row items-stretch gap-0 ${isLeft ? '' : 'md:flex-row-reverse'}`}>
         {/* Main Content Block */}
         <motion.div
-          initial={{ x: isLeft ? -60 : 60, opacity: 0 }}
+          initial={{ x: isMobile ? 0 : (isLeft ? -60 : 60), opacity: isMobile ? 1 : 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: isMobile ? '-50px' : '-100px' }}
+          transition={{ duration: isMobile ? 0.5 : 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex-1 w-full md:w-auto"
+          style={{ willChange: 'transform, opacity' }}
           {...({} as any)}
         >
           <motion.div
@@ -271,7 +297,8 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                        style={{ willChange: 'transform, opacity' }}
                         {...({} as any)}
                       >
                         <div
@@ -286,8 +313,9 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                                 key={i}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: i * 0.05 }}
+                                transition={{ duration: 0.2, delay: i * 0.03 }}
                                 className="text-sm sm:text-base md:text-base text-slate-600 flex items-start gap-3"
+                                style={{ willChange: 'transform, opacity' }}
                                 {...({} as any)}
                               >
                                 <span className="text-slate-400 mt-1.5 flex-shrink-0">•</span>
@@ -304,7 +332,8 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                        style={{ willChange: 'transform, opacity' }}
                         {...({} as any)}
                       >
                         <div
@@ -319,8 +348,9 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                                 key={i}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: i * 0.05 }}
+                                transition={{ duration: 0.2, delay: i * 0.03 }}
                                 className="text-sm sm:text-base md:text-base text-slate-600 flex items-start gap-3"
+                                style={{ willChange: 'transform, opacity' }}
                                 {...({} as any)}
                               >
                                 <span className="text-slate-400 mt-1.5 flex-shrink-0">•</span>
@@ -341,8 +371,9 @@ function ServiceCard({ service, index }: ServiceCardProps) {
               initial={{ width: 0 }}
               whileInView={{ width: '100%' }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mt-12"
+              style={{ willChange: 'width' }}
               aria-hidden="true"
               {...({} as any)}
             />
@@ -351,11 +382,12 @@ function ServiceCard({ service, index }: ServiceCardProps) {
 
         {/* Image Block - スマホで上部、タブレット以上でサイドに */}
         <motion.div
-          initial={{ x: isLeft ? 60 : -60, opacity: 0 }}
+          initial={{ x: isMobile ? 0 : (isLeft ? 60 : -60), opacity: isMobile ? 1 : 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: isMobile ? '-50px' : '-100px' }}
+          transition={{ duration: isMobile ? 0.5 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
           className={`w-full md:w-80 lg:w-96 aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:h-auto bg-gradient-to-br ${service.bgGradient} relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500 border border-slate-200/50 hover:border-slate-300`}
+          style={{ willChange: 'transform, opacity' }}
           {...({} as any)}
         >
           <ImageBlock service={service} isMobile={true} className="absolute inset-0 w-full h-full" />
@@ -388,8 +420,9 @@ export default function Services() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-12 md:mb-28"
+          style={{ willChange: 'transform, opacity' }}
           {...({} as any)}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
@@ -399,8 +432,9 @@ export default function Services() {
             initial={{ width: 0, opacity: 0 }}
             whileInView={{ width: '100px', opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mx-auto mb-6"
+            style={{ willChange: 'width, opacity' }}
             aria-hidden="true"
             {...({} as any)}
           />

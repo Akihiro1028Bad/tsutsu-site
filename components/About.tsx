@@ -102,11 +102,11 @@ export default function About() {
                 </div>
 
                 <div className="space-y-4 sm:space-y-6 text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed font-light">
-                    <p>元消防士のフリーランスエンジニア。</p>
-                    <p>4年間の現場経験を経て、3年前にエンジニアへ転身。</p>
-                    <p>複数プロジェクトの設計・実装・運用を担当し、2025年8月に独立。</p>
-                    <p>C# / PHP（Laravel） / JavaScript / React / Next.js を中心に、フルスタックに開発支援を行っています。</p>
-                    <p>また、自身の異業種転身の経験を活かし、未経験者向けの学習・キャリアサポートにも取り組んでいます。</p>
+                  <p>元消防士のフリーランスエンジニア。</p>
+                  <p>4年間の現場経験を経て、独学でプログラミングを学び、3年前にエンジニアへ転身。</p>
+                  <p>複数の業務システム・Webアプリケーションの設計・実装・運用を担当し、2025年8月に独立。</p>
+                  <p>C# / PHP（Laravel） / JavaScript / React / Next.jsを中心に、フルスタックに開発支援を行っています。</p>
+                  <p>また、自身の異業種転身の経験を活かし、未経験者や初学者の学習・キャリアサポートにも力を入れています。</p>
                 </div>
               </div>
             </motion.div>

@@ -800,8 +800,8 @@ export default function Header() {
       }`}
       {...({} as any)}
     >
-      <nav className="container mx-auto px-8 py-5 md:py-6">
-        <div className="flex items-center justify-between border-b border-slate-200/30 pb-4">
+      <nav className="container mx-auto px-8 py-3 md:py-4">
+        <div className="flex items-center justify-between border-b border-slate-200/30 pb-2">
           <motion.a
             href="#home"
             className="flex items-center"
@@ -826,7 +826,7 @@ export default function Header() {
               alt="tsutsu"
               width={240}
               height={96}
-              className="h-20 md:h-24 lg:h-28 w-auto"
+              className="h-16 md:h-20 lg:h-24 w-auto"
               priority
             />
           </motion.a>

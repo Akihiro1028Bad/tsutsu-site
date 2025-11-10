@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, MessageSquare, Clock, Send } from 'lucide-react'
 import { useState } from 'react'
 
-type FormData = {
+type ContactFormData = {
   name: string
   email: string
   subject: string
@@ -19,7 +19,7 @@ type FormErrors = {
 }
 
 export default function Contact() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     subject: '',
@@ -34,22 +34,30 @@ export default function Contact() {
 
     if (!formData.name.trim()) {
       newErrors.name = 'お名前を入力してください'
+    } else if (formData.name.length > 100) {
+      newErrors.name = 'お名前は100文字以内で入力してください'
     }
 
     if (!formData.email.trim()) {
       newErrors.email = 'メールアドレスを入力してください'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = '有効なメールアドレスを入力してください'
+    } else if (formData.email.length > 255) {
+      newErrors.email = 'メールアドレスが長すぎます'
     }
 
     if (!formData.subject.trim()) {
       newErrors.subject = '件名を入力してください'
+    } else if (formData.subject.length > 200) {
+      newErrors.subject = '件名は200文字以内で入力してください'
     }
 
     if (!formData.message.trim()) {
       newErrors.message = 'メッセージを入力してください'
     } else if (formData.message.trim().length < 10) {
       newErrors.message = 'メッセージは10文字以上で入力してください'
+    } else if (formData.message.length > 5000) {
+      newErrors.message = 'メッセージは5000文字以内で入力してください'
     }
 
     setErrors(newErrors)
@@ -67,26 +75,43 @@ export default function Contact() {
     setSubmitStatus('idle')
 
     try {
-      // ここで実際の送信処理を実装
-      // 例: await fetch('/api/contact', { method: 'POST', body: JSON.stringify(formData) })
-      
-      // デモ用の遅延
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      // ネットワークエラーのチェック
+      if (!response.ok) {
+        let errorMessage = '送信に失敗しました'
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch {
+          // JSON解析に失敗した場合（ネットワークエラーなど）
+          errorMessage = 'ネットワークエラーが発生しました。接続を確認してください。'
+        }
+        throw new Error(errorMessage)
+      }
+
+      const data = await response.json()
       setSubmitStatus('success')
       setFormData({ name: '', email: '', subject: '', message: '' })
       
       // 3秒後にステータスをリセット
       setTimeout(() => setSubmitStatus('idle'), 3000)
     } catch (error) {
+      console.error('送信エラー:', error)
       setSubmitStatus('error')
-      setTimeout(() => setSubmitStatus('idle'), 3000)
+      setTimeout(() => setSubmitStatus('idle'), 5000) // エラー時は少し長めに表示
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  const handleChange = (field: keyof FormData) => (
+  const handleChange = (field: keyof ContactFormData) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }))
@@ -403,6 +428,8 @@ export default function Contact() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
+                      role="alert"
+                      aria-live="polite"
                       className="p-4 bg-green-50 border border-green-200 text-green-800 text-sm"
                       {...({} as any)}
                     >
@@ -414,6 +441,8 @@ export default function Contact() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
+                      role="alert"
+                      aria-live="assertive"
                       className="p-4 bg-red-50 border border-red-200 text-red-800 text-sm"
                       {...({} as any)}
                     >
