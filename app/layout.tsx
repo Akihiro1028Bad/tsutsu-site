@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
-import MouseFollower from '@/components/MouseFollower'
+import ClientComponents from '@/components/ClientComponents'
 
 const notoSansJP = Noto_Sans_JP({
   weight: ['300', '400', '500', '700'],
@@ -78,8 +78,8 @@ export default function RootLayout({
   return (
     <html lang="ja" className={notoSansJP.variable}>
       <body className="antialiased font-sans">
+        <ClientComponents />
         {children}
-        <MouseFollower />
       </body>
     </html>
   )
