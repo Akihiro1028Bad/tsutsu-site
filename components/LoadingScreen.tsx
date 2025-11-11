@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export default function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true)
+  const [progress, setProgress] = useState(0)
 
   const isLoadingRef = useRef(true)
   const isCompletedRef = useRef(false)
@@ -32,7 +33,7 @@ export default function LoadingScreen() {
       fadeOutTimeout = setTimeout(() => {
         setIsLoading(false)
         isLoadingRef.current = false
-      }, 500)
+      }, 1500)
     }
 
     // プログレスバーのアニメーション（視覚的フィードバック）
