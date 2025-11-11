@@ -33,7 +33,7 @@ export default function LoadingScreen() {
       fadeOutTimeout = setTimeout(() => {
         setIsLoading(false)
         isLoadingRef.current = false
-      }, 1500)
+      }, 100)
     }
 
     // プログレスバーのアニメーション（視覚的フィードバック）
