@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import ClientComponents from '@/components/ClientComponents'
+import StructuredData from '@/components/StructuredData'
 
 const notoSansJP = Noto_Sans_JP({
   weight: ['300', '400', '500', '700'],
@@ -22,10 +23,15 @@ export const metadata: Metadata = {
   authors: [{ name: '堤　暁寛' }],
   creator: 'tsutsu',
   publisher: 'tsutsu',
+  applicationName: 'tsutsu',
+  generator: 'Next.js',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
+  },
+  alternates: {
+    canonical: '/',
   },
   openGraph: {
     type: 'website',
@@ -78,6 +84,7 @@ export default function RootLayout({
   return (
     <html lang="ja" className={notoSansJP.variable}>
       <body className="antialiased font-sans">
+        <StructuredData />
         <ClientComponents />
         {children}
       </body>

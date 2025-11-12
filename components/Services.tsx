@@ -142,7 +142,7 @@ function ImageBlock({
         >
           <Image
             src={service.backgroundImage}
-            alt=""
+            alt={`${service.title}の背景画像`}
             fill
             sizes="(max-width: 768px) 100vw, 400px"
             className="object-cover"
