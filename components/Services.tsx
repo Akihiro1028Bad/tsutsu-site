@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
+import Image from 'next/image'
 
 type Service = {
   title: string
@@ -106,54 +107,85 @@ function ImageBlock({
   className?: string
   isMobile?: boolean
 }) {
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const imageRef = useRef<HTMLDivElement>(null)
+
+  // アニメーション終了後にwillChangeを削除
+  useEffect(() => {
+    if (imageLoaded && imageRef.current) {
+      const timer = setTimeout(() => {
+        if (imageRef.current) {
+          imageRef.current.style.willChange = 'auto'
+        }
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [imageLoaded])
+
   return (
     <div className={`relative overflow-hidden w-full h-full ${className}`}>
       {/* Background Image */}
       {service.backgroundImage && (
         <motion.div
+          ref={imageRef}
           initial={{ opacity: 0, scale: 1.05 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          onAnimationComplete={() => setImageLoaded(true)}
           className="absolute inset-0 group-hover:opacity-[0.5] transition-opacity duration-500 z-0"
           style={{
-            backgroundImage: `url(${service.backgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: isMobile ? 'top center' : 'center',
-            backgroundRepeat: 'no-repeat',
-            opacity: 0.5,
-            filter: 'saturate(0.4) brightness(0.92)',
-            willChange: 'opacity, transform',
+            willChange: imageLoaded ? 'auto' : 'opacity, transform',
+          }}
+          aria-hidden="true"
+          {...({} as any)}
+        >
+          <Image
+            src={service.backgroundImage}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 400px"
+            className="object-cover"
+            style={{
+              objectPosition: isMobile ? 'top center' : 'center',
+              opacity: 0.85,
+              filter: 'saturate(0.7) brightness(0.98)',
+            }}
+            aria-hidden="true"
+          />
+        </motion.div>
+      )}
+
+      {/* Monochrome Overlay - 軽減 */}
+      <div 
+        className="absolute inset-0 bg-slate-900/5 group-hover:bg-slate-900/8 transition-colors duration-500 z-[1]"
+        aria-hidden="true"
+      />
+
+      {/* Gradient Overlay - モバイルでは無効化、デスクトップでは軽量なアニメーション */}
+      {!isMobile ? (
+        <motion.div
+          animate={{
+            opacity: [0.1, 0.15, 0.1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className={`absolute inset-0 bg-gradient-to-br ${service.gradient} group-hover:opacity-20 transition-opacity duration-500 z-[1]`}
+          style={{
+            willChange: 'opacity',
           }}
           aria-hidden="true"
           {...({} as any)}
         />
+      ) : (
+        <div 
+          className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-10 group-hover:opacity-15 transition-opacity duration-500 z-[1]`}
+          aria-hidden="true"
+        />
       )}
-
-      {/* Monochrome Overlay */}
-      <div 
-        className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/12 transition-colors duration-500 z-[1]"
-        aria-hidden="true"
-      />
-
-      {/* Gradient Overlay */}
-      <motion.div
-        animate={{
-          backgroundPosition: ['0% 0%', '100% 100%'],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          repeatType: 'reverse',
-          ease: 'linear',
-        }}
-        className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-20 group-hover:opacity-25 transition-opacity duration-500 z-[1]`}
-        style={{
-          backgroundSize: '200% 200%',
-        }}
-        aria-hidden="true"
-        {...({} as any)}
-      />
 
       {/* Background Number Badge */}
       <div className={`absolute top-4 right-4 sm:top-6 sm:right-6 text-5xl sm:text-7xl md:text-8xl font-light text-slate-200/40 leading-none select-none pointer-events-none z-[2] ${isMobile ? 'text-4xl sm:text-6xl' : ''}`}>
@@ -165,8 +197,11 @@ function ImageBlock({
 
 function ServiceCard({ service, index }: ServiceCardProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLDivElement>(null)
   const [activeTab, setActiveTab] = useState<TabType>('capabilities')
   const [isMobile, setIsMobile] = useState(false)
+  const [animationsComplete, setAnimationsComplete] = useState(false)
   
   // スマホ検出
   useEffect(() => {
@@ -178,8 +213,13 @@ function ServiceCard({ service, index }: ServiceCardProps) {
     }
     
     checkMobile()
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    mediaQuery.addEventListener('change', checkMobile)
     window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    return () => {
+      mediaQuery.removeEventListener('change', checkMobile)
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
   
   // スマホではスクロール連動アニメーションを無効化
@@ -191,6 +231,21 @@ function ServiceCard({ service, index }: ServiceCardProps) {
   const y = useTransform(scrollYProgress, [0, 1], [40, -40])
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.98, 1, 0.98])
+
+  // アニメーション完了後にwillChangeを削除
+  useEffect(() => {
+    if (animationsComplete) {
+      const timer = setTimeout(() => {
+        if (contentRef.current) {
+          contentRef.current.style.willChange = 'auto'
+        }
+        if (imageRef.current) {
+          imageRef.current.style.willChange = 'auto'
+        }
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [animationsComplete])
 
   const isLeft = index % 2 === 0
 
@@ -209,12 +264,14 @@ function ServiceCard({ service, index }: ServiceCardProps) {
       <div className={`flex flex-col-reverse md:flex-row items-stretch gap-0 ${isLeft ? '' : 'md:flex-row-reverse'}`}>
         {/* Main Content Block */}
         <motion.div
+          ref={contentRef}
           initial={{ x: isMobile ? 0 : (isLeft ? -60 : 60), opacity: isMobile ? 1 : 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          viewport={{ once: true, margin: isMobile ? '-50px' : '-100px' }}
-          transition={{ duration: isMobile ? 0.5 : 0.8, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
+          transition={{ duration: isMobile ? 0.4 : 0.8, ease: [0.16, 1, 0.3, 1] }}
+          onAnimationComplete={() => setAnimationsComplete(true)}
           className="flex-1 w-full md:w-auto"
-          style={{ willChange: 'transform, opacity' }}
+          style={{ willChange: animationsComplete ? 'auto' : 'transform, opacity' }}
           {...({} as any)}
         >
           <motion.div
@@ -294,11 +351,10 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                     {activeTab === 'capabilities' && (
                       <motion.div
                         key="capabilities"
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: isMobile ? 0 : 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                        style={{ willChange: 'transform, opacity' }}
+                        exit={{ opacity: 0, y: isMobile ? 0 : -10 }}
+                        transition={{ duration: isMobile ? 0.15 : 0.2, ease: [0.4, 0, 0.2, 1] }}
                         {...({} as any)}
                       >
                         <div
@@ -309,18 +365,13 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                         >
                           <ul className="space-y-3">
                             {service.capabilities.map((cap, i) => (
-                              <motion.li
+                              <li
                                 key={i}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.2, delay: i * 0.03 }}
                                 className="text-sm sm:text-base md:text-base text-slate-600 flex items-start gap-3"
-                                style={{ willChange: 'transform, opacity' }}
-                                {...({} as any)}
                               >
                                 <span className="text-slate-400 mt-1.5 flex-shrink-0">•</span>
                                 <span className="leading-relaxed">{cap}</span>
-                              </motion.li>
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -329,11 +380,10 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                     {activeTab === 'audience' && (
                       <motion.div
                         key="audience"
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: isMobile ? 0 : 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                        style={{ willChange: 'transform, opacity' }}
+                        exit={{ opacity: 0, y: isMobile ? 0 : -10 }}
+                        transition={{ duration: isMobile ? 0.15 : 0.2, ease: [0.4, 0, 0.2, 1] }}
                         {...({} as any)}
                       >
                         <div
@@ -344,18 +394,13 @@ function ServiceCard({ service, index }: ServiceCardProps) {
                         >
                           <ul className="space-y-3">
                             {service.targetAudience.map((target, i) => (
-                              <motion.li
+                              <li
                                 key={i}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.2, delay: i * 0.03 }}
                                 className="text-sm sm:text-base md:text-base text-slate-600 flex items-start gap-3"
-                                style={{ willChange: 'transform, opacity' }}
-                                {...({} as any)}
                               >
                                 <span className="text-slate-400 mt-1.5 flex-shrink-0">•</span>
                                 <span className="leading-relaxed">{target}</span>
-                              </motion.li>
+                              </li>
                             ))}
                           </ul>
                         </div>
@@ -371,9 +416,8 @@ function ServiceCard({ service, index }: ServiceCardProps) {
               initial={{ width: 0 }}
               whileInView={{ width: '100%' }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: isMobile ? 0.4 : 0.6, delay: isMobile ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mt-12"
-              style={{ willChange: 'width' }}
               aria-hidden="true"
               {...({} as any)}
             />
@@ -382,15 +426,17 @@ function ServiceCard({ service, index }: ServiceCardProps) {
 
         {/* Image Block - スマホで上部、タブレット以上でサイドに */}
         <motion.div
+          ref={imageRef}
           initial={{ x: isMobile ? 0 : (isLeft ? 60 : -60), opacity: isMobile ? 1 : 0 }}
           whileInView={{ x: 0, opacity: 1 }}
-          viewport={{ once: true, margin: isMobile ? '-50px' : '-100px' }}
-          transition={{ duration: isMobile ? 0.5 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
+          transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
+          onAnimationComplete={() => setAnimationsComplete(true)}
           className={`w-full md:w-80 lg:w-96 aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:h-auto bg-gradient-to-br ${service.bgGradient} relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500 border border-slate-200/50 hover:border-slate-300`}
-          style={{ willChange: 'transform, opacity' }}
+          style={{ willChange: animationsComplete ? 'auto' : 'transform, opacity' }}
           {...({} as any)}
         >
-          <ImageBlock service={service} isMobile={true} className="absolute inset-0 w-full h-full" />
+          <ImageBlock service={service} isMobile={isMobile} className="absolute inset-0 w-full h-full" />
         </motion.div>
       </div>
     </motion.div>
@@ -422,7 +468,6 @@ export default function Services() {
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-12 md:mb-28"
-          style={{ willChange: 'transform, opacity' }}
           {...({} as any)}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
@@ -434,7 +479,6 @@ export default function Services() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mx-auto mb-6"
-            style={{ willChange: 'width, opacity' }}
             aria-hidden="true"
             {...({} as any)}
           />
