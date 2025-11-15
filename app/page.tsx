@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import LargeTextMarquee from '@/components/LargeTextMarquee'
+import AnnouncementBanner from '@/components/AnnouncementBanner'
 
 // フォールド外のコンポーネントを動的インポート
 const Services = dynamic(() => import('@/components/Services'), {
@@ -26,6 +27,7 @@ export default function Home() {
     <main className="min-h-screen">
       <Header />
       <Hero />
+      <AnnouncementBanner />
       {/* セクション区切りとしてのLarge Text Marquee */}
       <LargeTextMarquee speed={45} />
       <Services />
