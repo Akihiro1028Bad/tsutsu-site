@@ -16,6 +16,30 @@
   }
 }
 
+@layer components {
+  /* microCMSリッチエディタコンテンツ用のスタイリング */
+  .prose {
+    /* フォントファミリーの明示的な適用 */
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* .prose内のすべての要素にフォントファミリーを継承 */
+  .prose * {
+    font-family: inherit;
+  }
+
+  /* microCMSのインラインスタイルで指定されたフォントファミリーを上書き */
+  .prose [style*="font-family"] {
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif !important;
+  }
+
+  /* インラインスタイルのフォントサイズは尊重するが、フォントファミリーは上書き */
+  .prose [style*="font-size"] {
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif !important;
+  }
+}
+
 /* スムーズなスクロール */
 html {
   scroll-behavior: smooth;

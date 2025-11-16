@@ -76,8 +76,93 @@ module.exports = {
           },
         },
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            fontFamily: 'var(--font-noto-sans-jp), "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif',
+            fontFeatureSettings: '"rlig" 1, "calt" 1',
+            maxWidth: 'none',
+            // 見出しのスタイル
+            'h1, h2, h3, h4, h5, h6': {
+              fontFamily: 'inherit',
+              fontWeight: '300',
+              letterSpacing: '-0.025em',
+              color: '#020617', // slate-950
+            },
+            // 段落のスタイル
+            p: {
+              fontFamily: 'inherit',
+              fontWeight: '300',
+              lineHeight: '1.75',
+              color: '#334155', // slate-700
+            },
+            // リストのスタイル
+            'ul, ol': {
+              fontFamily: 'inherit',
+              color: '#334155', // slate-700
+            },
+            li: {
+              fontFamily: 'inherit',
+              fontWeight: '300',
+            },
+            // 強調のスタイル
+            strong: {
+              fontFamily: 'inherit',
+              fontWeight: '400',
+              color: '#020617', // slate-950
+            },
+            // リンクのスタイル
+            a: {
+              fontFamily: 'inherit',
+              color: '#0284c7', // primary-600
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            },
+            // 引用のスタイル
+            blockquote: {
+              fontFamily: 'inherit',
+              borderLeftColor: '#cbd5e1', // slate-300
+              color: '#475569', // slate-600
+            },
+            // コードのスタイル
+            code: {
+              fontFamily: 'inherit',
+              color: '#1e293b', // slate-800
+              backgroundColor: '#f1f5f9', // slate-100
+              padding: '0.125rem 0.25rem',
+              borderRadius: '0.25rem',
+            },
+            pre: {
+              fontFamily: 'inherit',
+              backgroundColor: '#020617', // slate-950
+              color: '#f1f5f9', // slate-100
+            },
+            // 画像のスタイル
+            img: {
+              borderRadius: '0.5rem',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            },
+            // テーブルのスタイル
+            table: {
+              borderCollapse: 'collapse',
+            },
+            'thead th': {
+              borderColor: '#cbd5e1', // slate-300
+              backgroundColor: '#f8fafc', // slate-50
+              fontWeight: '400',
+            },
+            'tbody td': {
+              borderColor: '#cbd5e1', // slate-300
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
 

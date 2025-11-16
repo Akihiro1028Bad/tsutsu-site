@@ -1,7 +1,10 @@
 'use client'
 
+import { Suspense } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { 
   Github, 
   Twitter, 
@@ -10,14 +13,16 @@ import {
   Home, 
   Briefcase, 
   User, 
+  Bell,
   MessageSquare
 } from 'lucide-react'
 
 const navItems = [
-  { name: 'ホーム', href: '#home', icon: Home },
-  { name: 'サービス', href: '#services', icon: Briefcase },
-  { name: 'プロフィール', href: '#about', icon: User },
-  { name: 'お問い合わせ', href: '#contact', icon: MessageSquare },
+  { name: 'ホーム', href: '#home', id: 'home', icon: Home, isHash: true },
+  { name: 'サービス', href: '#services', id: 'services', icon: Briefcase, isHash: true },
+  { name: 'プロフィール', href: '#about', id: 'about', icon: User, isHash: true },
+  { name: 'お知らせ', href: '/announcements', id: 'announcements', icon: Bell, isHash: false },
+  { name: 'お問い合わせ', href: '#contact', id: 'contact', icon: MessageSquare, isHash: true },
 ]
 
 const socialLinks = [
@@ -27,8 +32,25 @@ const socialLinks = [
   { name: 'Email', icon: Mail, href: 'mailto:contact@example.com', color: 'hover:text-primary-400' },
 ]
 
-export default function Footer() {
+// 年を取得するコンポーネント（new Date()を使用）
+function FooterYear() {
   const currentYear = new Date().getFullYear()
+  return <>{currentYear}</>
+}
+
+export default function Footer() {
+  const pathname = usePathname()
+  
+  // お知らせページがアクティブかどうかを判定
+  const isAnnouncementsActive = pathname?.startsWith('/announcements') ?? false
+
+  // ハッシュリンクのhrefを取得（お知らせページの場合はトップページへのリンクに変更）
+  const getHashHref = (href: string, isHash: boolean) => {
+    if (isHash && isAnnouncementsActive) {
+      return `/${href}` // `#home` → `/#home`
+    }
+    return href
+  }
 
   // 攻めた・アシンメトリックデザイン
   const EdgyAsymmetricDesign = () => (
@@ -91,20 +113,55 @@ export default function Footer() {
             <nav className="flex flex-col space-y-3">
               {navItems.map((item, index) => {
                 const Icon = item.icon
-                return (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="group flex items-center space-x-2 text-sm text-gray-400 hover:text-primary-400 transition-all duration-300 transform hover:translate-x-2"
-                    style={{ marginLeft: `${index * 8}px` }}
-                  >
-                    <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <span className="relative">
-                      {item.name}
-                      <span className="absolute bottom-0 left-0 w-0 h-px bg-primary-400 group-hover:w-full transition-all duration-300" />
-                    </span>
-                  </a>
-                )
+                if (item.isHash) {
+                  const href = getHashHref(item.href, item.isHash)
+                  // お知らせページの場合はLinkコンポーネントを使用
+                  if (isAnnouncementsActive) {
+                    return (
+                      <Link
+                        key={item.name}
+                        href={href}
+                        className="group flex items-center space-x-2 text-sm text-gray-400 hover:text-primary-400 transition-all duration-300 transform hover:translate-x-2"
+                        style={{ marginLeft: `${index * 8}px` }}
+                      >
+                        <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <span className="relative">
+                          {item.name}
+                          <span className="absolute bottom-0 left-0 w-0 h-px bg-primary-400 group-hover:w-full transition-all duration-300" />
+                        </span>
+                      </Link>
+                    )
+                  }
+                  return (
+                    <a
+                      key={item.name}
+                      href={href}
+                      className="group flex items-center space-x-2 text-sm text-gray-400 hover:text-primary-400 transition-all duration-300 transform hover:translate-x-2"
+                      style={{ marginLeft: `${index * 8}px` }}
+                    >
+                      <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                      <span className="relative">
+                        {item.name}
+                        <span className="absolute bottom-0 left-0 w-0 h-px bg-primary-400 group-hover:w-full transition-all duration-300" />
+                      </span>
+                    </a>
+                  )
+                } else {
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="group flex items-center space-x-2 text-sm text-gray-400 hover:text-primary-400 transition-all duration-300 transform hover:translate-x-2"
+                      style={{ marginLeft: `${index * 8}px` }}
+                    >
+                      <Icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                      <span className="relative">
+                        {item.name}
+                        <span className="absolute bottom-0 left-0 w-0 h-px bg-primary-400 group-hover:w-full transition-all duration-300" />
+                      </span>
+                    </Link>
+                  )
+                }
               })}
             </nav>
           </motion.div>
@@ -142,7 +199,11 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8">
           <p className="text-xs text-gray-500 text-center font-light">
-            &copy; {currentYear} tsutsu. All rights reserved.
+            &copy;{' '}
+            <Suspense fallback={<span>tsutsu</span>}>
+              <FooterYear />
+            </Suspense>{' '}
+            tsutsu. All rights reserved.
           </p>
         </div>
       </div>

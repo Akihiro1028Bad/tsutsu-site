@@ -3,12 +3,15 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const headerRef = useRef<HTMLElement>(null)
+  const pathname = usePathname()
 
   useEffect(() => {
     let ticking = false
@@ -42,11 +45,23 @@ export default function Header() {
   }, [])
 
   const navItems = [
-    { name: 'ホーム', href: '#home', id: 'home' },
-    { name: 'サービス', href: '#services', id: 'services' },
-    { name: 'プロフィール', href: '#about', id: 'about' },
-    { name: 'お問い合わせ', href: '#contact', id: 'contact' },
+    { name: 'ホーム', href: '#home', id: 'home', isHash: true },
+    { name: 'サービス', href: '#services', id: 'services', isHash: true },
+    { name: 'プロフィール', href: '#about', id: 'about', isHash: true },
+    { name: 'お知らせ', href: '/announcements', id: 'announcements', isHash: false },
+    { name: 'お問い合わせ', href: '#contact', id: 'contact', isHash: true },
   ]
+  
+  // お知らせページがアクティブかどうかを判定
+  const isAnnouncementsActive = pathname?.startsWith('/announcements') ?? false
+
+  // ハッシュリンクのhrefを取得（お知らせページの場合はトップページへのリンクに変更）
+  const getHashHref = (href: string, isHash: boolean) => {
+    if (isHash && isAnnouncementsActive) {
+      return `/${href}` // `#home` → `/#home`
+    }
+    return href
+  }
 
   // エレガントデザイン
   const renderElegant = () => (
@@ -65,7 +80,7 @@ export default function Header() {
       <nav className="container mx-auto px-8 py-3 md:py-4">
         <div className="flex items-center justify-between border-b border-slate-200/30 pb-2">
           <motion.a
-            href="#home"
+            href={getHashHref('#home', true)}
             className="flex items-center"
             animate={{ 
               rotate: [0, -2, 2, -2, 0],
@@ -94,19 +109,52 @@ export default function Header() {
           </motion.a>
 
           <div className="hidden md:flex items-center space-x-12">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className={`text-xs uppercase tracking-[0.2em] font-light transition-all duration-500 ${
-                  activeSection === item.id
-                    ? 'text-slate-950 font-normal'
-                    : 'text-slate-500 hover:text-slate-950'
-                }`}
-              >
-                {item.name}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = item.id === 'announcements' 
+                ? isAnnouncementsActive 
+                : activeSection === item.id
+              
+              const linkClassName = `text-xs uppercase tracking-[0.2em] font-light transition-all duration-500 ${
+                isActive
+                  ? 'text-slate-950 font-normal'
+                  : 'text-slate-500 hover:text-slate-950'
+              }`
+              
+              if (item.isHash) {
+                const href = getHashHref(item.href, item.isHash)
+                // お知らせページの場合はLinkコンポーネントを使用
+                if (isAnnouncementsActive) {
+                  return (
+                    <Link
+                      key={item.name}
+                      href={href}
+                      className={linkClassName}
+                    >
+                      {item.name}
+                    </Link>
+                  )
+                }
+                return (
+                  <a
+                    key={item.name}
+                    href={href}
+                    className={linkClassName}
+                  >
+                    {item.name}
+                  </a>
+                )
+              } else {
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={linkClassName}
+                  >
+                    {item.name}
+                  </Link>
+                )
+              }
+            })}
           </div>
 
           <button
@@ -147,20 +195,55 @@ export default function Header() {
               className="md:hidden mt-4 pb-4 space-y-3 border-t border-slate-200/30 pt-4"
               {...({} as any)}
             >
-                {navItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block py-2 text-xs uppercase tracking-[0.2em] font-light transition-all duration-200 ${
-                    activeSection === item.id
-                      ? 'text-slate-950 font-normal'
-                      : 'text-slate-500 hover:text-slate-950'
-                  }`}
-                >
-                  {item.name}
-                </a>
-              ))}
+                {navItems.map((item) => {
+                const isActive = item.id === 'announcements' 
+                  ? isAnnouncementsActive 
+                  : activeSection === item.id
+                
+                const linkClassName = `block py-2 text-xs uppercase tracking-[0.2em] font-light transition-all duration-200 ${
+                  isActive
+                    ? 'text-slate-950 font-normal'
+                    : 'text-slate-500 hover:text-slate-950'
+                }`
+                
+                if (item.isHash) {
+                  const href = getHashHref(item.href, item.isHash)
+                  // お知らせページの場合はLinkコンポーネントを使用
+                  if (isAnnouncementsActive) {
+                    return (
+                      <Link
+                        key={item.name}
+                        href={href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={linkClassName}
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  }
+                  return (
+                    <a
+                      key={item.name}
+                      href={href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={linkClassName}
+                    >
+                      {item.name}
+                    </a>
+                  )
+                } else {
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={linkClassName}
+                    >
+                      {item.name}
+                    </Link>
+                  )
+                }
+              })}
             </motion.div>
           )}
         </AnimatePresence>
