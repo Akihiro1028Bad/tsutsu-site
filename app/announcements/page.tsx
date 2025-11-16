@@ -1,49 +1,44 @@
-import { client } from '@/lib/microcms/client'
-import { AnnouncementListResponse } from '@/lib/types/announcement'
+import { getList } from '@/lib/microcms/client'
+import { Announcement, AnnouncementListResponse } from '@/lib/types/announcement'
+import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementList from '@/components/AnnouncementList'
-
-// Cache Componentsモードでは revalidate を直接エクスポートできません
-// 代わりに fetch の next.revalidate オプションを使用します
+import Breadcrumb from '@/components/Breadcrumb'
 
 export default async function AnnouncementsPage() {
-  'use cache'
-  
   let data: AnnouncementListResponse
 
   try {
-    data = await client.get({
-      endpoint: 'announcements',
-      queries: {
-        filters: 'publishedAt[exists]',
-        orders: '-publishedAt',
-        limit: 100,
-      },
+    data = await getList<Announcement>('announcements', {
+      filters: 'publishedAt[exists]',
+      orders: '-publishedAt',
+      limit: 100,
     })
   } catch (error) {
-    // ビルド時のエラー（Network Error）の場合は空データを返す
-    // ランタイム時のエラーはthrowしてerror.tsxで処理
-    if (
-      error instanceof Error &&
-      (error.message.includes('Network Error') ||
-        error.message.includes('prerender'))
-    ) {
-      console.warn('ビルド時にお知らせの取得に失敗しました。空データを返します。')
-      data = {
-        contents: [],
-        totalCount: 0,
-        offset: 0,
-        limit: 100,
-      }
-    } else {
-      // その他のエラーはthrowしてerror.tsxで処理
-      console.error('お知らせの取得に失敗しました:', error)
+    const errorResult = handleMicroCMSError<AnnouncementListResponse>(error, {
+      onBuildTimeNetworkError: () => {
+        console.warn('ビルド時にお知らせの取得に失敗しました。空データを返します。')
+      },
+      onRuntimeError: () => {
+        console.error('お知らせの取得に失敗しました:', error)
+      },
+    })
+
+    if (errorResult.shouldThrow) {
       throw new Error('お知らせの取得に失敗しました。しばらくしてから再度お試しください。')
+    }
+
+    // ビルド時のネットワークエラーの場合は空データを返す
+    data = {
+      contents: [],
+      totalCount: 0,
+      offset: 0,
+      limit: 100,
     }
   }
 
   return (
     <main className="min-h-screen bg-white">
-      <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-12 md:py-32">
+      <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
         {/* Subtle Grid Background */}
         <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
           <div
@@ -55,14 +50,17 @@ export default async function AnnouncementsPage() {
           />
         </div>
 
-        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+          {/* Breadcrumb */}
+          <Breadcrumb items={[{ label: 'お知らせ' }]} />
+
           {/* Header Section */}
-          <div className="text-center mb-12 md:mb-16">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-4 sm:mb-6 text-slate-950 tracking-tight">
               お知らせ
             </h1>
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mx-auto mb-6 w-[100px]" />
-            <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed font-normal tracking-[0.08em] uppercase max-w-2xl mx-auto">
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mx-auto mb-4 sm:mb-6 w-[100px]" />
+            <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed font-normal tracking-[0.08em] uppercase max-w-2xl mx-auto">
               最新情報をお届けします
             </p>
           </div>

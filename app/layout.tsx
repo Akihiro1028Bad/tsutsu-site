@@ -3,6 +3,8 @@ import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import ClientComponents from '@/components/ClientComponents'
 import StructuredData from '@/components/StructuredData'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 const notoSansJP = Noto_Sans_JP({
   weight: ['300', '400', '500', '700'],
@@ -86,7 +88,9 @@ export default function RootLayout({
       <body className="antialiased font-sans">
         <StructuredData />
         <ClientComponents />
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   )
