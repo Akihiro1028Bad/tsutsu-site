@@ -13,7 +13,7 @@ export default function Loading() {
           />
         </div>
 
-        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
+        <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
           {/* Back Button Skeleton */}
           <div className="mb-8">
             <div className="h-5 w-32 bg-slate-200/40 rounded animate-pulse" />

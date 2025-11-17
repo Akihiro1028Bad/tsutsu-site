@@ -16,10 +16,18 @@ export async function generateStaticParams() {
       id: announcement.id,
     }))
   } catch (error) {
-    // ビルド時のエラーはログに記録し、空配列を返す
-    // これにより、ビルドは継続されるが、静的生成は行われない
-    console.warn('お知らせ一覧の取得に失敗しました（ビルド時）:', error)
-    console.warn('ビルドを継続しますが、静的生成は行われません。')
+    // 統一的なエラーハンドリングを使用
+    handleMicroCMSError(error, {
+      onBuildTimeNetworkError: () => {
+        console.warn('ビルド時にお知らせ一覧の取得に失敗しました。空配列を返します。')
+      },
+      onRuntimeError: () => {
+        // generateStaticParamsはビルド時のみ実行されるため、ここには到達しない
+        console.error('予期しないエラー（generateStaticParams）:', error)
+      },
+    })
+
+    // ビルド時のエラーは空配列を返してビルドを継続
     return []
   }
 }
@@ -57,9 +65,8 @@ export default async function AnnouncementDetailPage({
       throw new Error('お知らせの取得に失敗しました。しばらくしてから再度お試しください。')
     }
 
-    // notFound()が呼ばれた場合は、ここには到達しない
-    // TypeScriptの型チェックを満たすため、returnを追加
-    return
+    // エラー処理が完了したが、お知らせが見つからない場合はnotFound()を呼び出す
+    notFound()
   }
 
   // 公開済みかどうかの確認
@@ -81,7 +88,7 @@ export default async function AnnouncementDetailPage({
           />
         </div>
 
-        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+        <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
           {/* Breadcrumb */}
           <Breadcrumb
             items={[

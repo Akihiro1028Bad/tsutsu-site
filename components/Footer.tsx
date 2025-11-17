@@ -14,7 +14,8 @@ import {
   Briefcase, 
   User, 
   Bell,
-  MessageSquare
+  MessageSquare,
+  BookOpen
 } from 'lucide-react'
 
 const navItems = [
@@ -22,6 +23,7 @@ const navItems = [
   { name: 'サービス', href: '#services', id: 'services', icon: Briefcase, isHash: true },
   { name: 'プロフィール', href: '#about', id: 'about', icon: User, isHash: true },
   { name: 'お知らせ', href: '/announcements', id: 'announcements', icon: Bell, isHash: false },
+  { name: 'ブログ', href: '/blog', id: 'blog', icon: BookOpen, isHash: false },
   { name: 'お問い合わせ', href: '#contact', id: 'contact', icon: MessageSquare, isHash: true },
 ]
 
@@ -43,10 +45,13 @@ export default function Footer() {
   
   // お知らせページがアクティブかどうかを判定
   const isAnnouncementsActive = pathname?.startsWith('/announcements') ?? false
+  
+  // ブログページがアクティブかどうかを判定
+  const isBlogActive = pathname?.startsWith('/blog') ?? false
 
-  // ハッシュリンクのhrefを取得（お知らせページの場合はトップページへのリンクに変更）
+  // ハッシュリンクのhrefを取得（お知らせページまたはブログページの場合はトップページへのリンクに変更）
   const getHashHref = (href: string, isHash: boolean) => {
-    if (isHash && isAnnouncementsActive) {
+    if (isHash && (isAnnouncementsActive || isBlogActive)) {
       return `/${href}` // `#home` → `/#home`
     }
     return href
@@ -115,8 +120,8 @@ export default function Footer() {
                 const Icon = item.icon
                 if (item.isHash) {
                   const href = getHashHref(item.href, item.isHash)
-                  // お知らせページの場合はLinkコンポーネントを使用
-                  if (isAnnouncementsActive) {
+                  // お知らせページまたはブログページの場合はLinkコンポーネントを使用
+                  if (isAnnouncementsActive || isBlogActive) {
                     return (
                       <Link
                         key={item.name}

@@ -49,15 +49,19 @@ export default function Header() {
     { name: 'サービス', href: '#services', id: 'services', isHash: true },
     { name: 'プロフィール', href: '#about', id: 'about', isHash: true },
     { name: 'お知らせ', href: '/announcements', id: 'announcements', isHash: false },
+    { name: 'ブログ', href: '/blog', id: 'blog', isHash: false },
     { name: 'お問い合わせ', href: '#contact', id: 'contact', isHash: true },
   ]
   
   // お知らせページがアクティブかどうかを判定
   const isAnnouncementsActive = pathname?.startsWith('/announcements') ?? false
+  
+  // ブログページがアクティブかどうかを判定
+  const isBlogActive = pathname?.startsWith('/blog') ?? false
 
-  // ハッシュリンクのhrefを取得（お知らせページの場合はトップページへのリンクに変更）
+  // ハッシュリンクのhrefを取得（お知らせページまたはブログページの場合はトップページへのリンクに変更）
   const getHashHref = (href: string, isHash: boolean) => {
-    if (isHash && isAnnouncementsActive) {
+    if (isHash && (isAnnouncementsActive || isBlogActive)) {
       return `/${href}` // `#home` → `/#home`
     }
     return href
@@ -112,6 +116,8 @@ export default function Header() {
             {navItems.map((item) => {
               const isActive = item.id === 'announcements' 
                 ? isAnnouncementsActive 
+                : item.id === 'blog'
+                ? isBlogActive
                 : activeSection === item.id
               
               const linkClassName = `text-xs uppercase tracking-[0.2em] font-light transition-all duration-500 ${
@@ -122,8 +128,8 @@ export default function Header() {
               
               if (item.isHash) {
                 const href = getHashHref(item.href, item.isHash)
-                // お知らせページの場合はLinkコンポーネントを使用
-                if (isAnnouncementsActive) {
+                // お知らせページまたはブログページの場合はLinkコンポーネントを使用
+                if (isAnnouncementsActive || isBlogActive) {
                   return (
                     <Link
                       key={item.name}
@@ -198,6 +204,8 @@ export default function Header() {
                 {navItems.map((item) => {
                 const isActive = item.id === 'announcements' 
                   ? isAnnouncementsActive 
+                  : item.id === 'blog'
+                  ? isBlogActive
                   : activeSection === item.id
                 
                 const linkClassName = `block py-2 text-xs uppercase tracking-[0.2em] font-light transition-all duration-200 ${
@@ -208,8 +216,8 @@ export default function Header() {
                 
                 if (item.isHash) {
                   const href = getHashHref(item.href, item.isHash)
-                  // お知らせページの場合はLinkコンポーネントを使用
-                  if (isAnnouncementsActive) {
+                  // お知らせページまたはブログページの場合はLinkコンポーネントを使用
+                  if (isAnnouncementsActive || isBlogActive) {
                     return (
                       <Link
                         key={item.name}

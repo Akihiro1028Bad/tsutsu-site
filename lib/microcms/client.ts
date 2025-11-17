@@ -22,6 +22,8 @@ import { buildQueryString, buildBaseUrl, buildContentUrl } from './utils'
 /**
  * 環境変数の検証
  * 必要な環境変数が設定されていない場合はエラーを投げる
+ * 
+ * ビルド時とランタイム時で異なるエラーメッセージを提供します
  */
 function validateEnvironment(): {
   serviceDomain: string
@@ -30,16 +32,26 @@ function validateEnvironment(): {
   const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
   const apiKey = process.env.MICROCMS_API_KEY
 
+  // ビルド時かどうかを判定
+  const isBuildTime =
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    process.env.NEXT_PHASE === 'phase-development-build' ||
+    (typeof window === 'undefined' &&
+      process.env.NODE_ENV === 'production' &&
+      !process.env.VERCEL_ENV)
+
   if (!serviceDomain) {
-    throw new Error(
-      'MICROCMS_SERVICE_DOMAIN is not set. Please set it in your .env.local file.'
-    )
+    const message = isBuildTime
+      ? 'MICROCMS_SERVICE_DOMAIN is not set. Build cannot continue. Please set it in your environment variables.'
+      : 'MICROCMS_SERVICE_DOMAIN is not set. Please set it in your .env.local file.'
+    throw new Error(message)
   }
 
   if (!apiKey) {
-    throw new Error(
-      'MICROCMS_API_KEY is not set. Please set it in your .env.local file.'
-    )
+    const message = isBuildTime
+      ? 'MICROCMS_API_KEY is not set. Build cannot continue. Please set it in your environment variables.'
+      : 'MICROCMS_API_KEY is not set. Please set it in your .env.local file.'
+    throw new Error(message)
   }
 
   return { serviceDomain, apiKey }

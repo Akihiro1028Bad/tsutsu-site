@@ -1,8 +1,28 @@
+import type { Metadata } from 'next'
 import { getList } from '@/lib/microcms/client'
 import { Announcement, AnnouncementListResponse } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementList from '@/components/AnnouncementList'
 import Breadcrumb from '@/components/Breadcrumb'
+
+export const metadata: Metadata = {
+  title: 'お知らせ | tsutsu',
+  description: 'サービス更新やメンテナンス情報など、最新のお知らせを掲載しています。',
+  alternates: {
+    canonical: '/announcements',
+  },
+  openGraph: {
+    title: 'お知らせ | tsutsu',
+    description: 'サービス更新やメンテナンス情報など、最新のお知らせを掲載しています。',
+    url: '/announcements',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'お知らせ | tsutsu',
+    description: 'サービス更新やメンテナンス情報など、最新のお知らせを掲載しています。',
+  },
+}
 
 export default async function AnnouncementsPage() {
   let data: AnnouncementListResponse
