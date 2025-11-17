@@ -2,20 +2,17 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Announcement } from '@/lib/types/announcement'
-import AnnouncementList from '@/components/AnnouncementList'
+import type { ReactNode } from 'react'
 
 interface AnnouncementSectionClientProps {
-  announcements: Announcement[]
+  children: ReactNode
 }
 
 /**
  * お知らせセクションのクライアントコンポーネント
  * アニメーションとインタラクティブな要素を担当
  */
-export default function AnnouncementSectionClient({
-  announcements,
-}: AnnouncementSectionClientProps) {
+export default function AnnouncementSectionClient({ children }: AnnouncementSectionClientProps) {
   return (
     <section
       id="announcements"
@@ -64,7 +61,7 @@ export default function AnnouncementSectionClient({
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <AnnouncementList announcements={announcements} />
+          {children}
         </motion.div>
 
         {/* CTA - すべて見るリンク */}

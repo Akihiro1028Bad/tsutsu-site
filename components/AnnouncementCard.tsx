@@ -1,32 +1,30 @@
-'use client'
-
-import { Announcement } from '@/lib/types/announcement'
-import { formatDate, getCategoryName, getCardImageUrl, getExcerpt } from '@/lib/utils/announcement'
 import ContentCard, { type ContentCardData } from './ContentCard'
+import { formatDate, type AnnouncementCardItem } from '@/lib/utils/announcement'
 
 interface AnnouncementCardProps {
-  announcement: Announcement
+  announcement: AnnouncementCardItem
 }
 
 export default function AnnouncementCard({ announcement }: AnnouncementCardProps) {
-  const categoryName = getCategoryName(announcement.category)
-  const cardImageUrl = getCardImageUrl(announcement.read)
-
   const contentData: ContentCardData = {
     id: announcement.id,
     title: announcement.title,
     publishedAt: announcement.publishedAt,
-    category: announcement.category,
-    image: announcement.read,
-    excerpt: getExcerpt(announcement.content),
+    image: announcement.imageUrl
+      ? {
+          url: announcement.imageUrl,
+          alt: announcement.title,
+        }
+      : undefined,
+    excerpt: announcement.excerpt,
   }
 
   return (
     <ContentCard
       content={contentData}
-      href={`/announcements/${announcement.id}`}
-      imageUrl={cardImageUrl}
-      categoryName={categoryName}
+      href={announcement.href}
+      imageUrl={announcement.imageUrl}
+      categoryName={announcement.categoryName}
       formatDate={formatDate}
     />
   )

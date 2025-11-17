@@ -1,10 +1,8 @@
-'use client'
-
-import { BlogPost } from '@/lib/types/blog'
 import BlogCard from './BlogCard'
+import type { BlogCardItem } from '@/lib/utils/blog'
 
 interface BlogListProps {
-  posts: BlogPost[]
+  posts: BlogCardItem[]
 }
 
 export default function BlogList({ posts }: BlogListProps) {

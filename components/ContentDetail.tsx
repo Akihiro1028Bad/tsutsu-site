@@ -44,7 +44,7 @@ export default async function ContentDetail({
   const processedContent = await processHtmlWithCodeBlocks(content.content, 'dark')
   
   // XSS対策: コードブロック処理済みHTMLをサニタイズ
-  const sanitizedContent = sanitizeHtml(processedContent)
+  const sanitizedContent = await sanitizeHtml(processedContent)
 
   return (
     <article className="max-w-4xl mx-auto">

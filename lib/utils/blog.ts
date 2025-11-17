@@ -1,8 +1,24 @@
-import { BlogPost, BlogListResponse, ImageField } from '@/lib/types/blog'
-import { getList } from '@/lib/microcms/client'
-import { handleMicroCMSError } from '@/lib/utils/error-handler'
+/**
+ * ブログ関連のユーティリティ関数（クライアント/サーバー共通）
+ * 
+ * このファイルは同期関数のみを含みます
+ * 非同期関数（API呼び出し）は blog-server.ts に分離されています
+ */
+
+import { BlogPost, ImageField } from '@/lib/types/blog'
 import { IMAGE_CONFIG, CONTENT_CONFIG } from '@/lib/constants/config'
 import { generateExcerpt } from './text'
+
+export interface BlogCardItem {
+  id: string
+  slug: string
+  title: string
+  href: string
+  publishedAt: string
+  categoryName: string
+  imageUrl: string | null
+  excerpt?: string
+}
 
 /**
  * 日付文字列を日本語形式にフォーマットします
@@ -33,48 +49,6 @@ export function getCategoryName(
   return category.name
 }
 
-/**
- * 最新のブログ記事を取得します
- * トップページのブログセクション用に、公開済みの最新記事を取得
- * 
- * @param limit - 取得する記事数（デフォルト: CONTENT_CONFIG.LATEST_POSTS_LIMIT）
- * @returns ブログ記事の配列（エラー時は空配列）
- */
-export async function getLatestBlogPosts(limit: number = CONTENT_CONFIG.LATEST_POSTS_LIMIT): Promise<BlogPost[]> {
-  let data: BlogListResponse
-
-  try {
-    data = await getList<BlogPost>('blog', {
-      filters: 'publishedAt[exists]',
-      orders: '-publishedAt',
-      limit,
-    })
-  } catch (error) {
-    const errorResult = handleMicroCMSError<BlogListResponse>(error, {
-      onBuildTimeNetworkError: () => {
-        console.warn('ビルド時にブログ記事の取得に失敗しました。空データを返します。')
-      },
-      onRuntimeError: () => {
-        console.error('ブログ記事の取得に失敗しました:', error)
-      },
-    })
-
-    if (errorResult.shouldThrow) {
-      // ランタイムエラーの場合は空配列を返す
-      return []
-    }
-
-    // ビルド時のネットワークエラーの場合は空データを返す
-    data = {
-      contents: [],
-      totalCount: 0,
-      offset: 0,
-      limit,
-    }
-  }
-
-  return data.contents
-}
 
 /**
  * microCMSの画像URLを最適化します
@@ -165,5 +139,22 @@ export function getExcerpt(
   maxLength: number = CONTENT_CONFIG.EXCERPT_MAX_LENGTH
 ): string {
   return generateExcerpt(content, maxLength)
+}
+
+export function toBlogCardItem(post: BlogPost): BlogCardItem {
+  return {
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    href: `/blog/${post.slug}`,
+    publishedAt: post.publishedAt,
+    categoryName: getCategoryName(post.category),
+    imageUrl: getCardImageUrl(post.hero),
+    excerpt: getExcerpt(post.content),
+  }
+}
+
+export function mapBlogPostsToCardItems(posts: BlogPost[]): BlogCardItem[] {
+  return posts.map(toBlogCardItem)
 }
 

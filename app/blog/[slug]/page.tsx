@@ -1,4 +1,6 @@
-import { getList } from '@/lib/microcms/client'
+import { cache } from 'react'
+import { cacheTag, cacheLife } from 'next/cache'
+import { getListStatic } from '@/lib/microcms/server-client'
 import { BlogPost } from '@/lib/types/blog'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import { getOptimizedImageUrl } from '@/lib/utils/blog'
@@ -10,18 +12,23 @@ import type { Metadata } from 'next'
 import { IMAGE_CONFIG, CONTENT_CONFIG, METADATA_CONFIG } from '@/lib/constants/config'
 
 /**
- * slugでブログ記事を取得するヘルパー関数
+ * slugでブログ記事を取得するヘルパー関数（メモ化）
+ * React cacheを使用して、generateMetadataとBlogDetailPageでの重複リクエストを防止
  * microCMSではslugで直接取得できないため、フィルタリングを使用
  * 
  * @param slug - ブログ記事のスラッグ
  * @param draftKey - 下書きキー（プレビュー用、オプション）
  * @returns ブログ記事データ
  */
-async function getBlogPostBySlug(
+const getBlogPostBySlug = cache(async (
   slug: string,
   draftKey?: string
-): Promise<BlogPost> {
-  const queries: Parameters<typeof getList>[1] = {
+): Promise<BlogPost> => {
+  'use cache'
+  cacheTag(`blog:${slug}`)
+  cacheLife('hours') // 1時間キャッシュ
+
+  const queries: Parameters<typeof getListStatic>[1] = {
     filters: `slug[equals]${slug}`,
     limit: 1,
   }
@@ -31,21 +38,25 @@ async function getBlogPostBySlug(
     queries.draftKey = draftKey
   }
 
-  const data = await getList<BlogPost>('blog', queries)
+  const data = await getListStatic<BlogPost>('blog', queries)
 
   if (data.contents.length === 0) {
     throw new Error('Blog post not found')
   }
 
   return data.contents[0]
-}
+})
 
 /**
  * 全ブログ記事のslugを取得して静的生成
  */
 export async function generateStaticParams() {
+  'use cache'
+  cacheTag('blog:static-params')
+  cacheLife('hours') // 1時間キャッシュ
+
   try {
-    const data = await getList<BlogPost>('blog', {
+    const data = await getListStatic<BlogPost>('blog', {
       filters: 'publishedAt[exists]',
       limit: CONTENT_CONFIG.LIST_PAGE_LIMIT,
       fields: 'slug', // slugのみ取得してパフォーマンス最適化

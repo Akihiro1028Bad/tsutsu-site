@@ -2,18 +2,17 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { BlogPost } from '@/lib/types/blog'
-import BlogList from '@/components/BlogList'
+import type { ReactNode } from 'react'
 
 interface BlogSectionClientProps {
-  posts: BlogPost[]
+  children: ReactNode
 }
 
 /**
  * ブログセクションのクライアントコンポーネント
  * アニメーションとインタラクティブな要素を担当
  */
-export default function BlogSectionClient({ posts }: BlogSectionClientProps) {
+export default function BlogSectionClient({ children }: BlogSectionClientProps) {
   return (
     <section
       id="blog"
@@ -62,7 +61,7 @@ export default function BlogSectionClient({ posts }: BlogSectionClientProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <BlogList posts={posts} />
+          {children}
         </motion.div>
 
         {/* CTA - すべて見るリンク */}

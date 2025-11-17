@@ -5,6 +5,7 @@ import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import BlogList from '@/components/BlogList'
 import Breadcrumb from '@/components/Breadcrumb'
 import { CONTENT_CONFIG } from '@/lib/constants/config'
+import { mapBlogPostsToCardItems } from '@/lib/utils/blog'
 
 export const metadata: Metadata = {
   title: 'ブログ | tsutsu',
@@ -57,6 +58,8 @@ export default async function BlogPage() {
     }
   }
 
+  const blogCards = mapBlogPostsToCardItems(data.contents)
+
   return (
     <main className="min-h-screen bg-white">
       <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
@@ -87,7 +90,7 @@ export default async function BlogPage() {
           </div>
 
           {/* Blog List */}
-          <BlogList posts={data.contents} />
+          <BlogList posts={blogCards} />
         </div>
       </section>
     </main>

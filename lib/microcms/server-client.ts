@@ -1,21 +1,15 @@
-import 'server-only'
-
 /**
- * microCMS API クライアント
+ * microCMS API サーバー専用クライアント
  * 
- * Next.js 16のCache Componentsモードに対応した、自前実装のmicroCMS APIクライアント
- * microCMS SDKのデフォルト動作による問題を回避するため、fetch APIを直接使用
+ * Next.js 16のCache Componentsモードに対応した、サーバー専用のmicroCMS APIクライアント
+ * 'use cache'ディレクティブを使用するため、サーバーコンポーネントでのみ使用可能
  * 
- * 特徴:
- * - 型安全性: TypeScriptで厳密な型定義
- * - キャッシュ制御: Cache Componentsモードに対応した適切なキャッシュ戦略
- * - エラーハンドリング: 詳細なエラー情報を提供
- * - Next.js 16対応: Cache ComponentsモードとReact cacheを活用
- * 
- * 注意: 'use cache'ディレクティブを使用する関数は server-client.ts に分離されています
- * クライアントコンポーネントからも使用可能な基本関数のみを提供します
+ * このファイルはクライアントコンポーネントからインポートしないでください
  */
 
+'use server'
+
+import { cacheTag, cacheLife } from 'next/cache'
 import type { QueryParams, ListResponse } from './types'
 import {
   MicroCMSApiError,
@@ -26,9 +20,6 @@ import { buildQueryString, buildBaseUrl, buildContentUrl } from './utils'
 
 /**
  * 環境変数の検証
- * 必要な環境変数が設定されていない場合はエラーを投げる
- * 
- * ビルド時とランタイム時で異なるエラーメッセージを提供します
  */
 function validateEnvironment(): {
   serviceDomain: string
@@ -37,7 +28,6 @@ function validateEnvironment(): {
   const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
   const apiKey = process.env.MICROCMS_API_KEY
 
-  // ビルド時かどうかを判定
   const isBuildTime =
     process.env.NEXT_PHASE === 'phase-production-build' ||
     process.env.NEXT_PHASE === 'phase-development-build' ||
@@ -64,9 +54,6 @@ function validateEnvironment(): {
 
 /**
  * fetch APIのエラーレスポンスを処理
- * 
- * @param response fetch APIのResponseオブジェクト
- * @returns エラーメッセージを含むオブジェクト
  */
 async function handleErrorResponse(
   response: Response
@@ -74,17 +61,14 @@ async function handleErrorResponse(
   let errorMessage: string | undefined
 
   try {
-    // エラーレスポンスのJSONを取得
     const errorData = await response.json()
     if (errorData && typeof errorData.message === 'string') {
       errorMessage = errorData.message
     }
   } catch {
-    // JSONのパースに失敗した場合は、ステータステキストを使用
     errorMessage = response.statusText || 'Unknown error'
   }
 
-  // デフォルトのエラーメッセージを生成
   const message = `microCMS API error: ${response.status} ${response.statusText}`
 
   return { message, errorMessage }
@@ -92,11 +76,6 @@ async function handleErrorResponse(
 
 /**
  * fetch APIのリクエストを実行（内部実装）
- * 
- * @param url リクエストURL
- * @param apiKey APIキー
- * @param cacheOption キャッシュオプション
- * @returns fetch APIのResponseオブジェクト
  */
 async function fetchWithAuthInternal(
   url: string,
@@ -115,7 +94,6 @@ async function fetchWithAuthInternal(
 
     return response
   } catch (error) {
-    // ネットワークエラー（接続エラー、タイムアウトなど）
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new MicroCMSNetworkError(
         'ネットワークエラーが発生しました。接続を確認してください。',
@@ -123,7 +101,6 @@ async function fetchWithAuthInternal(
       )
     }
 
-    // その他の予期しないエラー
     throw new MicroCMSUnknownError(
       '予期しないエラーが発生しました。',
       error
@@ -133,11 +110,6 @@ async function fetchWithAuthInternal(
 
 /**
  * コンテンツ一覧を取得（内部実装）
- * 
- * @param endpoint エンドポイント名
- * @param queries クエリパラメータ
- * @param cacheOption キャッシュオプション
- * @returns コンテンツ一覧のレスポンス
  */
 async function getListInternal<T>(
   endpoint: string,
@@ -146,17 +118,12 @@ async function getListInternal<T>(
 ): Promise<ListResponse<T>> {
   const { serviceDomain, apiKey } = validateEnvironment()
 
-  // ベースURLを構築
   const baseUrl = buildBaseUrl(serviceDomain, endpoint)
-
-  // クエリパラメータを構築
   const queryString = queries ? buildQueryString(queries) : ''
   const url = `${baseUrl}${queryString}`
 
-  // APIリクエストを実行
   const response = await fetchWithAuthInternal(url, apiKey, cacheOption)
 
-  // エラーレスポンスを処理
   if (!response.ok) {
     const { message, errorMessage } = await handleErrorResponse(response)
     throw new MicroCMSApiError(
@@ -167,7 +134,6 @@ async function getListInternal<T>(
     )
   }
 
-  // レスポンスをJSONとしてパース
   try {
     const data = await response.json()
     return data as ListResponse<T>
@@ -179,42 +145,103 @@ async function getListInternal<T>(
   }
 }
 
+/**
+ * コンテンツ詳細を取得（内部実装）
+ */
+async function getDetailInternal<T>(
+  endpoint: string,
+  contentId: string,
+  queries: QueryParams | undefined,
+  cacheOption: RequestCache
+): Promise<T> {
+  const { serviceDomain, apiKey } = validateEnvironment()
+
+  const baseUrl = buildContentUrl(serviceDomain, endpoint, contentId)
+  const queryString = queries ? buildQueryString(queries) : ''
+  const url = `${baseUrl}${queryString}`
+
+  const response = await fetchWithAuthInternal(url, apiKey, cacheOption)
+
+  if (!response.ok) {
+    const { message, errorMessage } = await handleErrorResponse(response)
+    throw new MicroCMSApiError(
+      message,
+      response.status,
+      errorMessage,
+      response
+    )
+  }
+
+  try {
+    const data = await response.json()
+    return data as T
+  } catch (error) {
+    throw new MicroCMSUnknownError(
+      'レスポンスのパースに失敗しました。',
+      error
+    )
+  }
+}
 
 /**
- * コンテンツ一覧を取得（後方互換性のため）
- * デフォルトでは静的キャッシュを使用
- * 
- * @deprecated 新しいコードでは getListStatic または getListDynamic を使用してください
- * @param endpoint エンドポイント名（例: 'announcements'）
- * @param queries クエリパラメータ（オプション）
- * @returns コンテンツ一覧のレスポンス
+ * 静的コンテンツ一覧を取得（ビルド時キャッシュ）
+ * Cache Componentsモードで使用し、静的生成に最適化
  */
-export async function getList<T>(
+export async function getListStatic<T>(
   endpoint: string,
   queries?: QueryParams
 ): Promise<ListResponse<T>> {
-  // サーバー専用関数をインポートして使用
-  const { getListStatic } = await import('./server-client')
-  return getListStatic<T>(endpoint, queries)
+  'use cache'
+  cacheTag(`microcms:${endpoint}`)
+  cacheLife('hours') // 1時間キャッシュ
+
+  return getListInternal<T>(endpoint, queries, 'force-cache')
 }
 
+/**
+ * 動的コンテンツ一覧を取得（ランタイムキャッシュ）
+ * 動的レンダリングが必要な場合に使用
+ */
+export async function getListDynamic<T>(
+  endpoint: string,
+  queries?: QueryParams
+): Promise<ListResponse<T>> {
+  'use cache: remote'
+  cacheTag(`microcms:${endpoint}:dynamic`)
+  cacheLife({ expire: 300 }) // 5分キャッシュ
+
+  return getListInternal<T>(endpoint, queries, 'no-store')
+}
 
 /**
- * コンテンツ詳細を取得（後方互換性のため）
- * デフォルトでは静的キャッシュを使用
- * 
- * @deprecated 新しいコードでは getDetailStatic または getDetailDynamic を使用してください
- * @param endpoint エンドポイント名（例: 'announcements'）
- * @param contentId コンテンツID
- * @param queries クエリパラメータ（オプション）
- * @returns コンテンツ詳細データ
+ * 静的コンテンツ詳細を取得（ビルド時キャッシュ）
+ * Cache Componentsモードで使用し、静的生成に最適化
  */
-export async function getDetail<T>(
+export async function getDetailStatic<T>(
   endpoint: string,
   contentId: string,
   queries?: QueryParams
 ): Promise<T> {
-  // サーバー専用関数をインポートして使用
-  const { getDetailStatic } = await import('./server-client')
-  return getDetailStatic<T>(endpoint, contentId, queries)
+  'use cache'
+  cacheTag(`microcms:${endpoint}:${contentId}`)
+  cacheLife('hours') // 1時間キャッシュ
+
+  return getDetailInternal<T>(endpoint, contentId, queries, 'force-cache')
 }
+
+/**
+ * 動的コンテンツ詳細を取得（ランタイムキャッシュ）
+ * 動的レンダリングが必要な場合に使用
+ */
+export async function getDetailDynamic<T>(
+  endpoint: string,
+  contentId: string,
+  queries?: QueryParams
+): Promise<T> {
+  'use cache: remote'
+  cacheTag(`microcms:${endpoint}:${contentId}:dynamic`)
+  cacheLife({ expire: 300 }) // 5分キャッシュ
+
+  return getDetailInternal<T>(endpoint, contentId, queries, 'no-store')
+}
+

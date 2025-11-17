@@ -2,93 +2,68 @@ import { Suspense } from 'react'
 import { cache } from 'react'
 import { connection } from 'next/server'
 import { cacheTag, cacheLife } from 'next/cache'
-import { getListDynamic } from '@/lib/microcms/server-client'
-import { BlogPost } from '@/lib/types/blog'
+import { getDetailDynamic } from '@/lib/microcms/server-client'
+import { Announcement } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
-import BlogDetail from '@/components/BlogDetail'
+import AnnouncementDetail from '@/components/AnnouncementDetail'
 import Breadcrumb from '@/components/Breadcrumb'
 import PreviewBanner from '@/components/PreviewBanner'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
 /**
- * slugでブログ記事を取得するヘルパー関数（プレビュー用、メモ化）
- * 動的レンダリング用なので、getListDynamicを使用
- * React cacheを使用して、同じリクエスト内での重複取得を防止
- * 
- * @param slug - ブログ記事のスラッグ
- * @param draftKey - 下書きキー（必須）
- * @returns ブログ記事データ
+ * IDでお知らせを取得するヘルパー関数（プレビュー用、メモ化）
  */
-const getBlogPostBySlugWithDraft = cache(async (
-  slug: string,
+const getAnnouncementByIdWithDraft = cache(async (
+  id: string,
   draftKey: string
-): Promise<BlogPost> => {
+): Promise<Announcement> => {
   'use cache: remote'
-  cacheTag(`blog:${slug}:preview:${draftKey}`)
-  cacheLife({ expire: 60 }) // プレビューは1分キャッシュ（短め）
+  cacheTag(`announcement:${id}:preview:${draftKey}`)
+  cacheLife({ expire: 60 })
 
-  const data = await getListDynamic<BlogPost>('blog', {
-    filters: `slug[equals]${slug}`,
-    limit: 1,
-    draftKey, // 下書きキーを指定
+  return getDetailDynamic<Announcement>('announcements', id, {
+    draftKey,
   })
-
-  if (data.contents.length === 0) {
-    throw new Error('Blog post not found')
-  }
-
-  return data.contents[0]
 })
 
-/**
- * プレビューコンテンツコンポーネント（動的データフェッチ用）
- * Suspenseでラップされる
- * paramsとsearchParamsをPromiseとして受け取り、内部でawaitする
- * connection()を呼び出して動的レンダリングを明示的にマーク
- */
-async function PreviewBlogContent({
+async function PreviewAnnouncementContent({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ id: string }>
   searchParams: Promise<{ draftKey?: string }>
 }) {
-  // 動的レンダリングを明示的にマーク
   await connection()
-  
-  const { slug } = await params
+
+  const { id } = await params
   const { draftKey } = await searchParams
 
-  // draftKeyが必須
   if (!draftKey) {
     notFound()
   }
-  let post: BlogPost
+
+  let announcement: Announcement
 
   try {
-    post = await getBlogPostBySlugWithDraft(slug, draftKey)
+    announcement = await getAnnouncementByIdWithDraft(id, draftKey)
   } catch (error) {
     const errorResult = handleMicroCMSError(error, {
       onBuildTimeNetworkError: () => {
-        console.warn('ビルド時にブログ記事の取得に失敗しました。notFound()を呼び出します。')
+        console.warn('ビルド時にお知らせの取得に失敗しました。notFound()を呼び出します。')
       },
-      onNotFound: () => {
-        // 404エラーの場合はnotFound()を呼び出す
-      },
+      onNotFound: () => {},
       onRuntimeError: () => {
-        console.error('ブログ記事の取得に失敗しました:', error)
+        console.error('お知らせの取得に失敗しました:', error)
       },
     })
 
-    // 404エラーまたはビルド時のネットワークエラーの場合
     if (errorResult.isNotFound || errorResult.isBuildTimeNetworkError) {
       notFound()
     }
 
-    // その他のエラーはthrowしてerror.tsxで処理
     if (errorResult.shouldThrow) {
-      throw new Error('ブログ記事の取得に失敗しました。しばらくしてから再度お試しください。')
+      throw new Error('お知らせの取得に失敗しました。しばらくしてから再度お試しください。')
     }
 
     notFound()
@@ -99,7 +74,6 @@ async function PreviewBlogContent({
       <PreviewBanner />
       <main className="min-h-screen bg-white">
         <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
-          {/* Subtle Grid Background */}
           <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
             <div
               className="absolute inset-0"
@@ -111,16 +85,14 @@ async function PreviewBlogContent({
           </div>
 
           <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
-            {/* Breadcrumb */}
             <Breadcrumb
               items={[
-                { label: 'ブログ', href: '/blog' },
-                { label: post.title },
+                { label: 'お知らせ', href: '/announcements' },
+                { label: announcement.title },
               ]}
             />
 
-            {/* Blog Detail */}
-            <BlogDetail post={post} />
+            <AnnouncementDetail announcement={announcement} />
           </div>
         </section>
       </main>
@@ -128,16 +100,12 @@ async function PreviewBlogContent({
   )
 }
 
-/**
- * ローディングフォールバック
- */
-function PreviewBlogLoading() {
+function PreviewAnnouncementLoading() {
   return (
     <>
       <PreviewBanner />
       <main className="min-h-screen bg-white">
         <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-12 md:py-32">
-          {/* Subtle Grid Background */}
           <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
             <div
               className="absolute inset-0"
@@ -149,12 +117,10 @@ function PreviewBlogLoading() {
           </div>
 
           <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
-            {/* Breadcrumb Skeleton */}
             <div className="mb-8">
               <div className="h-5 w-32 bg-slate-200/40 rounded animate-pulse" />
             </div>
 
-            {/* Article Skeleton */}
             <article className="max-w-4xl mx-auto">
               <header className="mb-8 sm:mb-12">
                 <div className="h-4 w-24 bg-slate-200/40 rounded animate-pulse mb-4" />
@@ -162,7 +128,6 @@ function PreviewBlogLoading() {
                 <div className="h-4 w-32 bg-slate-200/40 rounded animate-pulse" />
               </header>
 
-              {/* Content Skeleton */}
               <div className="space-y-4">
                 <div className="h-4 w-full bg-slate-200/40 rounded animate-pulse" />
                 <div className="h-4 w-full bg-slate-200/40 rounded animate-pulse" />
@@ -179,37 +144,28 @@ function PreviewBlogLoading() {
   )
 }
 
-/**
- * 動的メタデータを生成（プレビュー用）
- * プレビューページは常に動的レンダリングのため、シンプルなメタデータを返す
- */
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `プレビュー | tsutsu Blog`,
+    title: 'プレビュー | お知らせ',
     robots: {
-      index: false, // プレビューページはインデックスしない
+      index: false,
       follow: false,
     },
   }
 }
 
-/**
- * ブログプレビューページコンポーネント
- * paramsとsearchParamsへのアクセスをSuspenseでラップして動的レンダリングを許可
- */
-export default function PreviewBlogDetailPage({
+export default function PreviewAnnouncementDetailPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ id: string }>
   searchParams: Promise<{ draftKey?: string }>
 }) {
-  // Suspenseでラップして動的データフェッチを許可
-  // paramsとsearchParamsはPromiseとして子コンポーネントに渡す
   return (
-    <Suspense fallback={<PreviewBlogLoading />}>
-      <PreviewBlogContent params={params} searchParams={searchParams} />
+    <Suspense fallback={<PreviewAnnouncementLoading />}>
+      <PreviewAnnouncementContent params={params} searchParams={searchParams} />
     </Suspense>
   )
 }
+
 

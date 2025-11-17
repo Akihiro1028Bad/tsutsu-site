@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   cacheComponents: true,
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   images: {
     remotePatterns: [
       {

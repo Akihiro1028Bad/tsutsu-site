@@ -1,32 +1,30 @@
-'use client'
-
-import { BlogPost } from '@/lib/types/blog'
-import { formatDate, getCategoryName, getCardImageUrl, getExcerpt } from '@/lib/utils/blog'
 import ContentCard, { type ContentCardData } from './ContentCard'
+import { formatDate, type BlogCardItem } from '@/lib/utils/blog'
 
 interface BlogCardProps {
-  post: BlogPost
+  post: BlogCardItem
 }
 
 export default function BlogCard({ post }: BlogCardProps) {
-  const categoryName = getCategoryName(post.category)
-  const cardImageUrl = getCardImageUrl(post.hero)
-
   const contentData: ContentCardData = {
     id: post.id,
     title: post.title,
     publishedAt: post.publishedAt,
-    category: post.category,
-    image: post.hero,
-    excerpt: getExcerpt(post.content),
+    image: post.imageUrl
+      ? {
+          url: post.imageUrl,
+          alt: post.title,
+        }
+      : undefined,
+    excerpt: post.excerpt,
   }
 
   return (
     <ContentCard
       content={contentData}
-      href={`/blog/${post.slug}`}
-      imageUrl={cardImageUrl}
-      categoryName={categoryName}
+      href={post.href}
+      imageUrl={post.imageUrl}
+      categoryName={post.categoryName}
       formatDate={formatDate}
     />
   )

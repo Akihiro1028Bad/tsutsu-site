@@ -1,13 +1,31 @@
-import { getList, getDetail } from '@/lib/microcms/client'
-import { Announcement, AnnouncementListResponse } from '@/lib/types/announcement'
+import { cache } from 'react'
+import { cacheTag, cacheLife } from 'next/cache'
+import { getListStatic, getDetailStatic } from '@/lib/microcms/server-client'
+import { Announcement } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementDetail from '@/components/AnnouncementDetail'
 import Breadcrumb from '@/components/Breadcrumb'
 import { notFound } from 'next/navigation'
 
+/**
+ * お知らせ詳細を取得する関数（メモ化）
+ * React cacheを使用して、同じリクエスト内での重複取得を防止
+ */
+const getAnnouncementById = cache(async (id: string): Promise<Announcement> => {
+  'use cache'
+  cacheTag(`announcement:${id}`)
+  cacheLife('hours') // 1時間キャッシュ
+
+  return getDetailStatic<Announcement>('announcements', id)
+})
+
 export async function generateStaticParams() {
+  'use cache'
+  cacheTag('announcements:static-params')
+  cacheLife('hours') // 1時間キャッシュ
+
   try {
-    const data = await getList<Announcement>('announcements', {
+    const data = await getListStatic<Announcement>('announcements', {
       filters: 'publishedAt[exists]',
       limit: 100,
     })
@@ -41,7 +59,7 @@ export default async function AnnouncementDetailPage({
   let announcement: Announcement
 
   try {
-    announcement = await getDetail<Announcement>('announcements', id)
+    announcement = await getAnnouncementById(id)
   } catch (error) {
     const errorResult = handleMicroCMSError(error, {
       onBuildTimeNetworkError: () => {

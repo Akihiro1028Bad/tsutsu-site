@@ -1,10 +1,8 @@
-'use client'
-
-import { Announcement } from '@/lib/types/announcement'
 import AnnouncementCard from './AnnouncementCard'
+import type { AnnouncementCardItem } from '@/lib/utils/announcement'
 
 interface AnnouncementListProps {
-  announcements: Announcement[]
+  announcements: AnnouncementCardItem[]
 }
 
 export default function AnnouncementList({ announcements }: AnnouncementListProps) {

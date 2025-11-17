@@ -4,6 +4,7 @@ import { Announcement, AnnouncementListResponse } from '@/lib/types/announcement
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementList from '@/components/AnnouncementList'
 import Breadcrumb from '@/components/Breadcrumb'
+import { mapAnnouncementsToCardItems } from '@/lib/utils/announcement'
 
 export const metadata: Metadata = {
   title: 'お知らせ | tsutsu',
@@ -56,6 +57,8 @@ export default async function AnnouncementsPage() {
     }
   }
 
+  const announcements = mapAnnouncementsToCardItems(data.contents)
+
   return (
     <main className="min-h-screen bg-white">
       <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
@@ -86,7 +89,7 @@ export default async function AnnouncementsPage() {
           </div>
 
           {/* Announcements List */}
-          <AnnouncementList announcements={data.contents} />
+          <AnnouncementList announcements={announcements} />
         </div>
       </section>
     </main>

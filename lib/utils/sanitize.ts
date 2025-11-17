@@ -5,6 +5,7 @@
  */
 
 import DOMPurify from 'isomorphic-dompurify'
+import { connection } from 'next/server'
 
 /**
  * HTMLコンテンツをサニタイズします
@@ -12,7 +13,12 @@ import DOMPurify from 'isomorphic-dompurify'
  * @param html - サニタイズするHTMLコンテンツ
  * @returns サニタイズされたHTMLコンテンツ
  */
-export function sanitizeHtml(html: string): string {
+export async function sanitizeHtml(html: string): Promise<string> {
+  // Next.js 16以降では Server Component 内で new Date() を使用する前に
+  // 動的データソースへアクセスする必要があるため、connection() を呼び出し
+  // リクエストコンテキストにバインドして静的プリレンダー回避を明示します。
+  await connection()
+
   const sanitized = DOMPurify.sanitize(html, {
     // 許可するタグと属性
     ALLOWED_TAGS: [
