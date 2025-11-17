@@ -9,15 +9,30 @@ import { MicroCMSApiError, MicroCMSNetworkError } from '@/lib/microcms/errors'
 /**
  * ビルド時かどうかを判定します
  * 
+ * Next.js 16のビルド時判定:
+ * - process.env.NEXT_PHASEが'phase-production-build'または'phase-development-build'の場合
+ * - サーバーサイドで、かつ本番環境で、かつVERCEL_ENVが設定されていない場合
+ * 
  * @returns ビルド時の場合はtrue、ランタイム時の場合はfalse
  */
 export function isBuildTime(): boolean {
-  // ビルド時はprocess.env.NEXT_PHASEが'phase-production-build'になる
-  // または、typeof window === 'undefined'でサーバーサイドであることを確認
-  return (
-    process.env.NEXT_PHASE === 'phase-production-build' ||
-    (typeof window === 'undefined' && process.env.NODE_ENV === 'production')
-  )
+  // Next.jsのビルドフェーズを確認
+  const nextPhase = process.env.NEXT_PHASE
+  if (nextPhase === 'phase-production-build' || nextPhase === 'phase-development-build') {
+    return true
+  }
+
+  // サーバーサイドで、かつ本番環境の場合
+  // Vercel環境ではビルド時でもVERCEL_ENVが設定される場合があるため、除外
+  if (
+    typeof window === 'undefined' &&
+    process.env.NODE_ENV === 'production' &&
+    !process.env.VERCEL_ENV
+  ) {
+    return true
+  }
+
+  return false
 }
 
 /**

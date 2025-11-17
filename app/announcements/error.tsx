@@ -18,7 +18,7 @@ export default function Error({
   return (
     <main className="min-h-screen bg-white">
       <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-12 md:py-32">
-        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
+        <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-light mb-6 text-slate-950 tracking-tight">
               エラーが発生しました

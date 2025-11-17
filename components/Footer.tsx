@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -14,7 +14,8 @@ import {
   Briefcase, 
   User, 
   Bell,
-  MessageSquare
+  MessageSquare,
+  BookOpen
 } from 'lucide-react'
 
 const navItems = [
@@ -22,6 +23,7 @@ const navItems = [
   { name: 'サービス', href: '#services', id: 'services', icon: Briefcase, isHash: true },
   { name: 'プロフィール', href: '#about', id: 'about', icon: User, isHash: true },
   { name: 'お知らせ', href: '/announcements', id: 'announcements', icon: Bell, isHash: false },
+  { name: 'ブログ', href: '/blog', id: 'blog', icon: BookOpen, isHash: false },
   { name: 'お問い合わせ', href: '#contact', id: 'contact', icon: MessageSquare, isHash: true },
 ]
 
@@ -32,10 +34,26 @@ const socialLinks = [
   { name: 'Email', icon: Mail, href: 'mailto:contact@example.com', color: 'hover:text-primary-400' },
 ]
 
-// 年を取得するコンポーネント（new Date()を使用）
+// ビルド時の年度を定数として定義（サーバーとクライアントで同じ値になる）
+// 年度は年に1回しか変わらないため、ビルド時の年度を初期値として使用
+const BUILD_YEAR = new Date().getFullYear()
+
+// 年を取得するコンポーネント
+// useEffectを使用してクライアント側でのみ年度を更新し、ハイドレーションミスマッチを防止
 function FooterYear() {
-  const currentYear = new Date().getFullYear()
-  return <>{currentYear}</>
+  // ビルド時の年度を初期値として使用（サーバーとクライアントで同じ値がレンダリングされる）
+  const [currentYear, setCurrentYear] = useState(BUILD_YEAR)
+
+  useEffect(() => {
+    // クライアント側でのみ実行され、実際の年度に更新
+    // 年の境界をまたいだ場合でも、クライアント側で正しい年度に更新される
+    const clientYear = new Date().getFullYear()
+    if (clientYear !== BUILD_YEAR) {
+      setCurrentYear(clientYear)
+    }
+  }, [])
+
+  return <span>{currentYear}</span>
 }
 
 export default function Footer() {
@@ -43,10 +61,13 @@ export default function Footer() {
   
   // お知らせページがアクティブかどうかを判定
   const isAnnouncementsActive = pathname?.startsWith('/announcements') ?? false
+  
+  // ブログページがアクティブかどうかを判定
+  const isBlogActive = pathname?.startsWith('/blog') ?? false
 
-  // ハッシュリンクのhrefを取得（お知らせページの場合はトップページへのリンクに変更）
+  // ハッシュリンクのhrefを取得（お知らせページまたはブログページの場合はトップページへのリンクに変更）
   const getHashHref = (href: string, isHash: boolean) => {
-    if (isHash && isAnnouncementsActive) {
+    if (isHash && (isAnnouncementsActive || isBlogActive)) {
       return `/${href}` // `#home` → `/#home`
     }
     return href
@@ -115,8 +136,8 @@ export default function Footer() {
                 const Icon = item.icon
                 if (item.isHash) {
                   const href = getHashHref(item.href, item.isHash)
-                  // お知らせページの場合はLinkコンポーネントを使用
-                  if (isAnnouncementsActive) {
+                  // お知らせページまたはブログページの場合はLinkコンポーネントを使用
+                  if (isAnnouncementsActive || isBlogActive) {
                     return (
                       <Link
                         key={item.name}
@@ -199,11 +220,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8">
           <p className="text-xs text-gray-500 text-center font-light">
-            &copy;{' '}
-            <Suspense fallback={<span>tsutsu</span>}>
-              <FooterYear />
-            </Suspense>{' '}
-            tsutsu. All rights reserved.
+            &copy; <FooterYear /> tsutsu. All rights reserved.
           </p>
         </div>
       </div>

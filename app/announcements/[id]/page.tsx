@@ -1,13 +1,31 @@
-import { getList, getDetail } from '@/lib/microcms/client'
-import { Announcement, AnnouncementListResponse } from '@/lib/types/announcement'
+import { cache } from 'react'
+import { cacheTag, cacheLife } from 'next/cache'
+import { getListStatic, getDetailStatic } from '@/lib/microcms/server-client'
+import { Announcement } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementDetail from '@/components/AnnouncementDetail'
 import Breadcrumb from '@/components/Breadcrumb'
 import { notFound } from 'next/navigation'
 
+/**
+ * お知らせ詳細を取得する関数（メモ化）
+ * React cacheを使用して、同じリクエスト内での重複取得を防止
+ */
+const getAnnouncementById = cache(async (id: string): Promise<Announcement> => {
+  'use cache'
+  cacheTag(`announcement:${id}`)
+  cacheLife('hours') // 1時間キャッシュ
+
+  return getDetailStatic<Announcement>('announcements', id)
+})
+
 export async function generateStaticParams() {
+  'use cache'
+  cacheTag('announcements:static-params')
+  cacheLife('hours') // 1時間キャッシュ
+
   try {
-    const data = await getList<Announcement>('announcements', {
+    const data = await getListStatic<Announcement>('announcements', {
       filters: 'publishedAt[exists]',
       limit: 100,
     })
@@ -16,10 +34,18 @@ export async function generateStaticParams() {
       id: announcement.id,
     }))
   } catch (error) {
-    // ビルド時のエラーはログに記録し、空配列を返す
-    // これにより、ビルドは継続されるが、静的生成は行われない
-    console.warn('お知らせ一覧の取得に失敗しました（ビルド時）:', error)
-    console.warn('ビルドを継続しますが、静的生成は行われません。')
+    // 統一的なエラーハンドリングを使用
+    handleMicroCMSError(error, {
+      onBuildTimeNetworkError: () => {
+        console.warn('ビルド時にお知らせ一覧の取得に失敗しました。空配列を返します。')
+      },
+      onRuntimeError: () => {
+        // generateStaticParamsはビルド時のみ実行されるため、ここには到達しない
+        console.error('予期しないエラー（generateStaticParams）:', error)
+      },
+    })
+
+    // ビルド時のエラーは空配列を返してビルドを継続
     return []
   }
 }
@@ -33,7 +59,7 @@ export default async function AnnouncementDetailPage({
   let announcement: Announcement
 
   try {
-    announcement = await getDetail<Announcement>('announcements', id)
+    announcement = await getAnnouncementById(id)
   } catch (error) {
     const errorResult = handleMicroCMSError(error, {
       onBuildTimeNetworkError: () => {
@@ -57,9 +83,8 @@ export default async function AnnouncementDetailPage({
       throw new Error('お知らせの取得に失敗しました。しばらくしてから再度お試しください。')
     }
 
-    // notFound()が呼ばれた場合は、ここには到達しない
-    // TypeScriptの型チェックを満たすため、returnを追加
-    return
+    // エラー処理が完了したが、お知らせが見つからない場合はnotFound()を呼び出す
+    notFound()
   }
 
   // 公開済みかどうかの確認
@@ -81,7 +106,7 @@ export default async function AnnouncementDetailPage({
           />
         </div>
 
-        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+        <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
           {/* Breadcrumb */}
           <Breadcrumb
             items={[

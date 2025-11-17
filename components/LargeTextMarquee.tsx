@@ -73,7 +73,7 @@ export default function LargeTextMarquee({
   // アニメーション無効化時は静止表示
   if (prefersReducedMotion) {
     return (
-      <section className={`relative w-full overflow-hidden py-12 md:py-20 bg-slate-50/30 ${className}`} aria-hidden="true">
+      <section className={`relative w-full overflow-hidden py-8 md:py-12 bg-slate-50/30 ${className}`} aria-hidden="true">
         <div className="flex items-center justify-center">
           <span className="font-semibold tracking-[0.05em] select-none text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-slate-300/40 md:text-slate-400/50">
             {text}
@@ -98,7 +98,7 @@ export default function LargeTextMarquee({
 
   return (
     <section
-      className={`relative w-full overflow-hidden py-12 md:py-20 bg-slate-50/30 ${className}`}
+      className={`relative w-full overflow-hidden py-8 md:py-12 bg-slate-50/30 ${className}`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-hidden="true"

@@ -1,8 +1,29 @@
+import type { Metadata } from 'next'
 import { getList } from '@/lib/microcms/client'
 import { Announcement, AnnouncementListResponse } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementList from '@/components/AnnouncementList'
 import Breadcrumb from '@/components/Breadcrumb'
+import { mapAnnouncementsToCardItems } from '@/lib/utils/announcement'
+
+export const metadata: Metadata = {
+  title: 'お知らせ | tsutsu',
+  description: 'サービス更新やメンテナンス情報など、最新のお知らせを掲載しています。',
+  alternates: {
+    canonical: '/announcements',
+  },
+  openGraph: {
+    title: 'お知らせ | tsutsu',
+    description: 'サービス更新やメンテナンス情報など、最新のお知らせを掲載しています。',
+    url: '/announcements',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'お知らせ | tsutsu',
+    description: 'サービス更新やメンテナンス情報など、最新のお知らせを掲載しています。',
+  },
+}
 
 export default async function AnnouncementsPage() {
   let data: AnnouncementListResponse
@@ -36,6 +57,8 @@ export default async function AnnouncementsPage() {
     }
   }
 
+  const announcements = mapAnnouncementsToCardItems(data.contents)
+
   return (
     <main className="min-h-screen bg-white">
       <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
@@ -66,7 +89,7 @@ export default async function AnnouncementsPage() {
           </div>
 
           {/* Announcements List */}
-          <AnnouncementList announcements={data.contents} />
+          <AnnouncementList announcements={announcements} />
         </div>
       </section>
     </main>

@@ -1,3 +1,5 @@
+import 'server-only'
+
 /**
  * microCMS API クライアント
  * 
@@ -6,9 +8,12 @@
  * 
  * 特徴:
  * - 型安全性: TypeScriptで厳密な型定義
- * - キャッシュ制御: cache: 'no-store'で常に最新データを取得
+ * - キャッシュ制御: Cache Componentsモードに対応した適切なキャッシュ戦略
  * - エラーハンドリング: 詳細なエラー情報を提供
- * - Next.js 16対応: 時間依存処理のエラーを回避
+ * - Next.js 16対応: Cache ComponentsモードとReact cacheを活用
+ * 
+ * 注意: 'use cache'ディレクティブを使用する関数は server-client.ts に分離されています
+ * クライアントコンポーネントからも使用可能な基本関数のみを提供します
  */
 
 import type { QueryParams, ListResponse } from './types'
@@ -22,6 +27,8 @@ import { buildQueryString, buildBaseUrl, buildContentUrl } from './utils'
 /**
  * 環境変数の検証
  * 必要な環境変数が設定されていない場合はエラーを投げる
+ * 
+ * ビルド時とランタイム時で異なるエラーメッセージを提供します
  */
 function validateEnvironment(): {
   serviceDomain: string
@@ -30,16 +37,26 @@ function validateEnvironment(): {
   const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
   const apiKey = process.env.MICROCMS_API_KEY
 
+  // ビルド時かどうかを判定
+  const isBuildTime =
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    process.env.NEXT_PHASE === 'phase-development-build' ||
+    (typeof window === 'undefined' &&
+      process.env.NODE_ENV === 'production' &&
+      !process.env.VERCEL_ENV)
+
   if (!serviceDomain) {
-    throw new Error(
-      'MICROCMS_SERVICE_DOMAIN is not set. Please set it in your .env.local file.'
-    )
+    const message = isBuildTime
+      ? 'MICROCMS_SERVICE_DOMAIN is not set. Build cannot continue. Please set it in your environment variables.'
+      : 'MICROCMS_SERVICE_DOMAIN is not set. Please set it in your .env.local file.'
+    throw new Error(message)
   }
 
   if (!apiKey) {
-    throw new Error(
-      'MICROCMS_API_KEY is not set. Please set it in your .env.local file.'
-    )
+    const message = isBuildTime
+      ? 'MICROCMS_API_KEY is not set. Build cannot continue. Please set it in your environment variables.'
+      : 'MICROCMS_API_KEY is not set. Please set it in your .env.local file.'
+    throw new Error(message)
   }
 
   return { serviceDomain, apiKey }
@@ -74,14 +91,18 @@ async function handleErrorResponse(
 }
 
 /**
- * fetch APIのリクエストを実行
- * Next.js 16のCache Componentsモードに対応するため、cache: 'no-store'を設定
+ * fetch APIのリクエストを実行（内部実装）
  * 
  * @param url リクエストURL
  * @param apiKey APIキー
+ * @param cacheOption キャッシュオプション
  * @returns fetch APIのResponseオブジェクト
  */
-async function fetchWithAuth(url: string, apiKey: string): Promise<Response> {
+async function fetchWithAuthInternal(
+  url: string,
+  apiKey: string,
+  cacheOption: RequestCache = 'force-cache'
+): Promise<Response> {
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -89,10 +110,7 @@ async function fetchWithAuth(url: string, apiKey: string): Promise<Response> {
         'X-MICROCMS-API-KEY': apiKey,
         'Content-Type': 'application/json',
       },
-      // Next.js 16のCache Componentsモードに対応
-      // cache: 'no-store'により、常に最新のデータを取得
-      // これにより、時間依存処理のエラーを回避し、リアルタイム性を確保
-      cache: 'no-store',
+      cache: cacheOption,
     })
 
     return response
@@ -114,27 +132,17 @@ async function fetchWithAuth(url: string, apiKey: string): Promise<Response> {
 }
 
 /**
- * コンテンツ一覧を取得
+ * コンテンツ一覧を取得（内部実装）
  * 
- * @param endpoint エンドポイント名（例: 'announcements'）
- * @param queries クエリパラメータ（オプション）
+ * @param endpoint エンドポイント名
+ * @param queries クエリパラメータ
+ * @param cacheOption キャッシュオプション
  * @returns コンテンツ一覧のレスポンス
- * @throws MicroCMSApiError APIエラー
- * @throws MicroCMSNetworkError ネットワークエラー
- * @throws MicroCMSUnknownError その他のエラー
- * 
- * @example
- * ```typescript
- * const data = await getList<Announcement>('announcements', {
- *   filters: 'publishedAt[exists]',
- *   orders: '-publishedAt',
- *   limit: 100,
- * })
- * ```
  */
-export async function getList<T>(
+async function getListInternal<T>(
   endpoint: string,
-  queries?: QueryParams
+  queries: QueryParams | undefined,
+  cacheOption: RequestCache
 ): Promise<ListResponse<T>> {
   const { serviceDomain, apiKey } = validateEnvironment()
 
@@ -146,7 +154,7 @@ export async function getList<T>(
   const url = `${baseUrl}${queryString}`
 
   // APIリクエストを実行
-  const response = await fetchWithAuth(url, apiKey)
+  const response = await fetchWithAuthInternal(url, apiKey, cacheOption)
 
   // エラーレスポンスを処理
   if (!response.ok) {
@@ -171,58 +179,42 @@ export async function getList<T>(
   }
 }
 
+
 /**
- * コンテンツ詳細を取得
+ * コンテンツ一覧を取得（後方互換性のため）
+ * デフォルトでは静的キャッシュを使用
  * 
+ * @deprecated 新しいコードでは getListStatic または getListDynamic を使用してください
+ * @param endpoint エンドポイント名（例: 'announcements'）
+ * @param queries クエリパラメータ（オプション）
+ * @returns コンテンツ一覧のレスポンス
+ */
+export async function getList<T>(
+  endpoint: string,
+  queries?: QueryParams
+): Promise<ListResponse<T>> {
+  // サーバー専用関数をインポートして使用
+  const { getListStatic } = await import('./server-client')
+  return getListStatic<T>(endpoint, queries)
+}
+
+
+/**
+ * コンテンツ詳細を取得（後方互換性のため）
+ * デフォルトでは静的キャッシュを使用
+ * 
+ * @deprecated 新しいコードでは getDetailStatic または getDetailDynamic を使用してください
  * @param endpoint エンドポイント名（例: 'announcements'）
  * @param contentId コンテンツID
  * @param queries クエリパラメータ（オプション）
  * @returns コンテンツ詳細データ
- * @throws MicroCMSApiError APIエラー（404など）
- * @throws MicroCMSNetworkError ネットワークエラー
- * @throws MicroCMSUnknownError その他のエラー
- * 
- * @example
- * ```typescript
- * const announcement = await getDetail<Announcement>('announcements', 'content-id')
- * ```
  */
 export async function getDetail<T>(
   endpoint: string,
   contentId: string,
   queries?: QueryParams
 ): Promise<T> {
-  const { serviceDomain, apiKey } = validateEnvironment()
-
-  // コンテンツ詳細URLを構築
-  const baseUrl = buildContentUrl(serviceDomain, endpoint, contentId)
-
-  // クエリパラメータを構築
-  const queryString = queries ? buildQueryString(queries) : ''
-  const url = `${baseUrl}${queryString}`
-
-  // APIリクエストを実行
-  const response = await fetchWithAuth(url, apiKey)
-
-  // エラーレスポンスを処理
-  if (!response.ok) {
-    const { message, errorMessage } = await handleErrorResponse(response)
-    throw new MicroCMSApiError(
-      message,
-      response.status,
-      errorMessage,
-      response
-    )
-  }
-
-  // レスポンスをJSONとしてパース
-  try {
-    const data = await response.json()
-    return data as T
-  } catch (error) {
-    throw new MicroCMSUnknownError(
-      'レスポンスのパースに失敗しました。',
-      error
-    )
-  }
+  // サーバー専用関数をインポートして使用
+  const { getDetailStatic } = await import('./server-client')
+  return getDetailStatic<T>(endpoint, contentId, queries)
 }

@@ -13,7 +13,7 @@ export default function Loading() {
           />
         </div>
 
-        <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
+        <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
           {/* Header Section Skeleton */}
           <div className="text-center mb-12 md:mb-16">
             <div className="h-12 sm:h-16 md:h-20 lg:h-24 w-48 mx-auto bg-slate-200/40 rounded animate-pulse mb-6" />

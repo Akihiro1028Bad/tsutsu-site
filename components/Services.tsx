@@ -447,7 +447,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-12 md:py-32"
+      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-16 md:py-32"
     >
       {/* Subtle Grid Background */}
       <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
@@ -460,7 +460,7 @@ export default function Services() {
         />
       </div>
 
-      <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
+      <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
