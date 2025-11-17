@@ -4,7 +4,7 @@
  * XSS攻撃を防ぐため、microCMSのリッチエディタコンテンツをサニタイズします
  */
 
-import DOMPurify from 'isomorphic-dompurify'
+import sanitizeHtmlLib from 'sanitize-html'
 import { connection } from 'next/server'
 
 /**
@@ -19,23 +19,35 @@ export async function sanitizeHtml(html: string): Promise<string> {
   // リクエストコンテキストにバインドして静的プリレンダー回避を明示します。
   await connection()
 
-  const sanitized = DOMPurify.sanitize(html, {
-    // 許可するタグと属性
-    ALLOWED_TAGS: [
-      'p', 'br', 'strong', 'em', 'u', 's', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img', 'figure', 'figcaption',
-      'table', 'thead', 'tbody', 'tr', 'th', 'td', 'hr', 'div', 'span'
+  const sanitized = sanitizeHtmlLib(html, {
+    allowedTags: [
+      'p', 'br', 'strong', 'em', 'u', 's',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li', 'blockquote', 'code', 'pre',
+      'a', 'img', 'figure', 'figcaption',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td',
+      'hr', 'div', 'span'
     ],
-    ALLOWED_ATTR: [
-      'href', 'target', 'rel', 'src', 'alt', 'title', 'width', 'height',
-      'class', 'id', 'style', 'datetime', 'dateTime',
-      'data-filename', // microCMSのコードブロック用
-      'tabindex', // Shikiの出力に含まれる可能性がある
-    ],
-    ADD_TAGS: [],
-    // スタイル属性を許可（microCMSのリッチエディタとShikiの出力で使用されるため）
-    // data-filename属性を許可（microCMSのコードブロック用）
-    ALLOW_DATA_ATTR: true,
+    allowedAttributes: {
+      '*': [
+        'class',
+        'id',
+        'style',
+        'title',
+        'tabindex',
+        'data-filename',
+        'datetime',
+        'dateTime',
+      ],
+      a: ['href', 'target', 'rel'],
+      img: ['src', 'alt', 'width', 'height'],
+      table: ['width'],
+      th: ['width'],
+      td: ['width'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    selfClosing: ['img', 'hr'],
+    enforceHtmlBoundary: true,
   })
 
   // target="_blank"のリンクにrel="noopener noreferrer"を自動付与
