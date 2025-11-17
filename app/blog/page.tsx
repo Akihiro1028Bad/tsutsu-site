@@ -85,7 +85,7 @@ export default async function BlogPage() {
             </h1>
             <div className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mx-auto mb-4 sm:mb-6 w-[100px]" />
             <p className="text-base sm:text-lg md:text-xl text-slate-600 leading-relaxed font-normal tracking-[0.08em] uppercase max-w-2xl mx-auto">
-              技術ブログや開発に関する記事
+              技術記事やキャリア、ライフスタイルに関する記事
             </p>
           </div>
 
