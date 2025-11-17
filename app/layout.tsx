@@ -1,8 +1,13 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import ClientComponents from '@/components/ClientComponents'
 import StructuredData from '@/components/StructuredData'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import HeaderSkeleton from '@/components/HeaderSkeleton'
+import FooterSkeleton from '@/components/FooterSkeleton'
 
 const notoSansJP = Noto_Sans_JP({
   weight: ['300', '400', '500', '700'],
@@ -29,9 +34,6 @@ export const metadata: Metadata = {
     email: false,
     address: false,
     telephone: false,
-  },
-  alternates: {
-    canonical: '/',
   },
   openGraph: {
     type: 'website',
@@ -82,11 +84,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja" className={notoSansJP.variable}>
+    <html lang="ja" className={notoSansJP.variable} data-scroll-behavior="smooth">
       <body className="antialiased font-sans">
         <StructuredData />
         <ClientComponents />
+        <Suspense fallback={<HeaderSkeleton />}>
+          <Header />
+        </Suspense>
         {children}
+        <Suspense fallback={<FooterSkeleton />}>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   )

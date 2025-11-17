@@ -103,14 +103,27 @@ vercel
 
 #### 環境変数の設定
 
-Vercelダッシュボードで以下の環境変数を設定できます：
+Vercelダッシュボードで以下の環境変数を設定する必要があります：
 
-- `NEXT_PUBLIC_SITE_URL`: サイトのURL（メタデータで使用）
+**必須の環境変数:**
+- `MICROCMS_SERVICE_DOMAIN`: microCMSのサービスドメイン
+- `MICROCMS_API_KEY`: microCMSのAPIキー
+
+**推奨の環境変数:**
+- `NEXT_PUBLIC_SITE_URL`: サイトのURL（メタデータで使用、例: `https://your-project.vercel.app`）
+
+**オプションの環境変数（お問い合わせフォームを使用する場合）:**
+- `RECIPIENT_EMAIL`: お問い合わせメールの送信先（本番環境では必須）
+- `SMTP_HOST`: SMTPサーバーのホスト（デフォルト: `smtp.gmail.com`）
+- `SMTP_PORT`: SMTPサーバーのポート（デフォルト: `587`）
+- `SMTP_USER`: SMTP認証用のユーザー名
+- `SMTP_PASS`: SMTP認証用のパスワード
+- `SMTP_FROM`: 送信元メールアドレス
 
 設定方法：
 1. Vercelダッシュボードでプロジェクトを開く
 2. 「Settings」→「Environment Variables」に移動
-3. 変数を追加
+3. 変数を追加（Production、Preview、Developmentそれぞれに設定可能）
 
 #### 自動デプロイ
 

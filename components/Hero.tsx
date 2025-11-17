@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex items-center justify-center overflow-hidden bg-white min-h-[92dvh] md:min-h-[90dvh] lg:min-h-[100vh] py-12 md:py-32"
+      className="relative flex items-center justify-center overflow-hidden bg-white min-h-[92dvh] md:min-h-[90dvh] lg:min-h-[100vh] py-16 md:py-32"
     >
       {/* Subtle Grid Background */}
       <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true" data-parallax>

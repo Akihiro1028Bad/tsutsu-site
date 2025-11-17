@@ -16,9 +16,111 @@
   }
 }
 
-/* スムーズなスクロール */
+@layer components {
+  /* microCMSリッチエディタコンテンツ用のスタイリング */
+  .prose {
+    /* フォントファミリーの明示的な適用 */
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* .prose内のすべての要素にフォントファミリーを継承 */
+  .prose * {
+    font-family: inherit;
+  }
+
+  /* microCMSのインラインスタイルで指定されたフォントファミリーを上書き */
+  .prose [style*="font-family"] {
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif !important;
+  }
+
+  /* インラインスタイルのフォントサイズは尊重するが、フォントファミリーは上書き */
+  .prose [style*="font-size"] {
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif !important;
+  }
+
+  /* コードブロック用のスタイル */
+  .prose .code-block {
+    @apply my-6 rounded-lg overflow-hidden shadow-md;
+    position: relative;
+    border: 1px solid #cbd5e1; /* slate-300 */
+  }
+
+  .prose .code-filename {
+    @apply px-4 py-2 text-sm font-medium bg-slate-800 text-slate-200;
+    border-bottom: 1px solid #475569; /* slate-700 */
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  .prose .code-block-content-wrapper {
+    position: relative;
+  }
+
+  /* Shikiの出力に対応: pre.shikiのスタイルを上書き */
+  .prose .code-block pre,
+  .prose .code-block pre.shiki {
+    @apply m-0 p-4 overflow-x-auto text-sm leading-relaxed;
+    background-color: #020617 !important; /* slate-950 - Shikiのインラインスタイルを上書き */
+    color: #f1f5f9 !important; /* slate-100 */
+    border-radius: 0 0 0.5rem 0.5rem;
+    border-top: none;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  /* Shikiの出力スタイルとの統合 */
+  .prose .code-block pre code,
+  .prose .code-block pre.shiki code {
+    @apply bg-transparent p-0 rounded-none text-inherit;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  /* Shikiのline要素のスタイル */
+  .prose .code-block pre.shiki .line {
+    display: block;
+    min-height: 1.5em;
+  }
+
+  /* コピーボタンのスタイル */
+  .prose .code-block-copy-button {
+    @apply absolute top-2 right-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/80 hover:bg-slate-700/80 rounded border border-slate-600 hover:border-slate-500 transition-colors duration-200 flex items-center gap-1.5;
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    z-index: 10;
+  }
+
+  .prose .code-block-copy-button:focus {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-slate-950;
+  }
+
+  .prose .code-block-copy-button svg {
+    @apply w-4 h-4;
+  }
+
+  /* 言語バッジのスタイル */
+  .prose .code-block-language-badge {
+    @apply absolute top-2 left-2 px-2 py-1 text-xs font-medium text-slate-400 bg-slate-900/80 rounded;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    z-index: 10;
+  }
+}
+
+/* スムーズなスクロール（ハッシュリンク用） */
 html {
   scroll-behavior: smooth;
+}
+
+/* Next.jsのページ遷移時は即座にスクロール（パフォーマンス最適化） */
+html[data-nextjs-router] {
+  scroll-behavior: auto;
+}
+
+/* アクセシビリティ: 動きを減らす設定がある場合は無効化 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* カスタムスクロールバー */
