@@ -19,6 +19,8 @@ const getAnnouncementById = cache(async (id: string): Promise<Announcement> => {
   return getDetailStatic<Announcement>('announcements', id)
 })
 
+const PLACEHOLDER_ID = '__placeholder__' as const
+
 export async function generateStaticParams() {
   'use cache'
   cacheTag('announcements:static-params')
@@ -30,14 +32,26 @@ export async function generateStaticParams() {
       limit: 100,
     })
 
-    return data.contents.map((announcement) => ({
-      id: announcement.id,
-    }))
+    const params = data.contents
+      .filter((announcement) => announcement.id)
+      .map((announcement) => ({
+        id: announcement.id,
+      }))
+
+    if (params.length === 0) {
+      console.warn(
+        '公開済みのお知らせが0件のため、プレースホルダーIDを返します。'
+      )
+      return [{ id: PLACEHOLDER_ID }]
+    }
+
+    return params
   } catch (error) {
-    // 統一的なエラーハンドリングを使用
-    handleMicroCMSError(error, {
+    const errorResult = handleMicroCMSError(error, {
       onBuildTimeNetworkError: () => {
-        console.warn('ビルド時にお知らせ一覧の取得に失敗しました。空配列を返します。')
+        console.warn(
+          'ビルド時にお知らせ一覧の取得に失敗しました。プレースホルダーIDを返します。'
+        )
       },
       onRuntimeError: () => {
         // generateStaticParamsはビルド時のみ実行されるため、ここには到達しない
@@ -45,8 +59,17 @@ export async function generateStaticParams() {
       },
     })
 
-    // ビルド時のエラーは空配列を返してビルドを継続
-    return []
+    if (
+      errorResult.isBuildTimeNetworkError ||
+      errorResult.isNotFound ||
+      !errorResult.shouldThrow
+    ) {
+      return [{ id: PLACEHOLDER_ID }]
+    }
+
+    throw error instanceof Error
+      ? error
+      : new Error('お知らせ一覧の取得に失敗しました。')
   }
 }
 
@@ -56,6 +79,9 @@ export default async function AnnouncementDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  if (id === PLACEHOLDER_ID) {
+    notFound()
+  }
   let announcement: Announcement
 
   try {
