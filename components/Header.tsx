@@ -61,6 +61,7 @@ export default function Header() {
 
   const getHashHref = (href: string, isHash: boolean) => {
     if (isHash && (isAnnouncementsActive || isBlogActive)) {
+      // ブログ/お知らせページからは、トップページの該当セクションに遷移
       return `/${href}`
     }
     return href
