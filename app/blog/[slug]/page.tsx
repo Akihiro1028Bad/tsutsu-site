@@ -47,6 +47,8 @@ const getBlogPostBySlug = cache(async (
   return data.contents[0]
 })
 
+const PLACEHOLDER_SLUG = '__placeholder__' as const
+
 /**
  * 全ブログ記事のslugを取得して静的生成
  */
@@ -62,14 +64,26 @@ export async function generateStaticParams() {
       fields: 'slug', // slugのみ取得してパフォーマンス最適化
     })
 
-    return data.contents.map((post) => ({
-      slug: post.slug,
-    }))
+    const params = data.contents
+      .filter((post) => post.slug)
+      .map((post) => ({
+        slug: post.slug,
+      }))
+
+    if (params.length === 0) {
+      console.warn(
+        '公開済みのブログ記事が0件のため、プレースホルダーslugを返します。'
+      )
+      return [{ slug: PLACEHOLDER_SLUG }]
+    }
+
+    return params
   } catch (error) {
-    // 統一的なエラーハンドリングを使用
-    handleMicroCMSError(error, {
+    const errorResult = handleMicroCMSError(error, {
       onBuildTimeNetworkError: () => {
-        console.warn('ビルド時にブログ記事一覧の取得に失敗しました。空配列を返します。')
+        console.warn(
+          'ビルド時にブログ記事一覧の取得に失敗しました。プレースホルダーslugを返します。'
+        )
       },
       onRuntimeError: () => {
         // generateStaticParamsはビルド時のみ実行されるため、ここには到達しない
@@ -77,8 +91,17 @@ export async function generateStaticParams() {
       },
     })
 
-    // ビルド時のエラーは空配列を返してビルドを継続
-    return []
+    if (
+      errorResult.isBuildTimeNetworkError ||
+      errorResult.isNotFound ||
+      !errorResult.shouldThrow
+    ) {
+      return [{ slug: PLACEHOLDER_SLUG }]
+    }
+
+    throw error instanceof Error
+      ? error
+      : new Error('ブログ記事一覧の取得に失敗しました。')
   }
 }
 
@@ -91,6 +114,12 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
+  if (slug === PLACEHOLDER_SLUG) {
+    return {
+      title: '記事が見つかりません | tsutsu Blog',
+      description: 'お探しのブログ記事は見つかりませんでした。',
+    }
+  }
   let post: BlogPost
 
   try {
@@ -170,6 +199,9 @@ export default async function BlogDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+  if (slug === PLACEHOLDER_SLUG) {
+    notFound()
+  }
   let post: BlogPost
 
   try {

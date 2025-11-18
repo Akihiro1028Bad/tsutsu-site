@@ -46,12 +46,32 @@ export async function sanitizeHtml(html: string): Promise<string> {
       td: ['width'],
     },
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
-    selfClosing: ['img', 'hr'],
+    selfClosing: ['img', 'hr', 'br'],
     enforceHtmlBoundary: true,
   })
 
+  // <p>タグ内の余分な空白行を削除
+  const normalized = removeExtraWhitespaceInParagraphs(sanitized)
+
   // target="_blank"のリンクにrel="noopener noreferrer"を自動付与
-  return addSecureRelToLinks(sanitized)
+  return addSecureRelToLinks(normalized)
+}
+
+/**
+ * <p>タグ内の余分な空白行を削除
+ * 
+ * @param html - HTML文字列
+ * @returns 余分な空白行が削除されたHTML文字列
+ */
+function removeExtraWhitespaceInParagraphs(html: string): string {
+  return html.replace(/<p([^>]*)>([\s\S]*?)<\/p>/gi, (match, attributes, content) => {
+    // タグ内のテキスト部分の前後の空白行を削除
+    // ただし、<br>タグの前後の空白は保持
+    const cleaned = content
+      .replace(/^[\s\n\r]+|[\s\n\r]+$/g, '') // 前後の空白を削除
+      .replace(/\n\s*\n/g, '\n') // 連続する改行を1つに
+    return `<p${attributes}>${cleaned}</p>`
+  })
 }
 
 /**
