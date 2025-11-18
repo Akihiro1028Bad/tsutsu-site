@@ -68,7 +68,7 @@ function clearAllCache(): void {
   // すべての既知のキャッシュタグをクリア
   for (const tag of ALL_CACHE_TAGS) {
     try {
-      revalidateTag(tag)
+      revalidateTag(tag, 'max')
     } catch (error) {
       console.error(`Failed to revalidate tag: ${tag}`, error)
     }
@@ -88,7 +88,7 @@ function clearAllCache(): void {
 function clearCacheByTags(tags: string[]): void {
   for (const tag of tags) {
     try {
-      revalidateTag(tag.trim())
+      revalidateTag(tag.trim(), 'max')
     } catch (error) {
       console.error(`Failed to revalidate tag: ${tag}`, error)
     }
@@ -174,7 +174,9 @@ export async function POST(request: NextRequest) {
     }
 
     // タグの配列または文字列を処理
-    const tags = Array.isArray(tag) ? tag : [tag]
+    const tags = (Array.isArray(tag) ? tag : [tag])
+      .filter((tag): tag is string => typeof tag === 'string')
+      .filter((tag) => tag.trim().length > 0)
 
     if (tags.length === 0) {
       return NextResponse.json(
