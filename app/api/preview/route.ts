@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getDetail } from '@/lib/microcms/client'
+import { getDetailNoStore } from '@/lib/microcms/server-client'
 import { BlogPost } from '@/lib/types/blog'
 
 /**
@@ -56,7 +56,7 @@ export async function GET(request: Request) {
     if (contentId) {
       try {
         // draftKeyを使用して下書きコンテンツを取得
-        const post = await getDetail<BlogPost>('blog', contentId, {
+        const post = await getDetailNoStore<BlogPost>('blog', contentId, {
           draftKey,
         })
 

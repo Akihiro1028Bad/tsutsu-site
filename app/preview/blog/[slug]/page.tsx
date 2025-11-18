@@ -1,8 +1,7 @@
 import { Suspense } from 'react'
-import { cache } from 'react'
 import { connection } from 'next/server'
-import { cacheTag, cacheLife } from 'next/cache'
-import { getListDynamic } from '@/lib/microcms/server-client'
+import { unstable_noStore as noStore } from 'next/cache'
+import { getListNoStore } from '@/lib/microcms/server-client'
 import { BlogPost } from '@/lib/types/blog'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import BlogDetail from '@/components/BlogDetail'
@@ -20,15 +19,11 @@ import type { Metadata } from 'next'
  * @param draftKey - 下書きキー（必須）
  * @returns ブログ記事データ
  */
-const getBlogPostBySlugWithDraft = cache(async (
+async function getBlogPostBySlugWithDraft(
   slug: string,
   draftKey: string
-): Promise<BlogPost> => {
-  'use cache: remote'
-  cacheTag(`blog:${slug}:preview:${draftKey}`)
-  cacheLife({ expire: 60 }) // プレビューは1分キャッシュ（短め）
-
-  const data = await getListDynamic<BlogPost>('blog', {
+): Promise<BlogPost> {
+  const data = await getListNoStore<BlogPost>('blog', {
     filters: `slug[equals]${slug}`,
     limit: 1,
     draftKey, // 下書きキーを指定
@@ -39,7 +34,7 @@ const getBlogPostBySlugWithDraft = cache(async (
   }
 
   return data.contents[0]
-})
+}
 
 /**
  * プレビューコンテンツコンポーネント（動的データフェッチ用）
@@ -56,6 +51,7 @@ async function PreviewBlogContent({
 }) {
   // 動的レンダリングを明示的にマーク
   await connection()
+  noStore()
   
   const { slug } = await params
   const { draftKey } = await searchParams

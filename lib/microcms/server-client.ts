@@ -9,7 +9,7 @@
 
 'use server'
 
-import { cacheTag, cacheLife } from 'next/cache'
+import { cacheTag, cacheLife, unstable_noStore as noStore } from 'next/cache'
 import type { QueryParams, ListResponse } from './types'
 import {
   MicroCMSApiError,
@@ -214,6 +214,18 @@ export async function getListDynamic<T>(
 }
 
 /**
+ * 完全にキャッシュを無効化してコンテンツ一覧を取得
+ * プレビューモードなど即時反映が必要な場合に使用
+ */
+export async function getListNoStore<T>(
+  endpoint: string,
+  queries?: QueryParams
+): Promise<ListResponse<T>> {
+  noStore()
+  return getListInternal<T>(endpoint, queries, 'no-store')
+}
+
+/**
  * 静的コンテンツ詳細を取得（ビルド時キャッシュ）
  * Cache Componentsモードで使用し、静的生成に最適化
  */
@@ -242,6 +254,19 @@ export async function getDetailDynamic<T>(
   cacheTag(`microcms:${endpoint}:${contentId}:dynamic`)
   cacheLife({ expire: 300 }) // 5分キャッシュ
 
+  return getDetailInternal<T>(endpoint, contentId, queries, 'no-store')
+}
+
+/**
+ * 完全にキャッシュを無効化してコンテンツ詳細を取得
+ * プレビューモードなど即時反映が必要な場合に使用
+ */
+export async function getDetailNoStore<T>(
+  endpoint: string,
+  contentId: string,
+  queries?: QueryParams
+): Promise<T> {
+  noStore()
   return getDetailInternal<T>(endpoint, contentId, queries, 'no-store')
 }
 
