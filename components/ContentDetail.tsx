@@ -118,7 +118,7 @@ export default async function ContentDetail({
           prose-li:font-light prose-li:leading-[1.75]
           prose-blockquote:border-l-slate-300 prose-blockquote:text-slate-600 prose-blockquote:leading-relaxed prose-blockquote:italic prose-blockquote:pl-6
           prose-code:text-slate-800 prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono
-          prose-pre:bg-slate-950 prose-pre:text-slate-100 prose-pre:text-sm prose-pre:font-mono
+          prose-pre:bg-slate-950 prose-pre:text-slate-100 prose-pre:text-sm prose-pre:font-mono prose-pre:leading-tight
           prose-img:rounded-lg prose-img:shadow-lg prose-img:my-6 sm:prose-img:my-8
           prose-figure:my-6 sm:prose-figure:my-8
           prose-figcaption:text-slate-500 prose-figcaption:text-xs sm:prose-figcaption:text-sm prose-figcaption:text-center prose-figcaption:mt-2 prose-figcaption:leading-relaxed
