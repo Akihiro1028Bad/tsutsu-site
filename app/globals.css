@@ -72,12 +72,18 @@
   /* Shikiの出力に対応: pre.shikiのスタイルを上書き */
   .prose .code-block pre,
   .prose .code-block pre.shiki {
-    @apply m-0 p-4 overflow-x-auto text-sm leading-relaxed;
+    @apply m-0 p-4 overflow-x-auto text-sm;
     background-color: #020617 !important; /* slate-950 - Shikiのインラインスタイルを上書き */
     color: #f1f5f9 !important; /* slate-100 */
     border-radius: 0 0 0.5rem 0.5rem;
     border-top: none;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    line-height: 0.7 !important; /* 狭い行間（14px × 0.7 = 9.8px） */
+  }
+  
+  /* Tailwind Typographyのprose-preスタイルを上書き */
+  .prose .code-block pre.prose-pre {
+    line-height: 0.7 !important;
   }
 
   /* Shikiの出力スタイルとの統合 */
@@ -85,14 +91,39 @@
   .prose .code-block pre.shiki code {
     @apply bg-transparent p-0 rounded-none text-inherit;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    font-size: inherit;
     color: inherit;
+    font-size: 0 !important; /* 改行文字のサイズを0にして行間を詰める */
+    line-height: 0 !important; /* 改行文字のline-heightも0にする */
+  }
+  
+  /* .line要素内のテキストは元のサイズに戻す */
+  .prose .code-block pre.shiki code .line {
+    font-size: 0.875rem; /* text-sm = 14px = 0.875rem */
   }
 
   /* Shikiのline要素のスタイル */
   .prose .code-block pre.shiki .line {
     display: block;
-    min-height: 1.5em;
+    height: 0.7em; /* pre要素のline-heightと一致させる（14px × 0.7 = 9.8px） */
+    line-height: 0.7em;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem; /* text-sm = 14px = 0.875rem */
+  }
+  
+  /* 空の行も同じ高さを維持 */
+  .prose .code-block pre.shiki .line:empty {
+    height: 0.7em;
+  }
+  
+  /* code要素内のline要素も同じスタイルを適用 */
+  .prose .code-block pre.shiki code .line {
+    display: block;
+    height: 0.7em;
+    line-height: 0.7em;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875rem; /* text-sm = 14px = 0.875rem */
   }
 
   /* コピーボタンのスタイル */
