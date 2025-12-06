@@ -52,6 +52,9 @@ function getHighlighter(): Promise<Highlighter> {
 /**
  * コードをシンタックスハイライトしてHTMLに変換
  * 
+ * Next.js 16対応: 'use cache'ディレクティブを使用してキャッシュ可能にする
+ * shiki内部でDate.now()を使用する可能性があるため、キャッシュコンポーネントとして扱う
+ * 
  * @param code - ハイライトするコード
  * @param language - 言語（デフォルト: 'text'）
  * @param theme - テーマ（'dark' | 'light'、デフォルト: 'dark'）
@@ -62,6 +65,8 @@ export async function highlightCode(
   language: string = 'text',
   theme: 'dark' | 'light' = 'dark'
 ): Promise<string> {
+  'use cache'
+  
   const highlighter = await getHighlighter()
   
   // 言語名を正規化（小文字化、エイリアス対応）
