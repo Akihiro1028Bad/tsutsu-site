@@ -33,7 +33,7 @@ export default function MensEstheServicePage() {
   })
 
   return (
-    <main>
+    <main className="font-serif">
       <StructuredData data={structuredData} />
       <HeroSection serviceInfo={serviceInfo} />
       <SectionNav />

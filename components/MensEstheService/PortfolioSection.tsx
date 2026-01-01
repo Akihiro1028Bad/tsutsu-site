@@ -1,9 +1,12 @@
 "use client"
 
 import Image from "next/image"
+import { motion } from "framer-motion"
 import type { MouseEvent } from "react"
 import { useState } from "react"
+import { ExternalLink } from "lucide-react"
 
+import { MENS_ESTHE_CONFIG } from "@/lib/constants/config"
 import type { PortfolioItem } from "@/lib/types/mens-esthe-service"
 
 function isValidHttpUrl(value: string): boolean {
@@ -52,49 +55,91 @@ export function PortfolioSection({ portfolioItems }: Props) {
   }
 
   return (
-    <section id="portfolio" aria-labelledby="portfolio-heading" className="py-16">
-      <div className="mx-auto max-w-5xl px-4">
-        <h2 id="portfolio-heading" className="text-2xl font-bold">
+    <section id="portfolio" aria-labelledby="portfolio-heading" className="relative py-20 md:py-28">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src={MENS_ESTHE_CONFIG.IMAGES.sections}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          aria-hidden="true"
+        />
+        {/* Overlay for readability */}
+        <div className="absolute inset-0 bg-white/90" />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 mx-auto max-w-5xl px-6">
+        <motion.h2
+          id="portfolio-heading"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl"
+        >
           制作実績
-        </h2>
+        </motion.h2>
 
         {portfolioItems.length === 0 ? (
-          <p className="mt-6 text-sm text-muted-foreground">現在準備中です</p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-8 text-base text-slate-600"
+          >
+            現在準備中です
+          </motion.p>
         ) : (
-          <ul className="mt-6 grid gap-6 sm:grid-cols-2">
-            {portfolioItems.map((item) => (
+          <ul className="mt-12 grid gap-8 sm:grid-cols-2">
+            {portfolioItems.map((item, index) => (
               <li key={item.id}>
-                <article className="rounded-lg border p-4">
+                <motion.article
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="group rounded-xl border border-slate-200 bg-white p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                >
                   {item.thumbnailImage ? (
-                    <div className="mb-3 overflow-hidden rounded-md">
-                      <Image
-                        src={item.thumbnailImage.src}
-                        alt={item.thumbnailImage.alt}
-                        width={item.thumbnailImage.width}
-                        height={item.thumbnailImage.height}
-                        sizes="(max-width: 640px) 100vw, 50vw"
-                        className="h-auto w-full"
-                      />
+                    <div className="mb-4 overflow-hidden rounded-lg">
+                      <div className="relative aspect-video">
+                        <Image
+                          src={item.thumbnailImage.src}
+                          alt={item.thumbnailImage.alt}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
                     </div>
                   ) : null}
 
-                  <h3 className="text-base font-semibold">{item.storeName}</h3>
+                  <h3 className="text-lg font-semibold text-slate-950">{item.storeName}</h3>
                   <a
                     href={item.siteUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${item.storeName}のサイトを開く`}
                     onClick={handleLinkClick(item)}
-                    className="mt-2 inline-flex text-sm text-blue-600 underline underline-offset-2"
+                    className="mt-4 inline-flex items-center gap-2 text-base font-medium text-gold-600 transition-colors hover:text-gold-700"
                   >
                     サイトを見る
+                    <ExternalLink className="h-4 w-4" />
                   </a>
                   {linkErrors[item.id] ? (
-                    <p role="alert" className="mt-2 text-sm text-red-600">
+                    <p role="alert" className="mt-3 text-sm text-red-600">
                       {linkErrors[item.id]}
                     </p>
                   ) : null}
-                </article>
+                </motion.article>
               </li>
             ))}
           </ul>

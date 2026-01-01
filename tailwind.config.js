@@ -32,9 +32,22 @@ module.exports = {
           800: '#86198f',
           900: '#701a75',
         },
+        gold: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+          800: '#92400e',
+          900: '#78350f',
+        },
       },
       fontFamily: {
         sans: ['var(--font-noto-sans-jp)', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'sans-serif'],
+        serif: ['var(--font-noto-serif-jp)', 'Hiragino Mincho ProN', 'Yu Mincho', 'Meiryo', 'serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',

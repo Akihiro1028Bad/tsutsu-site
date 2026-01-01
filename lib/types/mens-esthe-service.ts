@@ -34,6 +34,7 @@ export type Feature = {
   name: string
   description: string
   icon: IconName
+  image?: ImageAsset
 }
 
 export type PricingItem = {

@@ -41,3 +41,16 @@ export const METADATA_CONFIG = {
   DESCRIPTION_MAX_LENGTH: 160,
 } as const
 
+// メンズエステサービスページ設定
+export const MENS_ESTHE_CONFIG = {
+  // 背景画像パス
+  IMAGES: {
+    // ヒーローセクション用背景画像
+    hero: '/services/mens-esthe-hero-bg.jpg',
+    // その他セクション用共通背景画像
+    sections: '/services/mens-esthe-sections-bg.jpg',
+    // ヒーローセクション用モック画像
+    heroMock: '/services/mens-esthe-mock.png',
+  },
+} as const
+
