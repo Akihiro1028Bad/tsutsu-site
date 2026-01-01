@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --font-noto-sans-jp: system-ui;
+  }
+
   body {
     @apply bg-white text-gray-900;
     font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
@@ -236,4 +240,3 @@ html[data-nextjs-router] {
     transform: translateX(-50%);
   }
 }
-

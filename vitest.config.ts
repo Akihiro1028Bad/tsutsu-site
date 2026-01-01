@@ -17,12 +17,7 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov", "json"],
-      include: [
-        "app/services/mens-esthe/**/*.{ts,tsx}",
-        "components/MensEstheService/**/*.{ts,tsx}",
-        "lib/types/mens-esthe-service.ts",
-        "lib/utils/mens-esthe-service.ts",
-      ],
+      all: false,
       exclude: [
         "**/*.d.ts",
         "**/*.config.{js,ts,mjs,cjs}",

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { Noto_Sans_JP } from 'next/font/google'
 import './globals.css'
 import ClientComponents from '@/components/ClientComponents'
 import StructuredData from '@/components/StructuredData'
@@ -8,14 +7,6 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import HeaderSkeleton from '@/components/HeaderSkeleton'
 import FooterSkeleton from '@/components/FooterSkeleton'
-
-const notoSansJP = Noto_Sans_JP({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin', 'latin-ext'],
-  display: 'swap',
-  variable: '--font-noto-sans-jp',
-  preload: true,
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://tsutsu.dev'),
@@ -84,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja" className={notoSansJP.variable} data-scroll-behavior="smooth">
+    <html lang="ja" data-scroll-behavior="smooth">
       <body className="antialiased font-sans">
         <StructuredData />
         <ClientComponents />
@@ -99,4 +90,3 @@ export default function RootLayout({
     </html>
   )
 }
-
