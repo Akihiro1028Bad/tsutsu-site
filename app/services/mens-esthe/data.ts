@@ -152,22 +152,43 @@ export const processSteps: ProcessStep[] = [
   {
     id: 'process-step-01',
     stepNumber: 1,
-    title: 'ヒアリング',
-    description: '現状とゴールを整理し、必要な要件を決めます。',
-    icon: 'MessageSquare',
+    title: 'お問い合わせ',
+    description: 'お問い合わせフォームまたはメールでご連絡ください。',
+    icon: 'Mail',
   },
   {
     id: 'process-step-02',
     stepNumber: 2,
-    title: '制作',
-    description: '既存デザインに合わせて実装し、確認しながら進めます。',
-    icon: 'Code',
+    title: 'ヒアリング・要件定義',
+    description: '現状とゴールを整理し、必要な要件を詳しくお聞きします。',
+    icon: 'MessageSquare',
   },
   {
     id: 'process-step-03',
     stepNumber: 3,
-    title: '公開',
-    description: '公開後も軽微な調整や改善をサポートします。',
+    title: '提案・見積もり',
+    description: 'ご要望に基づいて最適な構成と見積もりをご提案します。',
+    icon: 'FileText',
+  },
+  {
+    id: 'process-step-04',
+    stepNumber: 4,
+    title: '制作・実装',
+    description: '既存デザインに合わせて実装し、確認しながら進めます。',
+    icon: 'Code',
+  },
+  {
+    id: 'process-step-05',
+    stepNumber: 5,
+    title: '確認・修正',
+    description: '完成したサイトを確認いただき、必要に応じて修正を行います。',
+    icon: 'CheckCircle',
+  },
+  {
+    id: 'process-step-06',
+    stepNumber: 6,
+    title: '公開・運用開始',
+    description: 'サイトを公開し、運用を開始します。公開後も軽微な調整や改善をサポートします。',
     icon: 'Rocket',
   },
 ]
@@ -175,12 +196,32 @@ export const processSteps: ProcessStep[] = [
 export const faqItems: FAQItem[] = [
   {
     id: 'faq-01',
-    question: '制作期間はどれくらいですか？',
-    answer: '内容にもよりますが、通常は1〜2週間程度です。',
+    question: 'スマホから更新できますか？',
+    answer: 'はい、スマートフォンからも更新可能です。管理画面はスマホでも使いやすい設計になっています。',
   },
   {
     id: 'faq-02',
-    question: '素材がなくても依頼できますか？',
-    answer: '可能です。必要に応じてテンプレートや代替案を提案します。',
+    question: '複数のスタッフで管理できますか？',
+    answer: '可能です。複数のスタッフが同時に管理画面にアクセスし、更新作業を行うことができます。',
+  },
+  {
+    id: 'faq-03',
+    question: 'デザインイメージがなくても制作可能ですか？',
+    answer: 'はい、可能です。既存のサイトのデザインシステムを活用し、必要に応じてテンプレートや代替案を提案します。',
+  },
+  {
+    id: 'faq-04',
+    question: 'TwitterやLINEの連携はできますか？',
+    answer: 'はい、対応可能です。Twitterの埋め込みやLINE公式アカウントとの連携など、ご要望に応じて実装します。',
+  },
+  {
+    id: 'faq-05',
+    question: 'サイトに記載する文章は作ってもらえますか？',
+    answer: 'はい、対応可能です。ご要望に応じて、サイトに記載する文章の作成や修正のサポートを行います。',
+  },
+  {
+    id: 'faq-06',
+    question: 'もっと詳しくサイト制作のことを知りたい。',
+    answer: 'お気軽にお問い合わせください。ご要望やご質問をお聞きし、最適なご提案をさせていただきます。',
   },
 ]
