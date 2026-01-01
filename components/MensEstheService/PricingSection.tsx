@@ -1,9 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 
-import { MENS_ESTHE_CONFIG } from '@/lib/constants/config'
 import { SECTION_IDS, type PricingItem } from '@/lib/types/mens-esthe-service'
 
 import { ContactCTA } from '@/components/MensEstheService/ContactCTA'
@@ -23,20 +21,6 @@ export function PricingSection({ pricingItems }: PricingSectionProps) {
 
   return (
     <section id={SECTION_IDS.pricing} className="relative py-20 md:py-28">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={MENS_ESTHE_CONFIG.IMAGES.sections}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-          aria-hidden="true"
-        />
-        {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-white/90" />
-      </div>
-
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-5xl px-6">
         <motion.h2
@@ -44,74 +28,144 @@ export function PricingSection({ pricingItems }: PricingSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl"
+          className="text-3xl font-bold tracking-tight text-slate-950 md:text-4xl mb-12"
         >
           料金
         </motion.h2>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="group rounded-xl border border-slate-200 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-          >
-            <h3 className="text-lg font-semibold text-slate-950">初期費用</h3>
-            <dl className="mt-6 space-y-5">
-              {initialItems.map((item) => (
-                <div key={item.id}>
-                  <dt className="text-base font-medium text-slate-900">{item.name}</dt>
-                  <dd className="mt-2 text-base text-slate-600">
-                    <strong className="text-lg text-gold-600">{item.price}</strong>
-                    <span className="ml-2">{item.description}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </motion.div>
+        <div className="space-y-0">
+          {/* 基本料金セクション（制作費と管理費を一緒に表示） */}
+          {(initialItems.length > 0 || monthlyItems.length > 0) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{
+                duration: 0.5,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="py-10"
+            >
+              <h3 className="text-2xl font-bold text-slate-900 mb-8 md:text-3xl tracking-tight">
+                基本料金
+              </h3>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="group rounded-xl border border-slate-200 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-          >
-            <h3 className="text-lg font-semibold text-slate-950">月額費用</h3>
-            <dl className="mt-6 space-y-5">
-              {monthlyItems.map((item) => (
-                <div key={item.id}>
-                  <dt className="text-base font-medium text-slate-900">{item.name}</dt>
-                  <dd className="mt-2 text-base text-slate-600">
-                    <strong className="text-lg text-gold-600">{item.price}</strong>
-                    <span className="ml-2">{item.description}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {initialItems.map((item, itemIndex) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.4,
+                      delay: itemIndex * 0.05,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <h4 className="text-lg font-semibold text-slate-900 md:text-xl leading-snug">
+                          {item.name}
+                        </h4>
+                        <div className="text-3xl font-bold text-slate-900 md:text-4xl whitespace-nowrap flex-shrink-0">
+                          {item.price}
+                        </div>
+                      </div>
+                      <p className="text-base leading-relaxed text-slate-600 md:text-lg">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="group rounded-xl border border-slate-200 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-          >
-            <h3 className="text-lg font-semibold text-slate-950">オプション</h3>
-            <dl className="mt-6 space-y-5">
-              {optionItems.map((item) => (
-                <div key={item.id}>
-                  <dt className="text-base font-medium text-slate-900">{item.name}</dt>
-                  <dd className="mt-2 text-base text-slate-600">
-                    <strong className="text-lg text-gold-600">{item.price}</strong>
-                    <span className="ml-2">{item.description}</span>
-                  </dd>
+                {monthlyItems.map((item, itemIndex) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.4,
+                      delay: (initialItems.length + itemIndex) * 0.05,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <h4 className="text-lg font-semibold text-slate-900 md:text-xl leading-snug">
+                          {item.name}
+                        </h4>
+                        <div className="text-3xl font-bold text-slate-900 md:text-4xl whitespace-nowrap flex-shrink-0">
+                          {item.price}
+                        </div>
+                      </div>
+                      <p className="text-base leading-relaxed text-slate-600 md:text-lg">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* オプションセクション */}
+          {optionItems.length > 0 && (
+            <>
+              {(initialItems.length > 0 || monthlyItems.length > 0) && (
+                <div className="mt-12 border-b border-slate-200" />
+              )}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.1,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="py-10"
+              >
+                <h3 className="text-2xl font-bold text-slate-900 mb-8 md:text-3xl tracking-tight">
+                  オプション
+                </h3>
+
+                <div className="space-y-8">
+                  {optionItems.map((item, itemIndex) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.1 + itemIndex * 0.05,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                    >
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-lg font-semibold text-slate-900 mb-2 md:text-xl leading-snug">
+                            {item.name}
+                          </h4>
+                          <p className="text-base leading-relaxed text-slate-600 md:text-lg">
+                            {item.description}
+                          </p>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="text-3xl font-bold text-slate-900 md:text-4xl whitespace-nowrap">
+                            {item.price}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-              ))}
-            </dl>
-          </motion.div>
+              </motion.div>
+            </>
+          )}
         </div>
 
         <div aria-labelledby={SECTION_IDS.pricing} className="mt-12">
