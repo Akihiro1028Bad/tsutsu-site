@@ -11,7 +11,13 @@ export default [
     },
   },
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: [
+      '**/node_modules/**',
+      '**/.next/**',
+      '**/out/**',
+      '**/coverage/**',
+      '**/build/**',
+      'eslint.config.mjs',
+    ],
   },
 ]
-
