@@ -1,5 +1,6 @@
 export const SECTION_IDS = {
   hero: "hero",
+  benefits: "benefits",
   features: "features",
   pricing: "pricing",
   portfolio: "portfolio",
@@ -64,4 +65,12 @@ export type FAQItem = {
   id: string
   question: string
   answer: string
+}
+
+export type Benefit = {
+  id: string
+  title: string
+  description: string
+  icon: IconName
+  highlight?: string
 }

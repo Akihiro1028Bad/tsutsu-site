@@ -2,6 +2,7 @@ import { SECTION_IDS } from "@/lib/types/mens-esthe-service"
 
 const navItems = [
   { id: SECTION_IDS.hero, label: "トップ" },
+  { id: SECTION_IDS.benefits, label: "選ばれる理由" },
   { id: SECTION_IDS.features, label: "機能" },
   { id: SECTION_IDS.pricing, label: "料金" },
   { id: SECTION_IDS.portfolio, label: "制作実績" },

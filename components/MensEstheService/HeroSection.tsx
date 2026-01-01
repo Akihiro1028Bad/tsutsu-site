@@ -23,7 +23,7 @@ export function HeroSection({ serviceInfo }: HeroSectionProps) {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative flex min-h-[80vh] items-center justify-center overflow-hidden py-24 md:py-32"
+      className="relative z-20 flex min-h-[80vh] items-center justify-center overflow-hidden py-24 md:py-32"
     >
       {/* Background Image */}
       <div className="absolute inset-0 z-0">

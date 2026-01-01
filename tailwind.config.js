@@ -52,6 +52,10 @@ module.exports = {
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',
         'slide-up': 'slideUp 0.6s ease-out',
+        'slide-up-scale': 'slideUpScale 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        'grow-y': 'growY 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        'pop-in': 'popIn 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+        shine: 'shine 1.05s ease-out',
         'gradient': 'gradient 15s ease infinite',
         'blob': 'blob 7s infinite',
       },
@@ -63,6 +67,24 @@ module.exports = {
         slideUp: {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        slideUpScale: {
+          '0%': { transform: 'translateY(30px) scale(0.95)', opacity: '0' },
+          '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+        },
+        growY: {
+          '0%': { transform: 'scaleY(0)' },
+          '100%': { transform: 'scaleY(1)' },
+        },
+        popIn: {
+          '0%': { transform: 'translateY(22px) scale(0.96)', opacity: '0' },
+          '60%': { transform: 'translateY(-2px) scale(1.01)', opacity: '1' },
+          '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+        },
+        shine: {
+          '0%': { opacity: '0', 'background-position': '0% 0%' },
+          '20%': { opacity: '0.8' },
+          '100%': { opacity: '0', 'background-position': '200% 0%' },
         },
         gradient: {
           '0%, 100%': {
@@ -178,4 +200,3 @@ module.exports = {
     require('@tailwindcss/typography'),
   ],
 }
-

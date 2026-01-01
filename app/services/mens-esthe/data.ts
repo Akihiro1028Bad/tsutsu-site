@@ -1,4 +1,5 @@
 import type {
+  Benefit,
   Feature,
   FAQItem,
   PortfolioItem,
@@ -14,6 +15,37 @@ export const serviceInfo: ServiceInfo = {
   description: `メンズエステ店向けに、集客と問い合わせに強いサービスページを制作します。`,
   targetAudience: 'メンズエステ店の経営者・運営者',
 }
+
+export const benefits: Benefit[] = [
+  {
+    id: 'benefit-01',
+    title: '低コストで高品質',
+    description: '既存デザインを活用することで、制作費を抑えながら高品質なサイトを実現できます。',
+    icon: 'DollarSign',
+    highlight: '¥100,000〜から',
+  },
+  {
+    id: 'benefit-02',
+    title: '短期間で公開可能',
+    description: '既存デザインシステムを活用することで、短期間でサイトを公開できます。',
+    icon: 'Clock',
+    highlight: '最短2週間で公開',
+  },
+  {
+    id: 'benefit-03',
+    title: '集客と問い合わせの向上',
+    description: '最適化された構成と導線設計により、集客と問い合わせを向上させます。',
+    icon: 'TrendingUp',
+    highlight: '問い合わせ率向上',
+  },
+  {
+    id: 'benefit-04',
+    title: '運用しやすい管理画面',
+    description: 'スマホからも更新可能で、複数スタッフで管理できる使いやすい管理画面を提供します。',
+    icon: 'Phone',
+    highlight: 'スマホ対応',
+  },
+]
 
 export const features: Feature[] = [
   {

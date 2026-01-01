@@ -107,20 +107,27 @@ function ImageBlock({
   className?: string
   isMobile?: boolean
 }) {
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const [willChangeEnabled, setWillChangeEnabled] = useState(true)
   const imageRef = useRef<HTMLDivElement>(null)
+  const willChangeTimerRef = useRef<number | null>(null)
 
-  // アニメーション終了後にwillChangeを削除
   useEffect(() => {
-    if (imageLoaded && imageRef.current) {
-      const timer = setTimeout(() => {
-        if (imageRef.current) {
-          imageRef.current.style.willChange = 'auto'
-        }
-      }, 1000)
-      return () => clearTimeout(timer)
+    return () => {
+      if (willChangeTimerRef.current !== null) {
+        window.clearTimeout(willChangeTimerRef.current)
+        willChangeTimerRef.current = null
+      }
     }
-  }, [imageLoaded])
+  }, [])
+
+  const scheduleWillChangeCleanup = () => {
+    if (isMobile) return
+    if (willChangeTimerRef.current !== null) return
+    willChangeTimerRef.current = window.setTimeout(() => {
+      setWillChangeEnabled(false)
+      willChangeTimerRef.current = null
+    }, 1000)
+  }
 
   return (
     <div className={`relative overflow-hidden w-full h-full ${className}`}>
@@ -132,10 +139,10 @@ function ImageBlock({
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          onAnimationComplete={() => setImageLoaded(true)}
+          onAnimationComplete={scheduleWillChangeCleanup}
           className="absolute inset-0 group-hover:opacity-[0.5] transition-opacity duration-500 z-0"
           style={{
-            willChange: imageLoaded ? 'auto' : 'opacity, transform',
+            willChange: isMobile ? 'opacity, transform' : (willChangeEnabled ? 'opacity, transform' : 'auto'),
           }}
           aria-hidden="true"
           {...({} as any)}
@@ -201,7 +208,8 @@ function ServiceCard({ service, index }: ServiceCardProps) {
   const imageRef = useRef<HTMLDivElement>(null)
   const [activeTab, setActiveTab] = useState<TabType>('capabilities')
   const [isMobile, setIsMobile] = useState(false)
-  const [animationsComplete, setAnimationsComplete] = useState(false)
+  const [willChangeEnabled, setWillChangeEnabled] = useState(true)
+  const willChangeTimerRef = useRef<number | null>(null)
   
   // スマホ検出
   useEffect(() => {
@@ -232,20 +240,23 @@ function ServiceCard({ service, index }: ServiceCardProps) {
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.98, 1, 0.98])
 
-  // アニメーション完了後にwillChangeを削除
   useEffect(() => {
-    if (animationsComplete) {
-      const timer = setTimeout(() => {
-        if (contentRef.current) {
-          contentRef.current.style.willChange = 'auto'
-        }
-        if (imageRef.current) {
-          imageRef.current.style.willChange = 'auto'
-        }
-      }, 1000)
-      return () => clearTimeout(timer)
+    return () => {
+      if (willChangeTimerRef.current !== null) {
+        window.clearTimeout(willChangeTimerRef.current)
+        willChangeTimerRef.current = null
+      }
     }
-  }, [animationsComplete])
+  }, [])
+
+  const scheduleWillChangeCleanup = () => {
+    if (isMobile) return
+    if (willChangeTimerRef.current !== null) return
+    willChangeTimerRef.current = window.setTimeout(() => {
+      setWillChangeEnabled(false)
+      willChangeTimerRef.current = null
+    }, 1000)
+  }
 
   const isLeft = index % 2 === 0
 
@@ -269,9 +280,9 @@ function ServiceCard({ service, index }: ServiceCardProps) {
           whileInView={{ x: 0, opacity: 1 }}
           viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
           transition={{ duration: isMobile ? 0.4 : 0.8, ease: [0.16, 1, 0.3, 1] }}
-          onAnimationComplete={() => setAnimationsComplete(true)}
+          onAnimationComplete={scheduleWillChangeCleanup}
           className="flex-1 w-full md:w-auto"
-          style={{ willChange: animationsComplete ? 'auto' : 'transform, opacity' }}
+          style={{ willChange: isMobile ? 'transform, opacity' : (willChangeEnabled ? 'transform, opacity' : 'auto') }}
           {...({} as any)}
         >
           <motion.div
@@ -431,9 +442,9 @@ function ServiceCard({ service, index }: ServiceCardProps) {
           whileInView={{ x: 0, opacity: 1 }}
           viewport={{ once: true, margin: isMobile ? '0px' : '-100px' }}
           transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-          onAnimationComplete={() => setAnimationsComplete(true)}
+          onAnimationComplete={scheduleWillChangeCleanup}
           className={`w-full md:w-80 lg:w-96 aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:h-auto bg-gradient-to-br ${service.bgGradient} relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-500 border border-slate-200/50 hover:border-slate-300`}
-          style={{ willChange: animationsComplete ? 'auto' : 'transform, opacity' }}
+          style={{ willChange: isMobile ? 'transform, opacity' : (willChangeEnabled ? 'transform, opacity' : 'auto') }}
           {...({} as any)}
         >
           <ImageBlock service={service} isMobile={isMobile} className="absolute inset-0 w-full h-full" />
