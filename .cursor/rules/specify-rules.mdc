@@ -1,0 +1,29 @@
+# tsutsu-site Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2026-01-01
+
+## Active Technologies
+
+- TypeScript 5.2.2以上（strict mode） + Next.js 16.0.1以上、React 19.0.0以上、framer-motion 12.23.24以上、Tailwind CSS 3.3.5以上 (001-mens-esthe-service-page)
+
+## Project Structure
+
+```text
+src/
+tests/
+```
+
+## Commands
+
+npm test && npm run lint
+
+## Code Style
+
+TypeScript 5.2.2以上（strict mode）: Follow standard conventions
+
+## Recent Changes
+
+- 001-mens-esthe-service-page: Added TypeScript 5.2.2以上（strict mode） + Next.js 16.0.1以上、React 19.0.0以上、framer-motion 12.23.24以上、Tailwind CSS 3.3.5以上
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->
