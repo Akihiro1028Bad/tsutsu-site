@@ -31,7 +31,7 @@
 **Package Manager**: pnpm  
 **Primary Dependencies**: Next.js 16.0.1以上、React 19.0.0以上、framer-motion 12.23.24以上、Tailwind CSS 3.3.5以上  
 **Storage**: N/A（静的コンテンツ、ハードコード）  
-**Testing**: Jest/Vitest（単体テスト）、React Testing Library（UIテスト）、100%カバレッジ要件  
+**Testing**: Vitest（単体テスト/カバレッジ）、React Testing Library（UIテスト）、100%カバレッジ要件  
 **Target Platform**: Web（モバイル、タブレット、デスクトップ）  
 **Project Type**: Web application（Next.js App Router）  
 **Performance Goals**: 初回表示3秒以内（ブロードバンド接続環境）、LCP最適化、画像最適化  
@@ -90,6 +90,7 @@ specs/001-mens-esthe-service-page/
 app/
 ├── services/
 │   └── mens-esthe/
+│       ├── data.ts              # 静的コンテンツ（ハードコード）
 │       ├── page.tsx              # メインページコンポーネント（Server Component）
 │       ├── error.tsx             # エラーページ（Client Component）
 │       ├── loading.tsx           # ローディングページ（Server Component）
@@ -98,6 +99,7 @@ app/
 components/
 ├── MensEstheService/
 │   ├── HeroSection.tsx           # ヒーローセクション（Client Component）
+│   ├── SectionNav.tsx            # ページ内セクションナビ（Client Component）
 │   ├── FeaturesSection.tsx       # 主要機能セクション（Client Component）
 │   ├── PricingSection.tsx        # 料金情報セクション（Client Component）
 │   ├── PortfolioSection.tsx     # 制作実績セクション（Client Component）
@@ -115,16 +117,15 @@ tests/
 ├── unit/
 │   └── mens-esthe-service/
 │       ├── utils.test.ts         # ユーティリティ関数の単体テスト
-│       └── types.test.ts         # 型定義のテスト
 └── ui/
     └── mens-esthe-service/
         ├── HeroSection.test.tsx  # ヒーローセクションのUIテスト
+        ├── SectionNav.test.tsx   # セクションナビのUIテスト
         ├── FeaturesSection.test.tsx
         ├── PricingSection.test.tsx
         ├── PortfolioSection.test.tsx
         ├── ProcessSection.test.tsx
         ├── FAQSection.test.tsx
-        └── ContactCTA.test.tsx
 ```
 
 **Structure Decision**: Next.js 16 App Routerの標準的な構造に従い、`app/services/mens-esthe/`配下にページファイルを配置。コンポーネントは`components/MensEstheService/`配下に機能ごとに分割。型定義とユーティリティは`lib/`配下に配置。テストは`tests/`配下に単体テストとUIテストを分離。
