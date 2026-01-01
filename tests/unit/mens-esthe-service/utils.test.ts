@@ -24,6 +24,7 @@ describe("SECTION_IDS", () => {
       process: "process",
       faq: "faq",
       contact: "contact",
+      benefits: "benefits",
     })
   })
 })

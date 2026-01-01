@@ -25,7 +25,7 @@ describe("ProcessSection", () => {
 
   it("TC-003-002: アイコンが未指定のステップも表示できる", () => {
     render(<ProcessSection processSteps={[{ ...processStepsMock[0], icon: undefined }]} />)
-    expect(screen.getByText("ヒアリング")).toBeInTheDocument()
+    expect(screen.getByText("お問い合わせ")).toBeInTheDocument()
   })
 })
 

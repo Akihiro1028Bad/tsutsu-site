@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ElementType } from 'react'
 
 type RevealVariant = 'fade' | 'slideUp' | 'slideUpScale' | 'growY' | 'pop'
 
 type RevealProps = {
-  as?: keyof JSX.IntrinsicElements
+  as?: ElementType
   className?: string
   children: React.ReactNode
   amount?: number

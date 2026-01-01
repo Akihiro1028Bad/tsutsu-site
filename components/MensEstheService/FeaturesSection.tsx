@@ -71,7 +71,7 @@ export function FeaturesSection({ features }: FeaturesSectionProps) {
           {features.map((feature, index) => {
             const Icon = iconMap[feature.icon] ?? Sparkles
             const hasImage = !!feature.image
-            const CardBody = hasImage ? (
+            const CardBody = hasImage && feature.image ? (
               <>
                 <div className="relative aspect-video w-full overflow-hidden">
                   <Image

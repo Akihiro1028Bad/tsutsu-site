@@ -15,8 +15,9 @@ describe("PricingSection", () => {
     render(<PricingSection pricingItems={pricingItemsMock} />)
 
     expect(screen.getByRole("heading", { name: "料金" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { level: 3, name: "初期費用" })).toBeInTheDocument()
-    expect(screen.getByRole("heading", { level: 3, name: "月額費用" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 3, name: "基本料金" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 4, name: "初期費用" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 4, name: "月額費用" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 3, name: "オプション" })).toBeInTheDocument()
   })
 
