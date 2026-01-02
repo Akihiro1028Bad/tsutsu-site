@@ -95,7 +95,7 @@ export const processStepsMock: ProcessStep[] = [
     id: "step-04",
     stepNumber: 4,
     title: "制作・実装",
-    description: "既存デザインに合わせて実装し、確認しながら進めます。",
+    description: "既存パッケージに合わせて実装し、確認しながら進めます。",
     icon: "Code",
   },
   {

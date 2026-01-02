@@ -20,14 +20,14 @@ export const benefits: Benefit[] = [
   {
     id: 'benefit-01',
     title: '低コストで高品質',
-    description: '既存デザインを活用することで、制作費を抑えながら高品質なサイトを実現できます。',
+    description: '既存パッケージを活用することで、制作費を抑えながら高品質なサイトを実現できます。',
     icon: 'DollarSign',
     highlight: '¥100,000〜から',
   },
   {
     id: 'benefit-02',
     title: '短期間で公開可能',
-    description: '既存デザインシステムを活用することで、短期間でサイトを公開できます。',
+    description: '既存パッケージを活用することで、短期間でサイトを公開できます。',
     icon: 'Clock',
     highlight: '最短2週間で公開',
   },
@@ -178,7 +178,31 @@ export const pricingItems: PricingItem[] = [
   },
 ]
 
-export const portfolioItems: PortfolioItem[] = []
+export const portfolioItems: PortfolioItem[] = [
+  {
+    id: 'portfolio-01',
+    storeName: 'デモサイト',
+    siteUrl: 'https://menese-demo.vercel.app/',
+    thumbnailImage: {
+      src: '/services/mens-esthe-mock_sub.png',
+      alt: 'サンプル店舗名のサイトサムネイル',
+      width: 1200,
+      height: 630,
+    },
+  },
+  // 追加の制作実績を以下に追加してください
+  // {
+  //   id: 'portfolio-02',
+  //   storeName: '店舗名',
+  //   siteUrl: 'https://example.com/',
+  //   thumbnailImage: {
+  //     src: '/images/portfolio/thumbnail.jpg',
+  //     alt: '店舗名のサイトサムネイル',
+  //     width: 1200,
+  //     height: 630,
+  //   },
+  // },
+]
 
 export const processSteps: ProcessStep[] = [
   {
@@ -206,7 +230,7 @@ export const processSteps: ProcessStep[] = [
     id: 'process-step-04',
     stepNumber: 4,
     title: '制作・実装',
-    description: '既存デザインに合わせて実装し、確認しながら進めます。',
+    description: '既存パッケージに合わせて実装し、確認しながら進めます。',
     icon: 'Code',
   },
   {

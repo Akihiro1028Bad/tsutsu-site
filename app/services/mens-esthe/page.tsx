@@ -18,11 +18,11 @@ import { generateStructuredData } from '@/lib/utils/mens-esthe-service'
 export const metadata: Metadata = {
   title: 'メンズエステ店向けサイト制作 | tsutsu-site',
   description:
-    'メンズエステ店向けに、集客と問い合わせに強いサービスページを既存デザインで制作します。',
+    'メンズエステ店向けに、集客と問い合わせに強いサービスページを既存パッケージで制作します。',
   openGraph: {
     title: 'メンズエステ店向けサイト制作',
     description:
-      'メンズエステ店向けに、集客と問い合わせに強いサービスページを既存デザインで制作します。',
+      'メンズエステ店向けに、集客と問い合わせに強いサービスページを既存パッケージで制作します。',
     type: 'website',
   },
 }
@@ -31,7 +31,7 @@ export default function MensEstheServicePage() {
   const structuredData = generateStructuredData({
     name: 'メンズエステ店向けサイト制作',
     description:
-      'メンズエステ店向けに、集客と問い合わせに強いサービスページを既存デザインで制作します。',
+      'メンズエステ店向けに、集客と問い合わせに強いサービスページを既存パッケージで制作します。',
   })
 
   return (
