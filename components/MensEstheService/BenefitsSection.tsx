@@ -62,35 +62,30 @@ export function BenefitsSection({ benefits }: BenefitsSectionProps) {
           </motion.div>
         )}
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="divide-y divide-slate-200">
           {benefits.map((benefit, index) => {
             const Icon = iconMap[benefit.icon] ?? Sparkles
-            const CardBody = (
-              <>
-                {/* Decorative gradient background on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gold-50/0 to-gold-100/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-                <div className="relative flex flex-col gap-5">
-                  <div className="flex items-start gap-5">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gold-500 text-white shadow-md transition-transform duration-300 group-hover:scale-110">
-                      <Icon aria-hidden="true" className="h-6 w-6" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-lg font-semibold text-slate-950">
-                        {benefit.title}
-                      </h3>
-                      {benefit.highlight && (
-                        <p className="mt-2 text-sm font-medium text-gold-600">
-                          {benefit.highlight}
-                        </p>
-                      )}
-                    </div>
+            const ItemContent = (
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+                <div className="flex shrink-0 items-center gap-4 sm:gap-5">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gold-500 text-white shadow-md transition-transform duration-300 group-hover:scale-110">
+                    <Icon aria-hidden="true" className="h-6 w-6" />
                   </div>
-                  <p className="text-base leading-relaxed text-slate-600">
-                    {benefit.description}
-                  </p>
+                  <div className="min-w-0 flex-1 sm:flex-initial">
+                    <h3 className="text-base font-semibold text-slate-950 md:text-lg">
+                      {benefit.title}
+                    </h3>
+                    {benefit.highlight && (
+                      <p className="mt-1 text-sm font-medium text-gold-600 md:mt-2">
+                        {benefit.highlight}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </>
+                <p className="text-sm leading-relaxed text-slate-600 sm:flex-1 md:text-base">
+                  {benefit.description}
+                </p>
+              </div>
             )
 
             if (isMobile) {
@@ -98,12 +93,11 @@ export function BenefitsSection({ benefits }: BenefitsSectionProps) {
                 <Reveal
                   key={benefit.id}
                   as="article"
-                  className="group relative overflow-hidden border border-slate-200 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  className="group py-6 first:pt-0 last:pb-0"
                   variant="pop"
-                  shine
                   delayMs={index * 90}
                 >
-                  {CardBody}
+                  {ItemContent}
                 </Reveal>
               )
             }
@@ -111,7 +105,7 @@ export function BenefitsSection({ benefits }: BenefitsSectionProps) {
             return (
               <motion.article
                 key={benefit.id}
-                className="group relative overflow-hidden border border-slate-200 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group py-6 first:pt-0 last:pb-0"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
@@ -121,7 +115,7 @@ export function BenefitsSection({ benefits }: BenefitsSectionProps) {
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
-                {CardBody}
+                {ItemContent}
               </motion.article>
             )
           })}

@@ -36,7 +36,7 @@ describe("validateServiceInfo", () => {
         name: "メンズエステ店向けサイト制作",
         catchphrase: "集客に強いLP",
         valueProposition: "最短で魅力が伝わる構成と導線設計",
-        description: "既存デザインに合わせてサービスページを制作します。",
+        description: "既存パッケージに合わせてサービスページを制作します。",
         targetAudience: "メンズエステ店の経営者・運営者",
       }),
     ).toBe(true)

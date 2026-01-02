@@ -126,13 +126,13 @@ export function PricingSection({ pricingItems }: PricingSectionProps) {
                   delay: 0.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="py-10"
+                className="py-6"
               >
-                <h3 className="text-2xl font-bold text-slate-900 mb-8 md:text-3xl tracking-tight">
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 md:text-3xl tracking-tight">
                   オプション
                 </h3>
 
-                <div className="space-y-8">
+                <div className="divide-y divide-slate-200">
                   {optionItems.map((item, itemIndex) => (
                     <motion.div
                       key={item.id}
@@ -144,18 +144,19 @@ export function PricingSection({ pricingItems }: PricingSectionProps) {
                         delay: 0.1 + itemIndex * 0.05,
                         ease: [0.16, 1, 0.3, 1],
                       }}
+                      className="py-4 first:pt-0 last:pb-0"
                     >
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-lg font-semibold text-slate-900 mb-2 md:text-xl leading-snug">
+                          <h4 className="text-base font-semibold text-slate-900 mb-1 md:text-lg leading-snug">
                             {item.name}
                           </h4>
-                          <p className="text-base leading-relaxed text-slate-600 md:text-lg">
+                          <p className="text-sm leading-relaxed text-slate-600 md:text-base">
                             {item.description}
                           </p>
                         </div>
-                        <div className="flex-shrink-0">
-                          <div className="text-3xl font-bold text-slate-900 md:text-4xl whitespace-nowrap">
+                        <div className="flex-shrink-0 sm:text-right">
+                          <div className="text-xl font-bold text-slate-900 md:text-2xl whitespace-nowrap">
                             {item.price}
                           </div>
                         </div>
