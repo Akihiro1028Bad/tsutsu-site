@@ -10,6 +10,8 @@ module.exports = {
       colors: {
         paper: '#fafaf7',
         ink: '#0a0a0a',
+        // Note: this key shadows Tailwind's built-in lime-50..900 scale.
+        // Only `lime` (DEFAULT) and `lime-500` are valid in this project.
         lime: {
           DEFAULT: '#d0ff3a',
           500: '#d0ff3a',
