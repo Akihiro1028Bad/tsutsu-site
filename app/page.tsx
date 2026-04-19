@@ -2,28 +2,12 @@ import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import Hero from '@/components/Hero'
 import LargeTextMarquee from '@/components/LargeTextMarquee'
-import BlogSectionSkeleton from '@/components/BlogSectionSkeleton'
 
-// フォールド外のコンポーネントを動的インポート
-const Services = dynamic(() => import('@/components/Services'), {
-  loading: () => <div className="min-h-screen" />,
-})
-
-const About = dynamic(() => import('@/components/About'), {
-  loading: () => <div className="min-h-screen" />,
-})
-
-const AnnouncementSection = dynamic(() => import('@/components/AnnouncementSection'), {
-  loading: () => null,
-})
-
-const BlogSection = dynamic(() => import('@/components/BlogSection'), {
-  loading: () => <BlogSectionSkeleton />,
-})
-
-const Contact = dynamic(() => import('@/components/Contact'), {
-  loading: () => <div className="min-h-screen" />,
-})
+const FeaturedWork = dynamic(() => import('@/components/FeaturedWork'))
+const Services = dynamic(() => import('@/components/Services'))
+const About = dynamic(() => import('@/components/About'))
+const LatestSection = dynamic(() => import('@/components/LatestSection'))
+const Contact = dynamic(() => import('@/components/Contact'))
 
 export const metadata: Metadata = {
   title: 'tsutsu | Web開発・システム開発支援',
@@ -58,16 +42,14 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-paper">
       <Hero />
-      {/* セクション区切りとしてのLarge Text Marquee */}
       <LargeTextMarquee speed={45} />
+      <FeaturedWork />
       <Services />
       <About />
-      <AnnouncementSection />
-      <BlogSection />
+      <LatestSection />
       <Contact />
     </main>
   )
 }
-

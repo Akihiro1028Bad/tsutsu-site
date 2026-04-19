@@ -4,11 +4,17 @@
 
 @layer base {
   :root {
-    --font-noto-sans-jp: system-ui;
+    --color-paper: #fafaf7;
+    --color-ink: #0a0a0a;
+    --color-lime: #d0ff3a;
+    --color-gray-200: #e5e5e5;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
   }
 
   body {
-    @apply bg-white text-gray-900;
+    background: var(--color-paper);
+    color: var(--color-ink);
     font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
@@ -21,6 +27,36 @@
 }
 
 @layer components {
+  .h-display {
+    font-family: var(--font-noto-sans-jp), 'Hiragino Kaku Gothic ProN', sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+
+  .h-section {
+    font-family: var(--font-noto-sans-jp), sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.0;
+  }
+
+  .mono-tag {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+
+  .lime-highlight {
+    background: var(--color-lime);
+    color: var(--color-ink);
+    padding: 0 0.15em;
+    display: inline-block;
+    transform: rotate(-1deg);
+  }
+
   /* microCMSリッチエディタコンテンツ用のスタイリング */
   .prose {
     /* フォントファミリーの明示的な適用 */

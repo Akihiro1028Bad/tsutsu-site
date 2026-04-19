@@ -8,6 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        paper: '#fafaf7',
+        ink: '#0a0a0a',
+        // Note: this key shadows Tailwind's built-in lime-50..900 scale.
+        // Only `lime` (DEFAULT) and `lime-500` are valid in this project.
+        lime: {
+          DEFAULT: '#d0ff3a',
+          500: '#d0ff3a',
+        },
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -48,6 +56,8 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-noto-sans-jp)', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'sans-serif'],
         serif: ['var(--font-noto-serif-jp)', 'Hiragino Mincho ProN', 'Yu Mincho', 'Meiryo', 'serif'],
+        display: ['var(--font-inter)', 'var(--font-noto-sans-jp)', 'sans-serif'],
+        mono: ['var(--font-geist-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',

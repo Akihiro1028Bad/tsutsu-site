@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { Noto_Sans_JP, Inter, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import ClientComponents from '@/components/ClientComponents'
 import StructuredData from '@/components/StructuredData'
@@ -7,6 +8,27 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import HeaderSkeleton from '@/components/HeaderSkeleton'
 import FooterSkeleton from '@/components/FooterSkeleton'
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  weight: ['400', '500', '700', '900'],
+  variable: '--font-noto-sans-jp',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '700', '800', '900'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://tsutsu.dev'),
@@ -75,7 +97,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja" data-scroll-behavior="smooth">
+    <html lang="ja" data-scroll-behavior="smooth" className={`${notoSansJP.variable} ${inter.variable} ${geistMono.variable}`}>
       <body className="antialiased font-sans">
         <StructuredData />
         <ClientComponents />
