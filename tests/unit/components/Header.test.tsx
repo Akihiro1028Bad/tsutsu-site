@@ -24,11 +24,11 @@ describe('Header', () => {
   it('adds scrolled styling after 16px scroll', () => {
     const { container } = render(<Header />)
     const header = container.querySelector('header')
-    expect(header).not.toHaveClass('border-b')
+    expect(header).not.toHaveClass('bg-white')
 
     window.scrollY = 32
     fireEvent.scroll(window)
-    expect(header).toHaveClass('border-b')
+    expect(header).toHaveClass('bg-white')
   })
 
   it('toggles mobile menu', () => {

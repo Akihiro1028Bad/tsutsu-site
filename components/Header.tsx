@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const NAV_LINKS = [
   { href: '/#work', label: 'Work' },
@@ -11,15 +12,70 @@ const NAV_LINKS = [
   { href: '/#contact', label: 'Contact' },
 ] as const
 
+type NavLink = (typeof NAV_LINKS)[number]
+
+function isActive(link: NavLink, pathname: string | null): boolean {
+  if (!pathname) return false
+  if (link.href === '/blog') {
+    return pathname === '/blog' || pathname.startsWith('/blog/')
+  }
+  if (link.href.startsWith('/#')) {
+    return pathname === '/'
+  }
+  return link.href === pathname
+}
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const hamburgerRef = useRef<HTMLButtonElement | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
+  const pathname = usePathname()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Focus management + Escape to close while dialog is open
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const hamburger = hamburgerRef.current
+    previousFocusRef.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null
+    closeButtonRef.current?.focus()
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        setMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      const target = previousFocusRef.current ?? hamburger
+      target?.focus()
+    }
+  }, [menuOpen])
+
+  // Body scroll lock while dialog is open
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const root = document.documentElement
+    const previousOverflow = root.style.overflow
+    root.style.overflow = 'hidden'
+
+    return () => {
+      root.style.overflow = previousOverflow
+    }
+  }, [menuOpen])
 
   return (
     <>
@@ -48,20 +104,27 @@ export default function Header() {
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="mono-tag text-ink/80 transition-colors hover:text-ink"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link, pathname)
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? 'page' : undefined}
+                  className="mono-tag text-ink/80 transition-colors hover:text-ink"
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </nav>
 
           <button
+            ref={hamburgerRef}
             type="button"
             aria-label="メニューを開く"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-dialog"
             className="flex h-10 w-10 items-center justify-center md:hidden"
             onClick={() => setMenuOpen(true)}
           >
@@ -72,13 +135,15 @@ export default function Header() {
 
       {menuOpen && (
         <div
+          id="mobile-nav-dialog"
           role="dialog"
           aria-modal="true"
           aria-label="ナビゲーション"
-          className="fixed inset-0 z-[60] flex flex-col bg-ink text-paper"
+          className="fixed inset-0 z-[60] flex flex-col overscroll-contain bg-ink text-paper"
         >
           <div className="flex h-16 items-center justify-end px-6">
             <button
+              ref={closeButtonRef}
               type="button"
               aria-label="メニューを閉じる"
               className="text-paper"
@@ -88,17 +153,21 @@ export default function Header() {
             </button>
           </div>
           <ul className="flex flex-1 flex-col justify-center gap-6 px-8 pb-24">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="h-display block text-4xl text-paper"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link, pathname)
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    aria-current={active ? 'page' : undefined}
+                    onClick={() => setMenuOpen(false)}
+                    className="h-display block text-4xl text-paper"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </div>
       )}
