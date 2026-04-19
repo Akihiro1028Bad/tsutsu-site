@@ -8,8 +8,11 @@ const NAV_LINKS = [
   { href: '/#contact', label: 'Contact' },
 ] as const
 
+// Next.js 16 Cache Components disallows `new Date()` in Server Components
+// without a dynamic data source. Bump this constant manually each year.
+const COPYRIGHT_YEAR = 2026
+
 export default function Footer() {
-  const year = new Date().getFullYear()
   return (
     <footer className="bg-ink text-paper">
       <div className="mx-auto max-w-screen-2xl px-6 py-20 md:px-12 md:py-28">
@@ -33,7 +36,7 @@ export default function Footer() {
         </nav>
 
         <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-paper/10 pt-8">
-          <p className="mono-tag text-paper/50">© {year} 堤 暁寛</p>
+          <p className="mono-tag text-paper/50">© {COPYRIGHT_YEAR} 堤 暁寛</p>
           <p className="mono-tag flex items-center gap-2 text-paper/70">
             <span
               aria-hidden
