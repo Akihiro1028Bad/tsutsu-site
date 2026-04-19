@@ -1,8 +1,10 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, MessageSquare, Clock, Send } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Send } from 'lucide-react'
 import { useState } from 'react'
+
+const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@tsutsumi.jp'
 
 type ContactFormData = {
   name: string
@@ -66,7 +68,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -96,10 +98,10 @@ export default function Contact() {
         throw new Error(errorMessage)
       }
 
-      const data = await response.json()
+      await response.json()
       setSubmitStatus('success')
       setFormData({ name: '', email: '', subject: '', message: '' })
-      
+
       // 3秒後にステータスをリセット
       setTimeout(() => setSubmitStatus('idle'), 3000)
     } catch (error) {
@@ -122,338 +124,222 @@ export default function Contact() {
   }
 
   return (
-    <section
-      id="contact"
-      className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-16 md:py-32"
-    >
-      {/* Subtle Grid Background */}
-      <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
-        <div 
-          className="absolute inset-0" 
-          style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px'
-          }}
-        />
-      </div>
+    <section id="contact" className="bg-paper px-6 py-24 md:px-12 md:py-32">
+      <div className="mx-auto max-w-screen-2xl">
+        <h2 className="h-display text-[clamp(3rem,8vw,8rem)] leading-[0.95] text-ink">
+          お仕事の<br />ご相談はこちら。
+        </h2>
 
-      <div className="w-full max-w-[1280px] mx-auto px-6 sm:px-12 md:px-16 lg:px-20 relative z-10">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-12 md:mb-16"
-          {...({} as any)}
-        >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 text-slate-950 tracking-tight">
-            お問い合わせ
-          </h2>
-          <motion.div
-            initial={{ width: 0, opacity: 0 }}
-            whileInView={{ width: '100px', opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent mx-auto mb-6"
-            aria-hidden="true"
-            {...({} as any)}
-          />
-          <p className="text-sm sm:text-base md:text-lg text-slate-600 leading-relaxed font-normal tracking-[0.08em] uppercase max-w-2xl mx-auto">
-            プロジェクトのご相談やお見積もりなど、お気軽にお問い合わせください
-          </p>
-        </motion.div>
+        <div className="mt-12 h-px w-24 bg-ink/20" />
 
-        {/* Content - Split Layout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="relative"
-          {...({} as any)}
-        >
-          <div className="flex flex-col md:flex-row items-stretch gap-0">
-            {/* Left Block - Information */}
-            <motion.div
-              initial={{ x: -40, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full md:w-80 lg:w-96 bg-slate-50/30 border-r border-slate-200/40 p-6 sm:p-8 md:p-12 flex flex-col justify-center"
-              {...({} as any)}
-            >
-              <div className="relative z-10 w-full space-y-8">
-                {/* Contact Method */}
-                <div>
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-slate-200/50 flex items-center justify-center flex-shrink-0 mt-1">
-                      <Mail className="w-5 h-5 text-slate-600" />
-                    </div>
-                    <div>
-                      <dt className="text-xs text-slate-400 mb-2 uppercase tracking-wider font-light">メールでのお問い合わせ</dt>
-                      <dd className="text-sm text-slate-900 leading-relaxed font-light">
-                        お問い合わせはメールにて承っております。
-                        <br />
-                        お気軽にご連絡ください。
-                      </dd>
-                    </div>
-                  </div>
-                </div>
+        <div className="mt-12 flex flex-col items-start gap-6">
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="mono-tag inline-flex items-center gap-3 rounded-full bg-lime-500 px-8 py-5 text-lg font-bold text-ink transition-transform hover:-translate-y-0.5"
+          >
+            {CONTACT_EMAIL} <span aria-hidden>→</span>
+          </a>
+          <p className="mono-tag text-ink/50">または</p>
+          <p className="mono-tag text-ink/70">フォームから連絡 ↓</p>
+        </div>
 
-                {/* Consultation Content */}
-                <div>
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-slate-200/50 flex items-center justify-center flex-shrink-0 mt-1">
-                      <MessageSquare className="w-5 h-5 text-slate-600" />
-                    </div>
-                    <div>
-                      <dt className="text-xs text-slate-400 mb-2 uppercase tracking-wider font-light">ご相談内容</dt>
-                      <dd className="text-sm text-slate-900 leading-relaxed font-light">
-                        Webサイト制作、アプリ開発、システム開発支援、
-                        <br />
-                        エンジニアの学習・キャリア支援など、幅広く対応いたします。
-                      </dd>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Response Time */}
-                <div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-200/50 flex items-center justify-center flex-shrink-0 mt-1">
-                      <Clock className="w-5 h-5 text-slate-600" />
-                    </div>
-                    <div>
-                      <dt className="text-xs text-slate-400 mb-2 uppercase tracking-wider font-light">返信時間</dt>
-                      <dd className="text-sm text-slate-900 leading-relaxed font-light">
-                        通常、2営業日以内にご返信いたします。
-                        <br />
-                        お急ぎの場合は、件名に「【至急】」とご記載ください。
-                      </dd>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional Note */}
-                <div className="pt-6 border-t border-slate-200/40">
-                  <p className="text-xs text-slate-500 leading-relaxed font-light">
-                    お問い合わせの際は、プロジェクトの概要やご希望のスケジュールなどをお知らせいただけると、よりスムーズにご対応できます。
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Block - Form */}
-            <motion.div
-              initial={{ x: 40, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="flex-1 bg-white p-6 sm:p-10 md:p-16"
-              {...({} as any)}
-            >
-              <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
-                {/* Name Field */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-xs text-slate-400 mb-2 uppercase tracking-wider font-light"
-                  >
-                    お名前 <span className="text-slate-300">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={formData.name}
-                    onChange={handleChange('name')}
-                    className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
-                      errors.name
-                        ? 'border-red-300 focus:border-red-500'
-                        : 'border-slate-200 focus:border-slate-950'
-                    } focus:outline-none transition-colors duration-300 text-slate-900 font-light text-base`}
-                    placeholder="山田 太郎"
-                  />
-                  {errors.name && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-xs text-red-500"
-                      {...({} as any)}
-                    >
-                      {errors.name}
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-xs text-slate-400 mb-2 uppercase tracking-wider font-light"
-                  >
-                    メールアドレス <span className="text-slate-300">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange('email')}
-                    className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
-                      errors.email
-                        ? 'border-red-300 focus:border-red-500'
-                        : 'border-slate-200 focus:border-slate-950'
-                    } focus:outline-none transition-colors duration-300 text-slate-900 font-light text-base`}
-                    placeholder="example@email.com"
-                  />
-                  {errors.email && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-xs text-red-500"
-                      {...({} as any)}
-                    >
-                      {errors.email}
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Subject Field */}
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-xs text-slate-400 mb-2 uppercase tracking-wider font-light"
-                  >
-                    件名 <span className="text-slate-300">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    value={formData.subject}
-                    onChange={handleChange('subject')}
-                    className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
-                      errors.subject
-                        ? 'border-red-300 focus:border-red-500'
-                        : 'border-slate-200 focus:border-slate-950'
-                    } focus:outline-none transition-colors duration-300 text-slate-900 font-light text-base`}
-                    placeholder="お問い合わせの件名"
-                  />
-                  {errors.subject && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-xs text-red-500"
-                      {...({} as any)}
-                    >
-                      {errors.subject}
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Message Field */}
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-xs text-slate-400 mb-2 uppercase tracking-wider font-light"
-                  >
-                    メッセージ <span className="text-slate-300">*</span>
-                  </label>
-                  <textarea
-                    id="message"
-                    value={formData.message}
-                    onChange={handleChange('message')}
-                    rows={6}
-                    className={`w-full px-4 py-3 min-h-[120px] bg-transparent border-b ${
-                      errors.message
-                        ? 'border-red-300 focus:border-red-500'
-                        : 'border-slate-200 focus:border-slate-950'
-                    } focus:outline-none transition-colors duration-300 text-slate-900 font-light text-base resize-none`}
-                    placeholder="お問い合わせ内容をご記入ください"
-                  />
-                  {errors.message && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-xs text-red-500"
-                      {...({} as any)}
-                    >
-                      {errors.message}
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Submit Button */}
-                <div className="pt-4">
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting}
-                    whileHover={{ scale: isSubmitting ? 1 : 1.02, y: isSubmitting ? 0 : -2 }}
-                    whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                    className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-3 md:py-4 min-h-[44px] flex items-center justify-center bg-slate-950 text-white rounded-none font-normal tracking-[0.08em] hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+        <details className="mt-12 border-t border-ink/15 pt-12">
+          <summary className="mono-tag cursor-pointer text-ink hover:text-ink/70">
+            お問い合わせフォームを開く →
+          </summary>
+          <div className="mt-8">
+            <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+              {/* Name Field */}
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-xs text-ink/50 mb-2 uppercase tracking-wider font-light"
+                >
+                  お名前 <span className="text-ink/30">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={formData.name}
+                  onChange={handleChange('name')}
+                  className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
+                    errors.name
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-ink/20 focus:border-ink'
+                  } focus:outline-none transition-colors duration-300 text-ink font-light text-base`}
+                  placeholder="山田 太郎"
+                />
+                {errors.name && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 text-xs text-red-500"
                     {...({} as any)}
                   >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      {isSubmitting ? (
-                        <>
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                            className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                            {...({} as any)}
-                          />
-                          送信中...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" />
-                          送信する
-                        </>
-                      )}
-                    </span>
-                    <motion.div
-                      className="absolute inset-0 bg-slate-800"
-                      initial={{ x: '-100%' }}
-                      whileHover={isSubmitting ? {} : { x: 0 }}
-                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      aria-hidden="true"
-                      {...({} as any)}
-                    />
-                  </motion.button>
-                </div>
+                    {errors.name}
+                  </motion.div>
+                )}
+              </div>
 
-                {/* Status Messages */}
-                <AnimatePresence>
-                  {submitStatus === 'success' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      role="alert"
-                      aria-live="polite"
-                      className="p-4 bg-green-50 border border-green-200 text-green-800 text-sm"
-                      {...({} as any)}
-                    >
-                      お問い合わせありがとうございます。送信が完了しました。
-                    </motion.div>
-                  )}
-                  {submitStatus === 'error' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      role="alert"
-                      aria-live="assertive"
-                      className="p-4 bg-red-50 border border-red-200 text-red-800 text-sm"
-                      {...({} as any)}
-                    >
-                      送信に失敗しました。しばらく時間をおいて再度お試しください。
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </form>
-            </motion.div>
+              {/* Email Field */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-xs text-ink/50 mb-2 uppercase tracking-wider font-light"
+                >
+                  メールアドレス <span className="text-ink/30">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formData.email}
+                  onChange={handleChange('email')}
+                  className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
+                    errors.email
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-ink/20 focus:border-ink'
+                  } focus:outline-none transition-colors duration-300 text-ink font-light text-base`}
+                  placeholder="example@email.com"
+                />
+                {errors.email && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 text-xs text-red-500"
+                    {...({} as any)}
+                  >
+                    {errors.email}
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Subject Field */}
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="block text-xs text-ink/50 mb-2 uppercase tracking-wider font-light"
+                >
+                  件名 <span className="text-ink/30">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  value={formData.subject}
+                  onChange={handleChange('subject')}
+                  className={`w-full px-4 py-3 min-h-[44px] bg-transparent border-b ${
+                    errors.subject
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-ink/20 focus:border-ink'
+                  } focus:outline-none transition-colors duration-300 text-ink font-light text-base`}
+                  placeholder="お問い合わせの件名"
+                />
+                {errors.subject && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 text-xs text-red-500"
+                    {...({} as any)}
+                  >
+                    {errors.subject}
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Message Field */}
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-xs text-ink/50 mb-2 uppercase tracking-wider font-light"
+                >
+                  メッセージ <span className="text-ink/30">*</span>
+                </label>
+                <textarea
+                  id="message"
+                  value={formData.message}
+                  onChange={handleChange('message')}
+                  rows={6}
+                  className={`w-full px-4 py-3 min-h-[120px] bg-transparent border-b ${
+                    errors.message
+                      ? 'border-red-300 focus:border-red-500'
+                      : 'border-ink/20 focus:border-ink'
+                  } focus:outline-none transition-colors duration-300 text-ink font-light text-base resize-none`}
+                  placeholder="お問い合わせ内容をご記入ください"
+                />
+                {errors.message && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-2 text-xs text-red-500"
+                    {...({} as any)}
+                  >
+                    {errors.message}
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-4">
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02, y: isSubmitting ? 0 : -2 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                  className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-3 md:py-4 min-h-[44px] inline-flex items-center justify-center bg-ink text-paper rounded-none font-normal tracking-[0.08em] hover:bg-ink/90 focus:bg-ink/90 focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 transition-all duration-500 text-sm sm:text-base uppercase relative group overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                  {...({} as any)}
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    {isSubmitting ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                          className="w-4 h-4 border-2 border-paper border-t-transparent rounded-full"
+                          {...({} as any)}
+                        />
+                        送信中...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        送信する
+                      </>
+                    )}
+                  </span>
+                </motion.button>
+              </div>
+
+              {/* Status Messages */}
+              <AnimatePresence>
+                {submitStatus === 'success' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    role="alert"
+                    aria-live="polite"
+                    className="p-4 bg-green-50 border border-green-200 text-green-800 text-sm"
+                    {...({} as any)}
+                  >
+                    お問い合わせありがとうございます。送信が完了しました。
+                  </motion.div>
+                )}
+                {submitStatus === 'error' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    role="alert"
+                    aria-live="assertive"
+                    className="p-4 bg-red-50 border border-red-200 text-red-800 text-sm"
+                    {...({} as any)}
+                  >
+                    送信に失敗しました。しばらく時間をおいて再度お試しください。
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </form>
           </div>
-        </motion.div>
+        </details>
       </div>
     </section>
   )
