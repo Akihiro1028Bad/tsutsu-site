@@ -107,9 +107,6 @@ export default function HomeNav() {
         })}
       </ul>
 
-      <span className="home-nav__lang" aria-hidden="true">
-        JA / <span className="home-nav__lang-muted">EN</span>
-      </span>
     </nav>
   )
 }

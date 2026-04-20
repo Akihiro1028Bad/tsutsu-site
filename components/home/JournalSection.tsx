@@ -18,12 +18,11 @@ export default function JournalSection({
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>04</span>
-          <em aria-hidden="true" />
           <span>Journal</span>
         </div>
         <div className="section-head__jp">
           <h2>Journal.</h2>
-          <p className="section-head__en">— お知らせ・ブログ</p>
+          <p className="section-head__en">お知らせ・ブログ</p>
         </div>
         <p className="section-head__lead">
           速報とじっくり、ふたつの時間軸で。

@@ -97,12 +97,6 @@ describe("Phase 2: HomeNav — structural rendering", () => {
     }
   })
 
-  it("renders a language indicator (JA / EN)", () => {
-    render(<HomeNav />)
-    expect(screen.getByText(/JA/)).toBeInTheDocument()
-    expect(screen.getByText(/EN/)).toBeInTheDocument()
-  })
-
   it("uses the editorial .home-nav scope class", () => {
     render(<HomeNav />)
     const nav = screen.getByRole("navigation")

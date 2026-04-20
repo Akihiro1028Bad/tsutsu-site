@@ -7,12 +7,11 @@ export default function WorksSection() {
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>01</span>
-          <em aria-hidden="true" />
           <span>Works</span>
         </div>
         <div className="section-head__jp">
           <h2>Works.</h2>
-          <p className="section-head__en">— 制作実績</p>
+          <p className="section-head__en">制作実績</p>
         </div>
         <p className="section-head__lead">
           「これを、僕がつくりました」と

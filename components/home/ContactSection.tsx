@@ -36,12 +36,11 @@ export default function ContactSection() {
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>05</span>
-          <em aria-hidden="true" />
           <span>Contact</span>
         </div>
         <div className="section-head__jp">
           <h2>Contact.</h2>
-          <p className="section-head__en">— お問い合わせ</p>
+          <p className="section-head__en">お問い合わせ</p>
         </div>
         <p className="section-head__lead">
           ご相談、見積り、ちょっとした質問、

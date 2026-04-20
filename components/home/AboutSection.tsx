@@ -7,12 +7,11 @@ export default function AboutSection() {
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>03</span>
-          <em aria-hidden="true" />
           <span>About</span>
         </div>
         <div className="section-head__jp">
           <h2>About.</h2>
-          <p className="section-head__en">— プロフィール</p>
+          <p className="section-head__en">プロフィール</p>
         </div>
         <p className="section-head__lead">
           東京を拠点に、Webのプロダクトを

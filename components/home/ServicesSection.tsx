@@ -6,12 +6,11 @@ export default function ServicesSection() {
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>02</span>
-          <em aria-hidden="true" />
           <span>Services</span>
         </div>
         <div className="section-head__jp">
           <h2>Services.</h2>
-          <p className="section-head__en">— サービス</p>
+          <p className="section-head__en">サービス</p>
         </div>
         <p className="section-head__lead">
           Webサイト、Webアプリ、自動化、

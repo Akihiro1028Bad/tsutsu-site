@@ -4,9 +4,6 @@
 export default function HeroSection() {
   return (
     <header id="top" className="hero hero--wrap">
-      <span className="hero__scroll-cue" aria-hidden="true">
-        Scroll ↓
-      </span>
       <div className="hero__grid">
         <div className="hero__title-block">
           <h1 className="hero__main">

@@ -43,9 +43,4 @@ describe("Phase 3: HeroSection — editorial first-fold", () => {
     expect(banner.textContent).toMatch(/サポート/)
   })
 
-  it("renders the vertical scroll cue", () => {
-    render(<HeroSection />)
-    const banner = screen.getByRole("banner")
-    expect(banner.textContent).toMatch(/Scroll/i)
-  })
 })

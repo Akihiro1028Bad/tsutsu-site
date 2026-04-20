@@ -14,19 +14,19 @@ const VARIANTS: ReadonlyArray<Variant> = [
   {
     id: "a",
     label: "A",
-    caption: "Signposted",
+    caption: "Minimal",
     href: "/design/a",
   },
   {
     id: "b",
     label: "B",
-    caption: "Modular",
+    caption: "Modern",
     href: "/design/b",
   },
   {
     id: "c",
     label: "C",
-    caption: "Magazine",
+    caption: "Editorial",
     href: "/design/c",
   },
 ]
