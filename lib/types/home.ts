@@ -46,4 +46,12 @@ export interface FeaturedWork {
   readonly stack: ReadonlyArray<string>
   readonly meta: ReadonlyArray<FeaturedWorkMeta>
   readonly image: FeaturedWorkImage
+  /** Used by the /works index row. */
+  readonly year: string
+  readonly category: string
+  /** Short Japanese one-liner shown on the /works index. */
+  readonly summary: string
+  readonly client: string
+  /** Live site URL — the index row links straight here. */
+  readonly externalUrl: string
 }

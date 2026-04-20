@@ -31,6 +31,21 @@ describe("Phase 3: lib/home/works-data — featured works dataset", () => {
     }
   })
 
+  it("each work exposes the index-page fields (year, category, summary, client, externalUrl)", () => {
+    for (const w of WORKS_FEATURED) {
+      expect(w.year).toMatch(/^\d{4}$/)
+      expect(w.category).toBeTruthy()
+      expect(w.summary).toBeTruthy()
+      expect(w.client).toBeTruthy()
+      expect(w.externalUrl).toMatch(/^https?:\/\//)
+    }
+  })
+
+  it("the Pickle Bang Theory entry links to thepicklebang.com", () => {
+    const hero = WORKS_FEATURED.find((w) => /Pickle/i.test(w.title))
+    expect(hero?.externalUrl).toMatch(/thepicklebang\.com/)
+  })
+
   it("declares the index page link separately from the work data", () => {
     expect(WORKS_INDEX_HREF).toMatch(/^\/?[a-z0-9-/]/)
   })
