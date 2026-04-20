@@ -1,73 +1,65 @@
-import type { Metadata } from 'next'
-import dynamic from 'next/dynamic'
-import Hero from '@/components/Hero'
-import LargeTextMarquee from '@/components/LargeTextMarquee'
-import BlogSectionSkeleton from '@/components/BlogSectionSkeleton'
+import type { Metadata } from "next"
+import HeroSection from "@/components/home/HeroSection"
+import WorksSection from "@/components/home/WorksSection"
+import ServicesSection from "@/components/home/ServicesSection"
+import AboutSection from "@/components/home/AboutSection"
+import JournalSection from "@/components/home/JournalSection"
+import ContactSection from "@/components/home/ContactSection"
+import {
+  toBlogListItem,
+  toNewsListItem,
+} from "@/lib/home/adapters"
+import { getLatestAnnouncements } from "@/lib/utils/announcement-server"
+import { getLatestBlogPosts } from "@/lib/utils/blog-server"
 
-// フォールド外のコンポーネントを動的インポート
-const Services = dynamic(() => import('@/components/Services'), {
-  loading: () => <div className="min-h-screen" />,
-})
-
-const About = dynamic(() => import('@/components/About'), {
-  loading: () => <div className="min-h-screen" />,
-})
-
-const AnnouncementSection = dynamic(() => import('@/components/AnnouncementSection'), {
-  loading: () => null,
-})
-
-const BlogSection = dynamic(() => import('@/components/BlogSection'), {
-  loading: () => <BlogSectionSkeleton />,
-})
-
-const Contact = dynamic(() => import('@/components/Contact'), {
-  loading: () => <div className="min-h-screen" />,
-})
+const PAGE_TITLE = "tsutsu | フリーランスエンジニア / Freelance Engineer"
+const PAGE_DESCRIPTION =
+  "想いを技術でカタチに。Webサイト・Webアプリ・業務自動化、そして学習・キャリア伴走まで。堤 暁寛（Tsutsu）のポートフォリオ。"
 
 export const metadata: Metadata = {
-  title: 'tsutsu | Web開発・システム開発支援',
-  description:
-    'Webサイト制作、アプリ開発、システム開発支援、未経験エンジニアの学習キャリア支援を行っている個人事業主のホームページ。',
-  alternates: {
-    canonical: '/',
-  },
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: 'tsutsu | Web開発・システム開発支援',
-    description:
-      'Webサイト制作、アプリ開発、システム開発支援、未経験エンジニアの学習キャリア支援を行っている個人事業主のホームページ。',
-    url: '/',
-    type: 'website',
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    url: "/",
+    type: "website",
     images: [
       {
-        url: '/logo.png',
+        url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: 'tsutsu',
+        alt: "tsutsu",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'tsutsu | Web開発・システム開発支援',
-    description:
-      'Webサイト制作、アプリ開発、システム開発支援、未経験エンジニアの学習キャリア支援を行っている個人事業主のホームページ。',
-    images: ['/logo.png'],
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: ["/logo.png"],
   },
 }
 
-export default function Home() {
+const JOURNAL_ITEM_COUNT = 4
+
+export default async function Home() {
+  const [announcements, blogPosts] = await Promise.all([
+    getLatestAnnouncements(JOURNAL_ITEM_COUNT),
+    getLatestBlogPosts(JOURNAL_ITEM_COUNT),
+  ])
+  const newsItems = announcements.map(toNewsListItem)
+  const blogItems = blogPosts.map(toBlogListItem)
+
   return (
-    <main className="min-h-screen">
-      <Hero />
-      {/* セクション区切りとしてのLarge Text Marquee */}
-      <LargeTextMarquee speed={45} />
-      <Services />
-      <About />
-      <AnnouncementSection />
-      <BlogSection />
-      <Contact />
+    <main>
+      <HeroSection />
+      <WorksSection />
+      <ServicesSection />
+      <AboutSection />
+      <JournalSection newsItems={newsItems} blogItems={blogItems} />
+      <ContactSection />
     </main>
   )
 }
-
