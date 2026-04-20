@@ -1,0 +1,74 @@
+/*
+ * Editorial home stylesheet — scoped to the (home) Route Group via the
+ * `.home-root` wrapper. Keeps tokens, base typography, and reduced-motion
+ * fallback colocated; section-specific styles live alongside their components.
+ */
+
+.home-root {
+  /* Surfaces */
+  --bg: oklch(0.98 0.005 85);
+  --bg-soft: oklch(0.955 0.008 85);
+
+  /* Ink */
+  --ink: oklch(0.2 0.012 260);
+  --ink-soft: oklch(0.35 0.012 260);
+  --ink-mute: oklch(0.55 0.01 260);
+
+  /* Lines */
+  --rule: oklch(0.88 0.008 85);
+
+  /* Accent (terracotta) */
+  --accent: oklch(0.55 0.16 30);
+  --accent-soft: oklch(0.94 0.05 30);
+
+  /* Type */
+  --f-display: var(--font-dm-serif), "Shippori Mincho", serif;
+  --f-jp-display: var(--font-shippori), "Zen Kaku Gothic New", serif;
+  --f-body: var(--font-zen-kaku), system-ui, sans-serif;
+  --f-mono: var(--font-space-mono), ui-monospace, monospace;
+
+  /* Layout */
+  --pad-x: clamp(20px, 5vw, 72px);
+  --col: 12;
+  --gap-section: clamp(64px, 9vw, 130px);
+
+  /* Motion */
+  --reveal-duration: 0.9s;
+  --reveal-translate: 24px;
+
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-feature-settings: "palt";
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+.home-root a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-root img,
+.home-root svg {
+  display: block;
+  max-width: 100%;
+}
+
+.home-root h1,
+.home-root h2,
+.home-root h3,
+.home-root h4 {
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-root {
+    --reveal-duration: 0.001s;
+    --reveal-translate: 0px;
+  }
+}
