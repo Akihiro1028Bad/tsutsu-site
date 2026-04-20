@@ -55,7 +55,7 @@ export default function HomeFooter() {
         <div className="home-footer__cols">
           {COLUMNS.map((col) => (
             <div key={col.heading}>
-              <h5>{col.heading}</h5>
+              <h3>{col.heading}</h3>
               <ul>
                 {col.links.map((link) => (
                   <li key={link.label}>

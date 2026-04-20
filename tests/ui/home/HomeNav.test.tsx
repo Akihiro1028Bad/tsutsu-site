@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { act, render, screen, cleanup } from "@testing-library/react"
+import { act, fireEvent, render, screen, cleanup } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import React from "react"
 
 import HomeNav from "@/components/home/HomeNav"
@@ -43,6 +44,32 @@ afterEach(() => {
   globalThis.IntersectionObserver = OriginalIntersectionObserver
 })
 
+function placeSection(id: string) {
+  const section = document.createElement("section")
+  section.id = id
+  document.body.appendChild(section)
+  return section
+}
+
+function fireIntersection(section: HTMLElement) {
+  act(() => {
+    lastCallback!(
+      [
+        {
+          isIntersecting: true,
+          intersectionRatio: 1,
+          target: section,
+          boundingClientRect: section.getBoundingClientRect(),
+          intersectionRect: section.getBoundingClientRect(),
+          rootBounds: null,
+          time: 0,
+        } as IntersectionObserverEntry,
+      ],
+      lastObserver as unknown as IntersectionObserver
+    )
+  })
+}
+
 describe("Phase 2: HomeNav — structural rendering", () => {
   it("renders a navigation landmark with an aria-label", () => {
     render(<HomeNav />)
@@ -76,10 +103,36 @@ describe("Phase 2: HomeNav — structural rendering", () => {
     expect(screen.getByText(/EN/)).toBeInTheDocument()
   })
 
-  it("uses the editorial nav class so CSS can apply mix-blend-mode", () => {
+  it("uses the editorial .home-nav scope class", () => {
     render(<HomeNav />)
     const nav = screen.getByRole("navigation")
     expect(nav.className).toMatch(/home-nav/)
+  })
+})
+
+describe("Phase 10: HomeNav — theme switching (C-3)", () => {
+  it("starts with the light theme when no section is active", () => {
+    render(<HomeNav />)
+    const nav = screen.getByRole("navigation")
+    expect(nav).toHaveAttribute("data-theme", "light")
+  })
+
+  it("switches to the dark theme when the Services section becomes active", () => {
+    const services = placeSection("services")
+    render(<HomeNav />)
+    fireIntersection(services)
+    const nav = screen.getByRole("navigation")
+    expect(nav).toHaveAttribute("data-theme", "dark")
+    services.remove()
+  })
+
+  it("stays on the light theme when a non-dark section is active", () => {
+    const works = placeSection("works")
+    render(<HomeNav />)
+    fireIntersection(works)
+    const nav = screen.getByRole("navigation")
+    expect(nav).toHaveAttribute("data-theme", "light")
+    works.remove()
   })
 })
 
@@ -93,49 +146,82 @@ describe("Phase 2: HomeNav — scroll spy", () => {
   })
 
   it("marks the matching link aria-current='true' when its section reports intersecting", () => {
-    // Place a section in the DOM so the observer has something to track.
-    const section = document.createElement("section")
-    section.id = "works"
-    document.body.appendChild(section)
-
+    const section = placeSection("works")
     render(<HomeNav />)
-
     expect(lastCallback).not.toBeNull()
     expect(lastObserver?.observe).toHaveBeenCalledWith(section)
-
-    act(() => {
-      lastCallback!(
-        [
-          {
-            isIntersecting: true,
-            intersectionRatio: 1,
-            target: section,
-            boundingClientRect: section.getBoundingClientRect(),
-            intersectionRect: section.getBoundingClientRect(),
-            rootBounds: null,
-            time: 0,
-          } as IntersectionObserverEntry,
-        ],
-        lastObserver as unknown as IntersectionObserver
-      )
-    })
-
+    fireIntersection(section)
     const worksLink = screen.getByRole("link", { name: /^works$/i })
     expect(worksLink).toHaveAttribute("aria-current", "true")
-
     section.remove()
   })
 
   it("disconnects the IntersectionObserver on unmount", () => {
-    const section = document.createElement("section")
-    section.id = "about"
-    document.body.appendChild(section)
-
+    const section = placeSection("about")
     const { unmount } = render(<HomeNav />)
     expect(lastObserver?.disconnect).not.toHaveBeenCalled()
     unmount()
     expect(lastObserver?.disconnect).toHaveBeenCalledTimes(1)
-
     section.remove()
+  })
+})
+
+describe("Phase 10: HomeNav — mobile disclosure (C-1)", () => {
+  it("exposes a menu toggle button with aria-expanded=false initially", () => {
+    render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    expect(toggle).toHaveAttribute("aria-expanded", "false")
+    expect(toggle).toHaveAttribute("aria-controls")
+  })
+
+  it("opens the nav panel when the toggle is clicked", async () => {
+    const user = userEvent.setup()
+    render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute("aria-expanded", "true")
+    const nav = screen.getByRole("navigation")
+    expect(nav).toHaveAttribute("data-menu-open", "true")
+  })
+
+  it("closes the panel when a section link is clicked", async () => {
+    const user = userEvent.setup()
+    render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute("aria-expanded", "true")
+
+    const aboutLink = screen.getByRole("link", { name: /^about$/i })
+    await user.click(aboutLink)
+    expect(toggle).toHaveAttribute("aria-expanded", "false")
+  })
+
+  it("closes the panel when Escape is pressed", async () => {
+    const user = userEvent.setup()
+    render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute("aria-expanded", "true")
+
+    fireEvent.keyDown(document, { key: "Escape" })
+    expect(toggle).toHaveAttribute("aria-expanded", "false")
+  })
+
+  it("ignores non-Escape keys", () => {
+    render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    const initial = toggle.getAttribute("aria-expanded")
+    fireEvent.keyDown(document, { key: "ArrowDown" })
+    expect(toggle).toHaveAttribute("aria-expanded", initial!)
+  })
+
+  it("removes the keydown listener on unmount", async () => {
+    const user = userEvent.setup()
+    const { unmount } = render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    await user.click(toggle)
+    unmount()
+    // After unmount pressing Escape must not throw or update stale state.
+    expect(() => fireEvent.keyDown(document, { key: "Escape" })).not.toThrow()
   })
 })

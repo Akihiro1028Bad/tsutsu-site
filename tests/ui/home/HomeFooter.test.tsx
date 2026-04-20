@@ -72,4 +72,19 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     render(<HomeFooter />)
     expect(screen.getByText(new RegExp(`© ${FIXED_YEAR}`))).toBeInTheDocument()
   })
+
+  it("uses h3 for column headings so the document doesn't skip heading levels", () => {
+    render(<HomeFooter />)
+    const footer = screen.getByRole("contentinfo")
+    const h3s = within(footer).getAllByRole("heading", { level: 3 })
+    const labels = h3s.map((h) => h.textContent)
+    expect(labels).toEqual(expect.arrayContaining(["Site", "Social", "Contact"]))
+    // No stray h4/h5 in the footer
+    expect(
+      within(footer).queryAllByRole("heading", { level: 4 })
+    ).toHaveLength(0)
+    expect(
+      within(footer).queryAllByRole("heading", { level: 5 })
+    ).toHaveLength(0)
+  })
 })

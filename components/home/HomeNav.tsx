@@ -16,8 +16,13 @@ const NAV_ITEMS: readonly NavItem[] = [
   { id: "contact", label: "Contact", href: "#contact" },
 ]
 
+/** Sections rendered on dark surfaces; nav switches to light text over them. */
+const DARK_SECTIONS: ReadonlySet<string> = new Set(["services"])
+const PANEL_ID = "home-nav-panel"
+
 export default function HomeNav() {
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const sections = NAV_ITEMS.map((item) => ({
@@ -46,12 +51,46 @@ export default function HomeNav() {
     return () => observer.disconnect()
   }, [])
 
+  // Esc closes the mobile disclosure.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [])
+
+  const theme = DARK_SECTIONS.has(activeId ?? "") ? "dark" : "light"
+
   return (
-    <nav className="home-nav" aria-label="Global navigation">
+    <nav
+      className="home-nav"
+      aria-label="Global navigation"
+      data-theme={theme}
+      data-menu-open={isOpen ? "true" : "false"}
+    >
       <a className="home-nav__brand" href="#top">
         tsutsu
       </a>
-      <ul className="home-nav__list">
+
+      <button
+        type="button"
+        className="home-nav__toggle"
+        aria-expanded={isOpen}
+        aria-controls={PANEL_ID}
+        aria-label={isOpen ? "メニューを閉じる / Close menu" : "メニュー / Menu"}
+        onClick={() => setIsOpen((v) => !v)}
+      >
+        <span aria-hidden="true">{isOpen ? "✕" : "≡"}</span>
+      </button>
+
+      <ul
+        id={PANEL_ID}
+        className="home-nav__list"
+        data-open={isOpen ? "true" : "false"}
+      >
         {NAV_ITEMS.map((item) => {
           const isActive = activeId === item.id
           return (
@@ -59,6 +98,7 @@ export default function HomeNav() {
               <a
                 href={item.href}
                 aria-current={isActive ? "true" : undefined}
+                onClick={() => setIsOpen(false)}
               >
                 {item.label}
               </a>
@@ -66,6 +106,7 @@ export default function HomeNav() {
           )
         })}
       </ul>
+
       <span className="home-nav__lang" aria-hidden="true">
         JA / <span className="home-nav__lang-muted">EN</span>
       </span>
