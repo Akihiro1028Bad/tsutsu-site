@@ -1,11 +1,19 @@
 import Script from 'next/script'
 import { BlogPost } from '@/lib/types/blog'
 import { formatDate, getCategoryName, getHeroImageUrl } from '@/lib/utils/blog'
+import { estimateReadingTimeMin } from '@/lib/utils/reading-time'
 import { generateMetaDescription } from '@/lib/utils/text'
-import ContentDetail, { type ContentDetailData } from './ContentDetail'
+import ContentDetail, {
+  type ArticleSibling,
+  type ContentDetailData,
+} from './ContentDetail'
 
 interface BlogDetailProps {
   post: BlogPost
+  siblings?: {
+    readonly older?: ArticleSibling
+    readonly newer?: ArticleSibling
+  }
 }
 
 /**
@@ -16,7 +24,7 @@ interface BlogDetailProps {
  * - コードブロックのシンタックスハイライト処理
  * - XSS対策（DOMPurify）
  */
-export default async function BlogDetail({ post }: BlogDetailProps) {
+export default async function BlogDetail({ post, siblings }: BlogDetailProps) {
   const categoryName = getCategoryName(post.category)
   const heroImageUrl = getHeroImageUrl(post.hero)
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tsutsu.dev'
@@ -67,6 +75,10 @@ export default async function BlogDetail({ post }: BlogDetailProps) {
         imageUrl={heroImageUrl}
         categoryName={categoryName}
         formatDate={formatDate}
+        kicker="Notes."
+        archive={{ href: "/blog", label: "記事一覧へ戻る" }}
+        siblings={siblings}
+        readingTimeMin={estimateReadingTimeMin(post.content)}
       />
     </>
   )

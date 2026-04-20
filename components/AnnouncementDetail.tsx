@@ -1,23 +1,34 @@
-import { Announcement } from '@/lib/types/announcement'
-import { formatDate, getCategoryName, getReadImageUrl } from '@/lib/utils/announcement'
-import ContentDetail, { type ContentDetailData } from './ContentDetail'
+import { Announcement } from "@/lib/types/announcement"
+import {
+  formatDate,
+  getCategoryName,
+  getReadImageUrl,
+} from "@/lib/utils/announcement"
+import { estimateReadingTimeMin } from "@/lib/utils/reading-time"
+import ContentDetail, {
+  type ArticleSibling,
+  type ContentDetailData,
+} from "./ContentDetail"
 
 interface AnnouncementDetailProps {
   announcement: Announcement
+  siblings?: {
+    readonly older?: ArticleSibling
+    readonly newer?: ArticleSibling
+  }
 }
 
 /**
- * お知らせ詳細コンポーネント（Server Component）
- * 
- * 機能:
- * - microCMSのHTMLコンテンツを表示
- * - コードブロックのシンタックスハイライト処理
- * - XSS対策（DOMPurify）
+ * Announcement detail wrapper — reshapes the microCMS record into the
+ * shared ContentDetail (Linear) layout.
  */
-export default async function AnnouncementDetail({ announcement }: AnnouncementDetailProps) {
+export default async function AnnouncementDetail({
+  announcement,
+  siblings,
+}: AnnouncementDetailProps) {
   const categoryName = getCategoryName(announcement.category)
   const readImageUrl = getReadImageUrl(announcement.read)
-  
+
   const contentData: ContentDetailData = {
     id: announcement.id,
     title: announcement.title,
@@ -33,7 +44,10 @@ export default async function AnnouncementDetail({ announcement }: AnnouncementD
       imageUrl={readImageUrl}
       categoryName={categoryName}
       formatDate={formatDate}
+      kicker="Announcements."
+      archive={{ href: "/announcements", label: "お知らせ一覧へ戻る" }}
+      siblings={siblings}
+      readingTimeMin={estimateReadingTimeMin(announcement.content)}
     />
   )
 }
-

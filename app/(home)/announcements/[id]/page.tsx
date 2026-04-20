@@ -4,7 +4,7 @@ import { getListStatic, getDetailStatic } from '@/lib/microcms/server-client'
 import { Announcement } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import AnnouncementDetail from '@/components/AnnouncementDetail'
-import Breadcrumb from '@/components/Breadcrumb'
+import type { ArticleSibling } from '@/components/ContentDetail'
 import { notFound } from 'next/navigation'
 
 /**
@@ -18,6 +18,48 @@ const getAnnouncementById = cache(async (id: string): Promise<Announcement> => {
 
   return getDetailStatic<Announcement>('announcements', id)
 })
+
+/**
+ * Fetches all announcement ids + titles (newest first) so the detail
+ * page can resolve older / newer neighbours for the sibling nav.
+ */
+const getAnnouncementSiblingList = cache(async () => {
+  'use cache'
+  cacheTag('announcements:siblings')
+  cacheLife('hours')
+
+  try {
+    const data = await getListStatic<Announcement>('announcements', {
+      filters: 'publishedAt[exists]',
+      orders: '-publishedAt',
+      fields: 'id,title,publishedAt',
+      limit: 100,
+    })
+    return data.contents
+  } catch {
+    return []
+  }
+})
+
+function pickSiblings(
+  list: ReadonlyArray<{ id: string; title: string }>,
+  currentId: string
+): { older?: ArticleSibling; newer?: ArticleSibling } {
+  const idx = list.findIndex((item) => item.id === currentId)
+  if (idx === -1) {
+    return {}
+  }
+  const newer = idx > 0 ? list[idx - 1] : null
+  const older = idx < list.length - 1 ? list[idx + 1] : null
+  return {
+    ...(newer
+      ? { newer: { href: `/announcements/${newer.id}`, title: newer.title } }
+      : {}),
+    ...(older
+      ? { older: { href: `/announcements/${older.id}`, title: older.title } }
+      : {}),
+  }
+}
 
 const PLACEHOLDER_ID = '__placeholder__' as const
 
@@ -118,33 +160,12 @@ export default async function AnnouncementDetailPage({
     notFound()
   }
 
+  const siblingList = await getAnnouncementSiblingList()
+  const siblings = pickSiblings(siblingList, id)
+
   return (
-    <main className="min-h-screen bg-white">
-      <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
-        {/* Subtle Grid Background */}
-        <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)`,
-              backgroundSize: '40px 40px',
-            }}
-          />
-        </div>
-
-        <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
-          {/* Breadcrumb */}
-          <Breadcrumb
-            items={[
-              { label: 'お知らせ', href: '/announcements' },
-              { label: announcement.title },
-            ]}
-          />
-
-          {/* Announcement Detail */}
-          <AnnouncementDetail announcement={announcement} />
-        </div>
-      </section>
+    <main className="article-page" data-style="modern">
+      <AnnouncementDetail announcement={announcement} siblings={siblings} />
     </main>
   )
 }

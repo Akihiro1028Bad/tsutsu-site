@@ -4,55 +4,37 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 interface Variant {
-  readonly id: "a" | "b" | "c"
+  readonly id: "a" | "b" | "c" | "d" | "e"
   readonly label: string
   readonly caption: string
   readonly href: string
 }
 
 const VARIANTS: ReadonlyArray<Variant> = [
+  { id: "a", label: "A", caption: "Linear", href: "/design/article/a" },
+  { id: "b", label: "B", caption: "Dark", href: "/design/article/b" },
+  { id: "c", label: "C", caption: "Kinetic", href: "/design/article/c" },
   {
-    id: "a",
-    label: "A",
-    caption: "Minimal",
-    href: "/design/a",
+    id: "d",
+    label: "D",
+    caption: "Manuscript",
+    href: "/design/article/d",
   },
-  {
-    id: "b",
-    label: "B",
-    caption: "Modern",
-    href: "/design/b",
-  },
-  {
-    id: "c",
-    label: "C",
-    caption: "Editorial",
-    href: "/design/c",
-  },
+  { id: "e", label: "E", caption: "Swiss", href: "/design/article/e" },
 ]
 
-export default function PreviewSwitcher() {
+export default function ArticlePreviewSwitcher() {
   const pathname = usePathname()
-  // Nested article-preview routes own their own switcher.
-  if (pathname?.startsWith("/design/article")) {
-    return null
-  }
-  const activeId: Variant["id"] =
-    pathname?.endsWith("/b")
-      ? "b"
-      : pathname?.endsWith("/c")
-        ? "c"
-        : "a"
+  const match = pathname?.match(/\/design\/article\/([a-e])$/)?.[1]
+  const activeId = (match ?? "a") as Variant["id"]
   return (
     <aside
       className="preview-switcher"
-      aria-label="Design variant switcher"
+      aria-label="Article design variant switcher"
     >
       <div className="preview-switcher__label">
         <span className="preview-switcher__eyebrow">PREVIEW</span>
-        <span className="preview-switcher__caption">
-          Design variant
-        </span>
+        <span className="preview-switcher__caption">Article design</span>
       </div>
       <nav className="preview-switcher__tabs">
         {VARIANTS.map((v) => {

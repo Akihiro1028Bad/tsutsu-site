@@ -6,10 +6,51 @@ import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import { getOptimizedImageUrl } from '@/lib/utils/blog'
 import { generateMetaDescription } from '@/lib/utils/text'
 import BlogDetail from '@/components/BlogDetail'
-import Breadcrumb from '@/components/Breadcrumb'
+import type { ArticleSibling } from '@/components/ContentDetail'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { IMAGE_CONFIG, CONTENT_CONFIG, METADATA_CONFIG } from '@/lib/constants/config'
+
+/**
+ * Fetches published blog slugs + titles (newest first) for sibling nav.
+ */
+const getBlogSiblingList = cache(async () => {
+  'use cache'
+  cacheTag('blog:siblings')
+  cacheLife('hours')
+
+  try {
+    const data = await getListStatic<BlogPost>('blog', {
+      filters: 'publishedAt[exists]',
+      orders: '-publishedAt',
+      fields: 'slug,title,publishedAt',
+      limit: 100,
+    })
+    return data.contents
+  } catch {
+    return []
+  }
+})
+
+function pickSiblings(
+  list: ReadonlyArray<{ slug: string; title: string }>,
+  currentSlug: string
+): { older?: ArticleSibling; newer?: ArticleSibling } {
+  const idx = list.findIndex((item) => item.slug === currentSlug)
+  if (idx === -1) {
+    return {}
+  }
+  const newer = idx > 0 ? list[idx - 1] : null
+  const older = idx < list.length - 1 ? list[idx + 1] : null
+  return {
+    ...(newer
+      ? { newer: { href: `/blog/${newer.slug}`, title: newer.title } }
+      : {}),
+    ...(older
+      ? { older: { href: `/blog/${older.slug}`, title: older.title } }
+      : {}),
+  }
+}
 
 /**
  * slugでブログ記事を取得するヘルパー関数（メモ化）
@@ -238,33 +279,12 @@ export default async function BlogDetailPage({
     notFound()
   }
 
+  const siblingList = await getBlogSiblingList()
+  const siblings = pickSiblings(siblingList, slug)
+
   return (
-    <main className="min-h-screen bg-white">
-      <section className="relative flex items-center justify-center overflow-hidden bg-white min-h-screen py-8 sm:py-12 md:py-24 lg:py-32">
-        {/* Subtle Grid Background */}
-        <div className="absolute inset-0 opacity-[0.015]" aria-hidden="true">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)`,
-              backgroundSize: '40px 40px',
-            }}
-          />
-        </div>
-
-        <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
-          {/* Breadcrumb */}
-          <Breadcrumb
-            items={[
-              { label: 'ブログ', href: '/blog' },
-              { label: post.title },
-            ]}
-          />
-
-          {/* Blog Detail */}
-          <BlogDetail post={post} />
-        </div>
-      </section>
+    <main className="article-page" data-style="modern">
+      <BlogDetail post={post} siblings={siblings} />
     </main>
   )
 }
