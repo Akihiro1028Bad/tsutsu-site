@@ -12,7 +12,7 @@ import { PricingSection } from '@/components/MensEstheService/PricingSection'
 import { ProcessSection } from '@/components/MensEstheService/ProcessSection'
 import { SectionNav } from '@/components/MensEstheService/SectionNav'
 import { StructuredData } from '@/components/MensEstheService/StructuredData'
-import { serviceInfo, benefits, features, pricingItems, portfolioItems, processSteps, faqItems } from '@/app/services/mens-esthe/data'
+import { serviceInfo, benefits, features, pricingItems, portfolioItems, processSteps, faqItems } from '@/app/(site)/services/mens-esthe/data'
 import { generateStructuredData } from '@/lib/utils/mens-esthe-service'
 
 export const metadata: Metadata = {

@@ -1,12 +1,6 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import './globals.css'
-import ClientComponents from '@/components/ClientComponents'
 import StructuredData from '@/components/StructuredData'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import HeaderSkeleton from '@/components/HeaderSkeleton'
-import FooterSkeleton from '@/components/FooterSkeleton'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://tsutsu.dev'),
@@ -78,14 +72,7 @@ export default function RootLayout({
     <html lang="ja" data-scroll-behavior="smooth">
       <body className="antialiased font-sans">
         <StructuredData />
-        <ClientComponents />
-        <Suspense fallback={<HeaderSkeleton />}>
-          <Header />
-        </Suspense>
         {children}
-        <Suspense fallback={<FooterSkeleton />}>
-          <Footer />
-        </Suspense>
       </body>
     </html>
   )
