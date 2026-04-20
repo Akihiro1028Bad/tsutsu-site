@@ -576,53 +576,64 @@
   color: var(--ink-soft);
 }
 .home-root .works__all {
-  border-top: 1px solid var(--ink);
+  border-top: 1px solid var(--rule);
+  padding: clamp(48px, 6vw, 88px) var(--pad-x);
   display: flex;
   justify-content: center;
 }
+/* CTA rendered as a bordered button: sans-serif label, hover-invert fill. */
 .home-root .works__all-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 28px;
-  padding: clamp(36px, 5vw, 56px) clamp(20px, 3vw, 40px);
-  width: 100%;
-  justify-content: center;
-  font-family: var(--f-jp-display);
-  font-weight: 500;
-  transition: color 0.3s, gap 0.3s ease;
+  gap: 18px;
+  padding: 20px clamp(28px, 3.5vw, 40px);
+  font-family: var(--f-body);
+  background: var(--bg);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    gap 0.25s ease;
 }
 .home-root .works__all-eyebrow {
   font-family: var(--f-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-mute);
+  transition: color 0.3s ease;
 }
 .home-root .works__all-label {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(28px, 3.4vw, 44px);
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  transition: color 0.3s;
+  font-family: var(--f-body);
+  font-style: normal;
+  font-weight: 500;
+  font-size: clamp(14px, 1.15vw, 16px);
+  letter-spacing: 0.06em;
+  color: inherit;
 }
 .home-root .works__all-arrow {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-size: 30px;
-  color: var(--ink-mute);
-  transition: transform 0.4s ease, color 0.3s;
+  font-family: var(--f-mono);
+  font-style: normal;
+  font-size: 16px;
+  color: inherit;
+  transition: transform 0.3s ease;
 }
 .home-root .works__all-link:hover {
-  gap: 40px;
+  background: var(--ink);
+  color: var(--bg);
+  gap: 26px;
 }
-.home-root .works__all-link:hover .works__all-label {
-  color: var(--accent);
+.home-root .works__all-link:hover .works__all-eyebrow {
+  color: var(--bg);
+  opacity: 0.7;
 }
 .home-root .works__all-link:hover .works__all-arrow {
-  transform: translateX(10px);
-  color: var(--accent);
+  transform: translateX(6px);
+}
+.home-root .works__all-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 @media (max-width: 900px) {
   .home-root .work-feature__rail {
@@ -639,13 +650,9 @@
 }
 @media (max-width: 760px) {
   .home-root .works__all-link {
-    flex-direction: column;
-    gap: 14px;
-    text-align: center;
-    padding: 44px 20px;
-  }
-  .home-root .works__all-link:hover {
-    gap: 18px;
+    width: 100%;
+    justify-content: center;
+    padding: 22px 24px;
   }
 }
 
