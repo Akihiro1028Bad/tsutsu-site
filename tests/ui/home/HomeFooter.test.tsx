@@ -2,6 +2,23 @@ import { describe, it, expect, beforeAll, afterAll, vi } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import React from "react"
 
+// next/image mock: pass-through to <img> so alt/src can be asserted.
+vi.mock("next/image", () => ({
+  default: ({
+    src,
+    alt,
+    ...rest
+  }: {
+    src: string | { src: string }
+    alt: string
+    [k: string]: unknown
+  }) => {
+    const resolvedSrc = typeof src === "string" ? src : src.src
+    // eslint-disable-next-line @next/next/no-img-element -- mock
+    return <img src={resolvedSrc} alt={alt} {...rest} />
+  },
+}))
+
 import HomeFooter from "@/components/home/HomeFooter"
 
 const FIXED_YEAR = 2031
@@ -21,12 +38,11 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     expect(screen.getByRole("contentinfo")).toBeInTheDocument()
   })
 
-  it("renders the editorial brand mark", () => {
+  it("renders the brand logo image", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
-    // Exact match resolves to the <em>tsutsu</em> brand glyph, sidestepping
-    // the copyright sentence in the meta row.
-    expect(within(footer).getByText("tsutsu")).toBeInTheDocument()
+    const logo = within(footer).getByRole("img", { name: /tsutsu/i }) as HTMLImageElement
+    expect(logo.getAttribute("src")).toBe("/logo.png")
   })
 
   it("renders the Site column links (About, Works, Services, Notes)", () => {

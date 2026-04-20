@@ -16,7 +16,7 @@ export const WORKS_FEATURED: ReadonlyArray<FeaturedWork> = Object.freeze([
       "クロスミントン世界王者が手がける、本八幡駅徒歩1分・24時間営業のインドアピックルボール施設。予約導線・世界観の表現まで一貫して設計・実装しました。初心者から上級者まで楽しめる空間を、Webでも体感できるかたちに。",
     summary:
       "インドア・ピックルボール施設のブランドサイト。予約導線・世界観の表現まで一貫して設計・実装。",
-    year: "2024",
+    year: "2026",
     category: "Web / Brand",
     client: "RST Agency株式会社",
     externalUrl: "https://www.thepicklebang.com/",
@@ -27,7 +27,7 @@ export const WORKS_FEATURED: ReadonlyArray<FeaturedWork> = Object.freeze([
       "Vercel",
     ]),
     meta: Object.freeze([
-      Object.freeze({ label: "Year", value: "2024" }),
+      Object.freeze({ label: "Year", value: "2026" }),
       Object.freeze({ label: "Status", value: "公開中" }),
       Object.freeze({ label: "Role", value: "デザイン・フルスタック開発" }),
       Object.freeze({ label: "Client", value: "RST Agency株式会社" }),

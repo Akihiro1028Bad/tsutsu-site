@@ -3,6 +3,31 @@ import { act, fireEvent, render, screen, cleanup } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import React from "react"
 
+// next/image mock: pass-through to <img> so alt/src can be asserted.
+vi.mock("next/image", () => ({
+  default: ({
+    src,
+    alt,
+    ...rest
+  }: {
+    src: string | { src: string }
+    alt: string
+    [k: string]: unknown
+  }) => {
+    const resolvedSrc = typeof src === "string" ? src : src.src
+    // eslint-disable-next-line @next/next/no-img-element -- mock
+    return <img src={resolvedSrc} alt={alt} {...rest} />
+  },
+}))
+
+// next/navigation mock: usePathname() defaults to "/" (home) so existing
+// tests see the home-page nav behaviour. Individual tests can override via
+// vi.mocked(usePathname).mockReturnValue("...").
+vi.mock("next/navigation", () => ({
+  usePathname: vi.fn(() => "/"),
+}))
+
+import { usePathname } from "next/navigation"
 import HomeNav from "@/components/home/HomeNav"
 
 type ObserverInstance = {
@@ -20,6 +45,7 @@ let lastCallback: IntersectionObserverCallback | null = null
 const OriginalIntersectionObserver = globalThis.IntersectionObserver
 
 beforeEach(() => {
+  vi.mocked(usePathname).mockReturnValue("/")
   lastObserver = null
   lastCallback = null
   globalThis.IntersectionObserver = vi
@@ -80,6 +106,15 @@ describe("Phase 2: HomeNav — structural rendering", () => {
     render(<HomeNav />)
     const brand = screen.getByRole("link", { name: /tsutsu/i })
     expect(brand).toHaveAttribute("href", "#top")
+  })
+
+  it("renders the brand logo image inside the anchor", () => {
+    render(<HomeNav />)
+    const brand = screen.getByRole("link", { name: /tsutsu/i })
+    const img = brand.querySelector("img") as HTMLImageElement | null
+    expect(img).not.toBeNull()
+    expect(img?.getAttribute("src")).toBe("/logo.png")
+    expect(img?.getAttribute("alt")).toMatch(/tsutsu/i)
   })
 
   it("renders all five section anchors with the design's hrefs", () => {
@@ -217,5 +252,43 @@ describe("Phase 10: HomeNav — mobile disclosure (C-1)", () => {
     unmount()
     // After unmount pressing Escape must not throw or update stale state.
     expect(() => fireEvent.keyDown(document, { key: "Escape" })).not.toThrow()
+  })
+})
+
+describe("HomeNav — cross-page navigation (non-home pathnames)", () => {
+  it("links the brand to '/' when viewed outside the home page", () => {
+    vi.mocked(usePathname).mockReturnValue("/announcements")
+    render(<HomeNav />)
+    const brand = screen.getByRole("link", { name: /tsutsu/i })
+    expect(brand).toHaveAttribute("href", "/")
+  })
+
+  it("rewrites each nav item's href to /#<id> when off-home", () => {
+    vi.mocked(usePathname).mockReturnValue("/blog")
+    render(<HomeNav />)
+    const expectations = [
+      { name: /^about$/i, href: "/#about" },
+      { name: /^works$/i, href: "/#works" },
+      { name: /^services$/i, href: "/#services" },
+      { name: /^notes$/i, href: "/#notes" },
+      { name: /^contact$/i, href: "/#contact" },
+    ]
+    for (const e of expectations) {
+      expect(screen.getByRole("link", { name: e.name })).toHaveAttribute(
+        "href",
+        e.href
+      )
+    }
+  })
+
+  it("keeps hash-only hrefs when on the home page", () => {
+    vi.mocked(usePathname).mockReturnValue("/")
+    render(<HomeNav />)
+    const brand = screen.getByRole("link", { name: /tsutsu/i })
+    expect(brand).toHaveAttribute("href", "#top")
+    expect(screen.getByRole("link", { name: /^about$/i })).toHaveAttribute(
+      "href",
+      "#about"
+    )
   })
 })

@@ -14,9 +14,9 @@ export default function AboutSection() {
           <p className="section-head__en">プロフィール</p>
         </div>
         <p className="section-head__lead">
-          東京を拠点に、Webのプロダクトを
+          “Tsutsu” と呼ばれています。
           <br />
-          ひとりで通せるエンジニア。
+          東京のフリーランスエンジニアです。
         </p>
       </div>
 

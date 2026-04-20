@@ -112,4 +112,18 @@ describe("Phase 3: WorksSection — editorial section head & feature card", () =
     const link = screen.getByRole("link", { name: /すべての制作事例|all works/i })
     expect(link).toHaveAttribute("href", WORKS_INDEX_HREF)
   })
+
+  it("each work card links to its externalUrl with target=_blank and rel=noopener noreferrer", () => {
+    render(<WorksSection />)
+    const articles = screen.getAllByRole("article")
+    articles.forEach((article, i) => {
+      const work = WORKS_FEATURED[i]
+      const anchor = article.closest("a")
+      expect(anchor).not.toBeNull()
+      expect(anchor).toHaveAttribute("href", work.externalUrl)
+      expect(anchor).toHaveAttribute("target", "_blank")
+      expect(anchor?.getAttribute("rel") ?? "").toMatch(/noopener/)
+      expect(anchor?.getAttribute("rel") ?? "").toMatch(/noreferrer/)
+    })
+  })
 })

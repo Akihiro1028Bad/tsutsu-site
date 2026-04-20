@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Suspense } from "react"
 import FooterYear from "@/components/home/FooterYear"
 
@@ -47,9 +48,14 @@ export default function HomeFooter() {
     <footer className="home-footer">
       <div className="home-footer__grid">
         <div className="home-footer__brand">
-          <div className="home-footer__name">
-            <em>tsutsu</em>.
-          </div>
+          <Image
+            src="/logo.png"
+            alt="tsutsu"
+            width={56}
+            height={56}
+            unoptimized
+            className="home-footer__logo"
+          />
           <div className="home-footer__tag">Freelance engineer — Tokyo</div>
         </div>
         <div className="home-footer__cols">

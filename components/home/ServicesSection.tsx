@@ -13,9 +13,9 @@ export default function ServicesSection() {
           <p className="section-head__en">サービス</p>
         </div>
         <p className="section-head__lead">
-          Webサイト、Webアプリ、自動化、
+          From build to hand-off.
           <br />
-          そしてキャリア伴走。4つの手触りで。
+          作って、動かして、使われるまで。
         </p>
       </div>
 

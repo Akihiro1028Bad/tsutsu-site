@@ -14,9 +14,9 @@ export default function WorksSection() {
           <p className="section-head__en">制作実績</p>
         </div>
         <p className="section-head__lead">
-          「これを、僕がつくりました」と
+          Built to last.
           <br />
-          はっきり言える仕事を、ひとつずつ。
+          長く使われるものを、ひとつずつ。
         </p>
       </div>
 

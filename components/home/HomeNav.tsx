@@ -1,19 +1,20 @@
 "use client"
 
+import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface NavItem {
   readonly id: string
   readonly label: string
-  readonly href: string
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
-  { id: "about", label: "About", href: "#about" },
-  { id: "works", label: "Works", href: "#works" },
-  { id: "services", label: "Services", href: "#services" },
-  { id: "notes", label: "Notes", href: "#notes" },
-  { id: "contact", label: "Contact", href: "#contact" },
+  { id: "about", label: "About" },
+  { id: "works", label: "Works" },
+  { id: "services", label: "Services" },
+  { id: "notes", label: "Notes" },
+  { id: "contact", label: "Contact" },
 ]
 
 /** Sections rendered on dark surfaces; nav switches to light text over them. */
@@ -21,6 +22,11 @@ const DARK_SECTIONS: ReadonlySet<string> = new Set(["services"])
 const PANEL_ID = "home-nav-panel"
 
 export default function HomeNav() {
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+  const sectionHref = (id: string) => (isHome ? `#${id}` : `/#${id}`)
+  const brandHref = isHome ? "#top" : "/"
+
   const [activeId, setActiveId] = useState<string | null>(null)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -71,8 +77,16 @@ export default function HomeNav() {
       data-theme={theme}
       data-menu-open={isOpen ? "true" : "false"}
     >
-      <a className="home-nav__brand" href="#top">
-        tsutsu
+      <a className="home-nav__brand" href={brandHref} aria-label="tsutsu">
+        <Image
+          src="/logo.png"
+          alt="tsutsu"
+          width={88}
+          height={88}
+          priority
+          unoptimized
+          className="home-nav__logo"
+        />
       </a>
 
       <button
@@ -92,11 +106,11 @@ export default function HomeNav() {
         data-open={isOpen ? "true" : "false"}
       >
         {NAV_ITEMS.map((item) => {
-          const isActive = activeId === item.id
+          const isActive = isHome && activeId === item.id
           return (
             <li key={item.id}>
               <a
-                href={item.href}
+                href={sectionHref(item.id)}
                 aria-current={isActive ? "true" : undefined}
                 onClick={() => setIsOpen(false)}
               >

@@ -1,3 +1,5 @@
+import Link from "next/link"
+import JournalListRow from "@/components/home/JournalListRow"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
 import type {
   JournalBlogItem,
@@ -34,8 +36,8 @@ export default function JournalSection({
           <div className="journal__news-head">
             <span className="journal__label">
               <em>News.</em>
-              <span className="journal__label-ja">お知らせ</span>
             </span>
+            <span className="journal__label-ja">お知らせ</span>
           </div>
           {newsItems.length === 0 ? (
             <p className="journal__empty" data-testid="news-empty">
@@ -44,16 +46,30 @@ export default function JournalSection({
           ) : (
             <ul className="journal__news-list">
               {newsItems.map((n) => (
-                <li key={n.id}>
-                  <a href={n.href}>
-                    <span className="journal__date">{n.dateDisplay}</span>
-                    <span className="journal__kind">{n.kind}</span>
-                    <span className="journal__title">{n.title}</span>
-                  </a>
-                </li>
+                <JournalListRow
+                  key={n.id}
+                  variant="news"
+                  item={{
+                    id: n.id,
+                    title: n.title,
+                    dateDisplay: n.dateDisplay,
+                    chip: n.kind,
+                    href: n.href,
+                    image: n.image,
+                  }}
+                />
               ))}
             </ul>
           )}
+          <div className="journal__more">
+            <Link className="journal__more-link" href="/announcements">
+              <span className="journal__more-eyebrow">Archive</span>
+              <span className="journal__more-label">すべてのお知らせを見る</span>
+              <span className="journal__more-arrow" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          </div>
         </div>
 
         <div className="journal__blog">
@@ -70,19 +86,30 @@ export default function JournalSection({
           ) : (
             <ul className="journal__blog-list">
               {blogItems.map((b) => (
-                <li key={b.id}>
-                  <a href={b.href}>
-                    <span className="journal__date">{b.dateDisplay}</span>
-                    <span className="journal__category">{b.category}</span>
-                    <span className="journal__title">{b.title}</span>
-                    <span className="journal__arrow" aria-hidden="true">
-                      →
-                    </span>
-                  </a>
-                </li>
+                <JournalListRow
+                  key={b.id}
+                  variant="blog"
+                  item={{
+                    id: b.id,
+                    title: b.title,
+                    dateDisplay: b.dateDisplay,
+                    chip: b.category,
+                    href: b.href,
+                    image: b.image,
+                  }}
+                />
               ))}
             </ul>
           )}
+          <div className="journal__more">
+            <Link className="journal__more-link" href="/blog">
+              <span className="journal__more-eyebrow">Archive</span>
+              <span className="journal__more-label">すべての記事を見る</span>
+              <span className="journal__more-arrow" aria-hidden="true">
+                →
+              </span>
+            </Link>
+          </div>
         </div>
       </RevealOnScroll>
     </section>

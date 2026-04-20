@@ -16,6 +16,23 @@ vi.mock("@/components/home/RevealOnScroll", () => ({
   ),
 }))
 
+// next/image mock: render a real <img> so alt/src are asserted directly.
+vi.mock("next/image", () => ({
+  default: ({
+    src,
+    alt,
+    ...rest
+  }: {
+    src: string | { src: string }
+    alt: string
+    [k: string]: unknown
+  }) => {
+    const resolvedSrc = typeof src === "string" ? src : src.src
+    // eslint-disable-next-line @next/next/no-img-element -- mock for next/image in tests
+    return <img src={resolvedSrc} alt={alt} {...rest} />
+  },
+}))
+
 import JournalSection from "@/components/home/JournalSection"
 import type {
   JournalBlogItem,
@@ -74,9 +91,11 @@ describe("Phase 5: JournalSection — News + Blog fused editorial block", () => 
 
   it("renders the News. label group", () => {
     render(<JournalSection newsItems={news} blogItems={blog} />)
-    const newsGroup = document.querySelector(".journal__news") as HTMLElement
-    expect(within(newsGroup).getByText(/News\./i)).toBeInTheDocument()
-    expect(within(newsGroup).getByText(/お知らせ/)).toBeInTheDocument()
+    const newsHead = document.querySelector(
+      ".journal__news-head"
+    ) as HTMLElement
+    expect(within(newsHead).getByText(/News\./i)).toBeInTheDocument()
+    expect(within(newsHead).getByText(/お知らせ/)).toBeInTheDocument()
   })
 
   it("renders every news item with its date, kind, title, and link", () => {
@@ -125,5 +144,72 @@ describe("Phase 5: JournalSection — News + Blog fused editorial block", () => 
   it("shows an empty-state placeholder for the Blog list when blog is empty", () => {
     render(<JournalSection newsItems={news} blogItems={[]} />)
     expect(screen.getByTestId("blog-empty")).toBeInTheDocument()
+  })
+
+  it("renders a thumbnail image for news items that provide one", () => {
+    const withImage: JournalNewsItem[] = [
+      {
+        ...news[0],
+        image: {
+          src: "https://example.com/n1.png",
+          alt: "news 1 visual",
+          width: 400,
+          height: 400,
+        },
+      },
+    ]
+    render(<JournalSection newsItems={withImage} blogItems={[]} />)
+    const img = screen.getByAltText("news 1 visual") as HTMLImageElement
+    expect(img).toBeInTheDocument()
+    expect(img.getAttribute("src")).toBe("https://example.com/n1.png")
+  })
+
+  it("renders a thumbnail image for blog items that provide one", () => {
+    const withImage: JournalBlogItem[] = [
+      {
+        ...blog[0],
+        image: {
+          src: "https://example.com/b1.png",
+          alt: "blog 1 cover",
+          width: 800,
+          height: 500,
+        },
+      },
+    ]
+    render(<JournalSection newsItems={[]} blogItems={withImage} />)
+    const img = screen.getByAltText("blog 1 cover") as HTMLImageElement
+    expect(img).toBeInTheDocument()
+    expect(img.getAttribute("src")).toBe("https://example.com/b1.png")
+  })
+
+  it("renders a fallback placeholder when a news item has no image", () => {
+    render(<JournalSection newsItems={news} blogItems={[]} />)
+    // News items in the fixture have no image — placeholder elements should exist.
+    const placeholders = document.querySelectorAll(".journal__thumb--placeholder")
+    expect(placeholders.length).toBe(news.length)
+  })
+
+  it("renders a fallback placeholder when a blog item has no image", () => {
+    render(<JournalSection newsItems={[]} blogItems={blog} />)
+    const placeholders = document.querySelectorAll(".journal__thumb--placeholder")
+    expect(placeholders.length).toBe(blog.length)
+  })
+
+  it("renders a 'view all announcements' CTA linking to /announcements", () => {
+    render(<JournalSection newsItems={news} blogItems={blog} />)
+    const newsGroup = document.querySelector(".journal__news") as HTMLElement
+    const cta = within(newsGroup).getByRole("link", {
+      name: /すべて.*お知らせ|all announcements|view all/i,
+    })
+    expect(cta).toHaveAttribute("href", "/announcements")
+  })
+
+  it("renders a 'view all posts' CTA linking to /blog", () => {
+    render(<JournalSection newsItems={news} blogItems={blog} />)
+    const blogGroup = document.querySelector(".journal__blog") as HTMLElement
+    const cta = within(blogGroup).getByRole("link", {
+      name: /すべて.*記事|すべて.*ブログ|all notes|view all/i,
+    })
+    expect(cta).toHaveAttribute("href", "/blog")
   })
 })

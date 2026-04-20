@@ -77,7 +77,7 @@ describe("Phase 5: toNewsListItem", () => {
     const item = toNewsListItem(
       makeAnnouncement({ id: "abc", category: "更新情報" })
     )
-    expect(item).toEqual({
+    expect(item).toMatchObject({
       id: "abc",
       title: "新サイト公開",
       dateDisplay: "2026.03.15",
@@ -108,6 +108,43 @@ describe("Phase 5: toNewsListItem", () => {
     )
     expect(item.kind).toBe("Media")
   })
+
+  it("maps the `read` image field to a normalised `image`", () => {
+    const item = toNewsListItem(
+      makeAnnouncement({
+        read: {
+          url: "https://images.microcms-assets.io/a/thumb.png",
+          width: 800,
+          height: 500,
+          alt: "visual",
+        },
+      })
+    )
+    expect(item.image).toEqual({
+      src: "https://images.microcms-assets.io/a/thumb.png",
+      alt: "visual",
+      width: 800,
+      height: 500,
+    })
+  })
+
+  it("defaults missing image dimensions and alt gracefully", () => {
+    const item = toNewsListItem(
+      makeAnnouncement({
+        read: { url: "https://example.com/a.png" },
+      })
+    )
+    expect(item.image).toBeDefined()
+    expect(item.image?.src).toBe("https://example.com/a.png")
+    expect(item.image?.alt).toBe("")
+    expect(typeof item.image?.width).toBe("number")
+    expect(typeof item.image?.height).toBe("number")
+  })
+
+  it("leaves image undefined when no `read` field is provided", () => {
+    const item = toNewsListItem(makeAnnouncement({}))
+    expect(item.image).toBeUndefined()
+  })
 })
 
 describe("Phase 5: toBlogListItem", () => {
@@ -119,7 +156,7 @@ describe("Phase 5: toBlogListItem", () => {
         category: "Frontend",
       })
     )
-    expect(item).toEqual({
+    expect(item).toMatchObject({
       id: "xyz",
       title: "Next.js App Router tips",
       dateDisplay: "2026.02.01",
@@ -147,5 +184,42 @@ describe("Phase 5: toBlogListItem", () => {
       })
     )
     expect(item.category).toBe("Backend")
+  })
+
+  it("maps the `hero` image field to a normalised `image`", () => {
+    const item = toBlogListItem(
+      makeBlogPost({
+        hero: {
+          url: "https://images.microcms-assets.io/b/hero.png",
+          width: 1600,
+          height: 900,
+          alt: "cover",
+        },
+      })
+    )
+    expect(item.image).toEqual({
+      src: "https://images.microcms-assets.io/b/hero.png",
+      alt: "cover",
+      width: 1600,
+      height: 900,
+    })
+  })
+
+  it("defaults missing image dimensions and alt gracefully", () => {
+    const item = toBlogListItem(
+      makeBlogPost({
+        hero: { url: "https://example.com/b.png" },
+      })
+    )
+    expect(item.image).toBeDefined()
+    expect(item.image?.src).toBe("https://example.com/b.png")
+    expect(item.image?.alt).toBe("")
+    expect(typeof item.image?.width).toBe("number")
+    expect(typeof item.image?.height).toBe("number")
+  })
+
+  it("leaves image undefined when no `hero` field is provided", () => {
+    const item = toBlogListItem(makeBlogPost({}))
+    expect(item.image).toBeUndefined()
   })
 })
