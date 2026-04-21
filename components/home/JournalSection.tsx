@@ -1,5 +1,6 @@
 import Link from "next/link"
 import CountUp from "@/components/motion/CountUp"
+import MagneticLink from "@/components/motion/MagneticLink"
 import JournalListRow from "@/components/home/JournalListRow"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
 import type {
@@ -65,13 +66,15 @@ export default function JournalSection({
             </ul>
           )}
           <div className="journal__more">
-            <Link className="journal__more-link" href="/announcements">
-              <span className="journal__more-eyebrow">Archive</span>
-              <span className="journal__more-label">すべてのお知らせを見る</span>
-              <span className="journal__more-arrow" aria-hidden="true">
-                →
-              </span>
-            </Link>
+            <MagneticLink strength={0.2} max={10}>
+              <Link className="journal__more-link" href="/announcements">
+                <span className="journal__more-eyebrow">Archive</span>
+                <span className="journal__more-label">すべてのお知らせを見る</span>
+                <span className="journal__more-arrow" aria-hidden="true">
+                  →
+                </span>
+              </Link>
+            </MagneticLink>
           </div>
         </div>
 
@@ -105,13 +108,15 @@ export default function JournalSection({
             </ul>
           )}
           <div className="journal__more">
-            <Link className="journal__more-link" href="/blog">
-              <span className="journal__more-eyebrow">Archive</span>
-              <span className="journal__more-label">すべての記事を見る</span>
-              <span className="journal__more-arrow" aria-hidden="true">
-                →
-              </span>
-            </Link>
+            <MagneticLink strength={0.2} max={10}>
+              <Link className="journal__more-link" href="/blog">
+                <span className="journal__more-eyebrow">Archive</span>
+                <span className="journal__more-label">すべての記事を見る</span>
+                <span className="journal__more-arrow" aria-hidden="true">
+                  →
+                </span>
+              </Link>
+            </MagneticLink>
           </div>
         </div>
       </RevealOnScroll>

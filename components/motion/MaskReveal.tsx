@@ -60,8 +60,8 @@ export default function MaskReveal({
   return (
     <motion.div
       ref={ref}
-      initial={{ clipPath: initial, WebkitClipPath: initial }}
-      animate={{ clipPath: target, WebkitClipPath: target }}
+      initial={{ clipPath: initial }}
+      animate={{ clipPath: target }}
       transition={{
         duration: duration / 1000,
         delay: delay / 1000,

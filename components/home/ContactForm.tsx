@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import MagneticLink from "@/components/motion/MagneticLink"
 import {
   CONTACT_TOPICS,
   contactFormSchema,
@@ -153,13 +154,15 @@ export default function ContactForm() {
         />
       </label>
 
-      <button
-        type="submit"
-        className="contact-form__submit"
-        disabled={isSending}
-      >
-        Send inquiry <span aria-hidden="true">↗</span>
-      </button>
+      <MagneticLink strength={0.25} max={12}>
+        <button
+          type="submit"
+          className="contact-form__submit"
+          disabled={isSending}
+        >
+          Send inquiry <span aria-hidden="true">↗</span>
+        </button>
+      </MagneticLink>
 
       <div
         className="contact-form__status"

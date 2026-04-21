@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import MagneticLink from "@/components/motion/MagneticLink"
 import WorksIndexRow from "@/components/home/works/WorksIndexRow"
 import WorksComingSoon from "@/components/home/works/WorksComingSoon"
 import { WORKS_FEATURED } from "@/lib/home/works-data"
@@ -83,10 +84,12 @@ export default function WorksPage() {
         <p className="works-cta__lead">
           お仕事のご相談、お待ちしています。
         </p>
-        <Link className="works-cta__link" href="/#contact">
-          <span>お問い合わせはこちら</span>
-          <span aria-hidden="true">→</span>
-        </Link>
+        <MagneticLink strength={0.3} max={14}>
+          <Link className="works-cta__link" href="/#contact">
+            <span>お問い合わせはこちら</span>
+            <span aria-hidden="true">→</span>
+          </Link>
+        </MagneticLink>
       </section>
     </>
   )

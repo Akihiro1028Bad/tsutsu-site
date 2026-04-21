@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import Lenis from "lenis"
+import CustomCursor from "@/components/motion/CustomCursor"
 import { useIsDesktop } from "@/lib/motion/use-is-desktop"
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion"
 
@@ -43,5 +44,10 @@ export default function MotionProvider({ children }: MotionProviderProps) {
     }
   }, [isDesktop, reducedMotion])
 
-  return <>{children}</>
+  return (
+    <>
+      {children}
+      <CustomCursor />
+    </>
+  )
 }
