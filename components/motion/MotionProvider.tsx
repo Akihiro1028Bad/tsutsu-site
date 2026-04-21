@@ -3,6 +3,8 @@
 import { useEffect } from "react"
 import Lenis from "lenis"
 import CustomCursor from "@/components/motion/CustomCursor"
+import GrainOverlay from "@/components/motion/GrainOverlay"
+import Loader from "@/components/motion/Loader"
 import { useIsDesktop } from "@/lib/motion/use-is-desktop"
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion"
 
@@ -47,7 +49,9 @@ export default function MotionProvider({ children }: MotionProviderProps) {
   return (
     <>
       {children}
+      <GrainOverlay />
       <CustomCursor />
+      <Loader />
     </>
   )
 }
