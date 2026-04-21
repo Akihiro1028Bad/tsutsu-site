@@ -891,24 +891,26 @@
 }
 
 /* ============================================================
-   About
+   About — desktop: name pinned (sticky) on the left while
+   paragraphs scroll past on the right. Mobile: stacked.
    ============================================================ */
 .home-root .about__body {
   display: grid;
-  grid-template-columns: repeat(var(--col), 1fr);
-  column-gap: clamp(12px, 1.6vw, 28px);
-}
-.home-root .about__name,
-.home-root .about-paragraph {
-  grid-column: 2 / span 10;
+  grid-template-columns: 5fr 7fr;
+  column-gap: clamp(32px, 4vw, 72px);
+  align-items: start;
 }
 .home-root .about__name {
+  grid-column: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: clamp(24px, 3vw, 40px);
-  margin-bottom: clamp(28px, 3.5vw, 48px);
-  border-bottom: 1px solid var(--rule);
+  position: sticky;
+  top: clamp(96px, 14vh, 132px);
+  align-self: start;
+}
+.home-root .about-paragraph {
+  grid-column: 2;
 }
 .home-root .about__name-ja {
   font-family: var(--f-jp-display);
@@ -947,9 +949,19 @@
   padding: 0 2px;
 }
 @media (max-width: 900px) {
+  .home-root .about__body {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
   .home-root .about__name,
   .home-root .about-paragraph {
     grid-column: 1 / -1;
+  }
+  .home-root .about__name {
+    position: static;
+    padding-bottom: clamp(24px, 3vw, 40px);
+    margin-bottom: clamp(28px, 3.5vw, 48px);
+    border-bottom: 1px solid var(--rule);
   }
 }
 
