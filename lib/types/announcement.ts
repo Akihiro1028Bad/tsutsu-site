@@ -11,6 +11,8 @@ export interface Announcement {
   category?: '更新情報' | 'テクノロジー' | CategoryReference
   // リード画像（カード表示用）
   read?: ImageField
+  /** Raw HTML (may include <style>/<script>) rendered inside a sandboxed iframe. */
+  embedHtml?: string
   createdAt: string
   updatedAt: string
   publishedAt: string

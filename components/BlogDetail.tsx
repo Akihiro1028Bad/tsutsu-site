@@ -37,6 +37,7 @@ export default async function BlogDetail({ post, siblings }: BlogDetailProps) {
     publishedAt: post.publishedAt,
     category: post.category,
     image: post.hero,
+    embedHtml: post.embedHtml,
   }
 
   const structuredData = {

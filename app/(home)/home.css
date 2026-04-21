@@ -1302,6 +1302,14 @@
 .home-root .article-page__body {
   max-width: 720px;
 }
+.home-root .article-page__embed {
+  max-width: 720px;
+  margin: clamp(40px, 5vw, 64px) auto 0;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: #fff;
+}
 
 /* ---- article prose typography ---- */
 .home-root .article-prose {
@@ -1419,6 +1427,27 @@
   color: var(--ink-mute);
   margin-top: 10px;
 }
+/* Defensive rules for microCMS WYSIWYG clutter that the pre-processor
+   may miss (e.g. nested <br> patterns, empty paragraphs, stray h1). */
+.home-root .article-prose h1,
+.home-root .article-prose h2,
+.home-root .article-prose h3,
+.home-root .article-prose h4,
+.home-root .article-prose h5,
+.home-root .article-prose h6 {
+  /* Keep paragraph-like <br> inside headings from breaking the line. */
+}
+.home-root .article-prose h1 br,
+.home-root .article-prose h2 br,
+.home-root .article-prose h3 br,
+.home-root .article-prose h4 br,
+.home-root .article-prose h5 br,
+.home-root .article-prose h6 br {
+  display: none;
+}
+.home-root .article-prose p:empty {
+  display: none;
+}
 .home-root .article-prose hr {
   border: none;
   border-top: 1px solid var(--rule);
@@ -1439,6 +1468,850 @@
 .home-root .article-prose th {
   background: var(--bg-soft);
   font-weight: 600;
+}
+
+/* ---- custom classes from microCMS リッチエディタv2 カスタムclass ----
+   - .lead      : opening paragraph — softer, slightly larger
+   - .callout   : highlighted soft box — info / aside
+   - .note      : inline small annotation with mono eyebrow "NOTE."
+   - .warn      : caution block — accent rule + "CAUTION" label
+   - .pullquote : display quote — large serif, centred, decorative rules
+   - .key       : key takeaway — thick ink bar + "KEY POINT" eyebrow */
+
+/* A. lead — opening paragraph */
+.home-root .article-prose .lead {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  letter-spacing: 0.005em;
+  margin-bottom: clamp(20px, 2.4vw, 32px);
+}
+
+/* B. callout — soft highlight box */
+.home-root .article-prose .callout {
+  border-left: 2px solid var(--accent);
+  background: var(--bg-soft);
+  padding: clamp(14px, 1.6vw, 20px) clamp(16px, 2vw, 24px);
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink);
+  border-radius: 2px;
+}
+.home-root .article-prose .callout > :first-child {
+  margin-top: 0;
+}
+.home-root .article-prose .callout > :last-child {
+  margin-bottom: 0;
+}
+
+/* C. note — inline editorial annotation with mono eyebrow */
+.home-root .article-prose .note {
+  position: relative;
+  padding-left: clamp(60px, 7vw, 84px);
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.75;
+  margin: clamp(18px, 2.2vw, 28px) 0;
+}
+.home-root .article-prose .note::before {
+  content: "NOTE.";
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  font-weight: 500;
+}
+
+/* D. warn — caution block */
+.home-root .article-prose .warn {
+  position: relative;
+  padding: clamp(16px, 2vw, 22px) 0 clamp(14px, 1.6vw, 18px);
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--rule);
+  margin: clamp(24px, 3vw, 40px) 0;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.75;
+}
+.home-root .article-prose .warn::before {
+  content: "CAUTION";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* E. pullquote — display quote */
+.home-root .article-prose .pullquote {
+  font-family: var(--f-display);
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.4;
+  font-weight: 400;
+  color: var(--ink);
+  text-align: center;
+  margin: clamp(40px, 5vw, 64px) auto;
+  max-width: 28em;
+  letter-spacing: -0.01em;
+  padding: 0;
+}
+.home-root .article-prose .pullquote::before,
+.home-root .article-prose .pullquote::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--ink-mute);
+  margin: 0 auto;
+  opacity: 0.5;
+}
+.home-root .article-prose .pullquote::before {
+  margin-bottom: clamp(14px, 1.6vw, 20px);
+}
+.home-root .article-prose .pullquote::after {
+  margin-top: clamp(14px, 1.6vw, 20px);
+}
+
+/* F. key — key takeaway with ink bar + mono eyebrow */
+.home-root .article-prose .key {
+  border-left: 3px solid var(--ink);
+  padding: 2px 0 2px clamp(14px, 1.6vw, 20px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  font-size: 17px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.002em;
+  position: relative;
+}
+.home-root .article-prose .key::before {
+  content: "KEY POINT";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* G. tldr — short summary box with "TL;DR" mono label */
+.home-root .article-prose .tldr {
+  position: relative;
+  padding: clamp(18px, 2vw, 24px) 0;
+  margin: clamp(24px, 3vw, 40px) 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+.home-root .article-prose .tldr::before {
+  content: "TL;DR";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--ink-mute);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* H. step — numbered step with auto counter. Parent resets counter. */
+.home-root .article-prose {
+  counter-reset: step-counter;
+}
+.home-root .article-prose .step {
+  counter-increment: step-counter;
+  position: relative;
+  padding-left: clamp(60px, 7vw, 84px);
+  margin: clamp(20px, 2.6vw, 32px) 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+  min-height: 36px;
+}
+.home-root .article-prose .step::before {
+  content: "STEP " counter(step-counter, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* I. stat — big display-font figure for metrics */
+.home-root .article-prose .stat {
+  font-family: var(--f-display);
+  font-size: clamp(40px, 5.6vw, 72px);
+  line-height: 1.05;
+  font-weight: 400;
+  color: var(--ink);
+  margin: clamp(28px, 3.4vw, 48px) 0 clamp(8px, 1vw, 12px);
+  letter-spacing: -0.02em;
+}
+.home-root .article-prose .stat + p {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  margin-top: 0;
+}
+
+/* J. aside — tangential commentary, indented + softened */
+.home-root .article-prose .aside {
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  padding-left: clamp(16px, 2vw, 24px);
+  border-left: 1px dotted var(--ink-mute);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* K. update — revision log entry with date-style mono label */
+.home-root .article-prose .update {
+  position: relative;
+  padding: clamp(14px, 1.6vw, 18px) 0 0;
+  margin: clamp(24px, 3vw, 40px) 0;
+  border-top: 1px dashed var(--rule);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+.home-root .article-prose .update::before {
+  content: "UPDATE";
+  display: inline-block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  background: transparent;
+  margin-right: 10px;
+  font-weight: 600;
+  vertical-align: 2px;
+}
+
+/* L. divider — decorative section break with centred glyph */
+.home-root .article-prose .divider {
+  text-align: center;
+  margin: clamp(48px, 6vw, 80px) 0;
+  color: var(--ink-mute);
+  font-family: var(--f-display);
+  font-size: 18px;
+  letter-spacing: 0.6em;
+  position: relative;
+}
+.home-root .article-prose .divider::before,
+.home-root .article-prose .divider::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: clamp(40px, 8vw, 80px);
+  height: 1px;
+  background: var(--rule);
+  margin: 0 18px;
+}
+
+/* M. epigraph — opening quote with em-dash attribution (small, italic) */
+.home-root .article-prose .epigraph {
+  margin: 0 0 clamp(32px, 4vw, 56px);
+  padding: 0 0 0 clamp(24px, 3vw, 40px);
+  font-family: var(--f-display);
+  font-size: 15px;
+  line-height: 1.7;
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 34em;
+  border-left: 1px solid var(--rule);
+}
+
+/* N. dropcap — large decorative first letter */
+.home-root .article-prose .dropcap::first-letter {
+  font-family: var(--f-display);
+  font-size: clamp(54px, 7vw, 84px);
+  line-height: 0.85;
+  float: left;
+  margin: 6px 12px -6px 0;
+  color: var(--accent);
+  font-weight: 400;
+  font-style: normal;
+}
+.home-root .article-prose .dropcap {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+/* O. marker — highlighter-style background sweep behind the paragraph text */
+.home-root .article-prose .marker {
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background: linear-gradient(
+    transparent 0 55%,
+    color-mix(in oklch, var(--accent) 22%, transparent) 55% 92%,
+    transparent 92% 100%
+  );
+  padding: 0 0.18em;
+  font-size: 16px;
+  line-height: 2.1;
+  color: var(--ink);
+  margin: clamp(24px, 3vw, 40px) 0;
+}
+
+/* P. timeline — date prefix (mono) + body, as a 2-col layout */
+.home-root .article-prose .timeline {
+  display: grid;
+  grid-template-columns: clamp(88px, 10vw, 120px) 1fr;
+  gap: clamp(16px, 2vw, 28px);
+  padding: clamp(10px, 1.2vw, 16px) 0;
+  border-top: 1px solid var(--rule);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin: 0;
+}
+.home-root .article-prose .timeline + .timeline {
+  margin-top: 0;
+}
+.home-root .article-prose .timeline::before {
+  content: attr(data-date, "");
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--ink-mute);
+  padding-top: 2px;
+}
+@media (max-width: 640px) {
+  .home-root .article-prose .timeline {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* Q. postscript — right-aligned afterthought at article end */
+.home-root .article-prose .postscript {
+  margin: clamp(40px, 5vw, 64px) 0 0 auto;
+  max-width: 28em;
+  padding-top: clamp(16px, 2vw, 24px);
+  border-top: 1px solid var(--rule);
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  text-align: right;
+  position: relative;
+}
+.home-root .article-prose .postscript::before {
+  content: "P.S.";
+  font-family: var(--f-mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-right: 10px;
+  font-weight: 600;
+  vertical-align: 2px;
+}
+
+/* R. haiku — centred display verse, generous line-height */
+.home-root .article-prose .haiku {
+  text-align: center;
+  font-family: var(--f-display);
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 2.2;
+  color: var(--ink);
+  margin: clamp(40px, 5vw, 64px) auto;
+  max-width: 20em;
+  letter-spacing: 0.1em;
+  white-space: pre-line;
+}
+
+/* S. bouten — Japanese literary emphasis dots above each character */
+.home-root .article-prose .bouten {
+  font-size: 16px;
+  line-height: 2.2;
+  color: var(--ink);
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  -webkit-text-emphasis-style: dot;
+  -webkit-text-emphasis-color: var(--accent);
+  -webkit-text-emphasis-position: over;
+  text-emphasis-style: dot;
+  text-emphasis-color: var(--accent);
+  text-emphasis-position: over;
+}
+
+/* T. question — Q. prefix for posed questions */
+.home-root .article-prose .question {
+  position: relative;
+  padding-left: clamp(40px, 4.4vw, 52px);
+  margin: clamp(24px, 3vw, 36px) 0 clamp(10px, 1.2vw, 14px);
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.003em;
+}
+.home-root .article-prose .question::before {
+  content: "Q.";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--f-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+/* U. answer — A. prefix for the reply */
+.home-root .article-prose .answer {
+  position: relative;
+  padding-left: clamp(40px, 4.4vw, 52px);
+  margin: 0 0 clamp(24px, 3vw, 36px);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+}
+.home-root .article-prose .answer::before {
+  content: "A.";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--f-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+/* V. wide — horizontal breakout, wider than body column */
+.home-root .article-prose .wide {
+  width: calc(100% + clamp(40px, 8vw, 120px));
+  margin-left: calc(-1 * clamp(20px, 4vw, 60px));
+  margin-right: calc(-1 * clamp(20px, 4vw, 60px));
+  margin-top: clamp(32px, 4vw, 56px);
+  margin-bottom: clamp(32px, 4vw, 56px);
+  padding: clamp(24px, 3vw, 40px) clamp(24px, 3.5vw, 56px);
+  background: var(--bg-soft);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  border-radius: 2px;
+}
+
+/* W. arrow — large arrow prefix, action / CTA */
+.home-root .article-prose .arrow {
+  position: relative;
+  padding-left: clamp(40px, 5vw, 60px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.002em;
+}
+.home-root .article-prose .arrow::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  top: -2px;
+  font-size: clamp(22px, 2.6vw, 30px);
+  color: var(--accent);
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* X. boxed — minimal rectangular outline around the paragraph */
+.home-root .article-prose .boxed {
+  border: 1px solid var(--ink);
+  padding: clamp(18px, 2.2vw, 28px) clamp(20px, 2.6vw, 32px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink);
+  position: relative;
+}
+.home-root .article-prose .boxed::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--ink);
+  pointer-events: none;
+}
+
+/* Y. typewriter — monospace with baseline rules (typewriter paper feel) */
+.home-root .article-prose .typewriter {
+  font-family: var(--f-mono);
+  font-size: 14px;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 calc(1em * 1.9 - 1px),
+    var(--rule) calc(1em * 1.9 - 1px) calc(1em * 1.9)
+  );
+  padding: 0 4px;
+  margin: clamp(24px, 3vw, 40px) 0;
+}
+
+/* Z. redacted — blacked-out classified-style text */
+.home-root .article-prose .redacted {
+  color: transparent;
+  background: var(--ink);
+  padding: 0.1em 0.3em;
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  border-radius: 1px;
+  user-select: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  font-size: 15px;
+  line-height: 1.9;
+}
+.home-root .article-prose p .redacted {
+  display: inline;
+  margin: 0;
+}
+
+/* AA. ticker — marquee-style scrolling banner (pure CSS) */
+.home-root .article-prose .ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 10px 0;
+  margin: clamp(24px, 3vw, 40px) 0;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  text-transform: uppercase;
+  animation: tsutsu-ticker 24s linear infinite;
+}
+.home-root .article-prose .ticker:hover {
+  animation-play-state: paused;
+}
+@keyframes tsutsu-ticker {
+  0% { text-indent: 100%; }
+  100% { text-indent: -200%; }
+}
+
+/* AB. neon — glowing tube sign on dark panel */
+.home-root .article-prose .neon {
+  background: #0a0a0f;
+  color: #ff6b88;
+  padding: clamp(28px, 3.4vw, 44px) clamp(24px, 3vw, 36px);
+  margin: clamp(32px, 4vw, 56px) 0;
+  font-family: var(--f-display);
+  font-size: clamp(22px, 2.8vw, 32px);
+  line-height: 1.3;
+  text-align: center;
+  letter-spacing: 0.02em;
+  border: 1px solid #222;
+  border-radius: 4px;
+  text-shadow:
+    0 0 4px currentColor,
+    0 0 10px currentColor,
+    0 0 22px #ff3a5f,
+    0 0 42px #ff3a5f;
+}
+
+/* AC. newspaper — 2-column serif with drop cap */
+.home-root .article-prose .newspaper {
+  column-count: 2;
+  column-gap: clamp(24px, 3vw, 40px);
+  column-rule: 1px solid var(--rule);
+  font-family: var(--f-display);
+  font-size: 13px;
+  line-height: 1.75;
+  text-align: justify;
+  color: var(--ink);
+  margin: clamp(28px, 3.4vw, 48px) 0;
+  hyphens: auto;
+}
+.home-root .article-prose .newspaper::first-letter {
+  font-size: 3em;
+  float: left;
+  line-height: 0.9;
+  margin: 4px 8px -4px 0;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+/* AD. polaroid — instant-camera style photo frame */
+.home-root .article-prose .polaroid {
+  display: block;
+  background: #fff;
+  padding: 14px 14px 44px;
+  margin: clamp(32px, 4vw, 56px) auto;
+  max-width: 360px;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.08);
+  transform: rotate(-1.5deg);
+  transition: transform 0.25s ease;
+  text-align: center;
+  font-family: var(--f-display);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+.home-root .article-prose .polaroid:hover {
+  transform: rotate(0);
+}
+.home-root .article-prose .polaroid img {
+  display: block;
+  margin: 0 auto 16px;
+  max-width: 100%;
+  height: auto;
+  background: var(--bg-soft);
+}
+
+/* AE. sticky — yellow note, slightly tilted, casual font */
+.home-root .article-prose .sticky {
+  background: #fff6a8;
+  color: #2b2716;
+  padding: clamp(20px, 2.4vw, 28px) clamp(22px, 2.8vw, 32px);
+  margin: clamp(32px, 4vw, 56px) auto;
+  max-width: 380px;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  transform: rotate(-1.2deg);
+  font-family: var(--f-display);
+  font-size: 16px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+/* AF. terminal — shell-style green on black */
+.home-root .article-prose .terminal {
+  background: #0b0f14;
+  color: #4ade80;
+  padding: clamp(18px, 2.2vw, 24px) clamp(20px, 2.4vw, 28px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  line-height: 1.75;
+  border-radius: 4px;
+  position: relative;
+  letter-spacing: 0.01em;
+}
+.home-root .article-prose .terminal::before {
+  content: "$ ";
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+/* AG. quote-mark — giant decorative open-quote */
+.home-root .article-prose .quote-mark {
+  position: relative;
+  padding: clamp(32px, 4vw, 56px) 0 0 clamp(20px, 2.6vw, 36px);
+  margin: clamp(40px, 5vw, 64px) 0;
+  font-family: var(--f-display);
+  font-size: clamp(17px, 1.9vw, 20px);
+  line-height: 1.7;
+  color: var(--ink);
+  font-style: italic;
+  max-width: 34em;
+}
+.home-root .article-prose .quote-mark::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.15em;
+  left: -0.12em;
+  font-size: clamp(96px, 12vw, 160px);
+  line-height: 0.8;
+  color: var(--accent);
+  opacity: 0.22;
+  font-family: var(--f-display);
+  font-style: normal;
+}
+
+/* AH. centered-bold — punchy centered statement */
+.home-root .article-prose .centered-bold {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1.4;
+  color: var(--ink);
+  margin: clamp(40px, 5vw, 64px) auto;
+  max-width: 28em;
+  letter-spacing: -0.005em;
+}
+
+/* AI. diagram — ASCII / monospace diagram container */
+.home-root .article-prose .diagram {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  padding: clamp(20px, 2.6vw, 32px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  border-radius: 2px;
+  white-space: pre;
+  overflow-x: auto;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* AJ. flow — horizontal process flow, mono, arrows between terms */
+.home-root .article-prose .flow {
+  text-align: center;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  line-height: 1.8;
+  color: var(--ink);
+  margin: clamp(28px, 3.4vw, 44px) 0;
+  padding: clamp(16px, 2vw, 24px) clamp(12px, 2vw, 20px);
+  border-top: 1px dashed var(--rule);
+  border-bottom: 1px dashed var(--rule);
+  text-transform: uppercase;
+}
+
+/* AK. annotation — labelled annotation with a leader line */
+.home-root .article-prose .annotation {
+  position: relative;
+  padding-left: clamp(28px, 3.4vw, 44px);
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.home-root .article-prose .annotation::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: clamp(18px, 2.4vw, 32px);
+  height: 1px;
+  background: var(--accent);
+}
+
+/* AL. framed — neutral frame around image or block */
+.home-root .article-prose .framed {
+  border: 1px solid var(--ink-soft);
+  padding: clamp(14px, 1.8vw, 22px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink);
+  position: relative;
+}
+.home-root .article-prose .framed::after {
+  content: "";
+  position: absolute;
+  inset: -6px 0 0 -6px;
+  width: 14px;
+  height: 14px;
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+  pointer-events: none;
+}
+
+/* ---- rich-classes preview showcase (dev route /design/rich-classes) ---- */
+.home-root .rich-preview {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 96px) clamp(20px, 4vw, 40px) clamp(80px, 10vw, 140px);
+}
+.home-root .rich-preview__head {
+  margin-bottom: clamp(48px, 6vw, 80px);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: clamp(28px, 3.6vw, 48px);
+}
+.home-root .rich-preview__kicker {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 12px;
+}
+.home-root .rich-preview__title {
+  font-family: var(--f-body);
+  font-size: clamp(26px, 3.2vw, 40px);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 clamp(12px, 1.6vw, 20px);
+  color: var(--ink);
+}
+.home-root .rich-preview__lede {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  max-width: 52em;
+  margin: 0;
+}
+.home-root .rich-preview__grid {
+  display: grid;
+  gap: clamp(40px, 5vw, 72px);
+}
+.home-root .rich-preview__card {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: clamp(24px, 3vw, 48px);
+  padding-bottom: clamp(32px, 4vw, 56px);
+  border-bottom: 1px dashed var(--rule);
+}
+.home-root .rich-preview__card:last-child {
+  border-bottom: none;
+}
+.home-root .rich-preview__card-label {
+  font-family: var(--f-body);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.home-root .rich-preview__card-code {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+  margin: 0 0 12px;
+  word-break: break-all;
+}
+.home-root .rich-preview__card-code code {
+  background: transparent;
+  padding: 0;
+}
+.home-root .rich-preview__card-intent {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.home-root .rich-preview__card-demo {
+  min-width: 0;
+}
+@media (max-width: 720px) {
+  .home-root .rich-preview__card {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 /* ---- article footer: siblings + back ---- */

@@ -1,8 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
+import { cleanupMicroCmsHtml } from "@/lib/utils/microcms-html-cleanup"
 import { sanitizeHtml } from "@/lib/utils/sanitize"
 import { processHtmlWithCodeBlocks } from "@/lib/utils/html-processor"
 import { ProseContent } from "./ProseContent"
+import HtmlEmbed from "./HtmlEmbed"
 
 /** Shared shape for both announcements and blog posts. */
 export interface ContentDetailData {
@@ -15,6 +17,8 @@ export interface ContentDetailData {
     url: string
     alt?: string
   }
+  /** Optional raw HTML (CSS/JS allowed) rendered in a sandboxed iframe below body. */
+  embedHtml?: string
 }
 
 /** Sibling pointer for older/newer article navigation. */
@@ -59,7 +63,8 @@ export default async function ContentDetail({
   siblings,
   readingTimeMin,
 }: ContentDetailProps) {
-  const processedContent = await processHtmlWithCodeBlocks(content.content, "dark")
+  const cleanedHtml = cleanupMicroCmsHtml(content.content)
+  const processedContent = await processHtmlWithCodeBlocks(cleanedHtml, "dark")
   const sanitizedContent = await sanitizeHtml(processedContent)
 
   return (
@@ -99,6 +104,12 @@ export default async function ContentDetail({
       <div className="article-page__body">
         <ProseContent html={sanitizedContent} className="article-prose" />
       </div>
+
+      {content.embedHtml ? (
+        <div className="article-page__embed">
+          <HtmlEmbed html={content.embedHtml} />
+        </div>
+      ) : null}
 
       <footer className="article-page__foot">
         {siblings && (siblings.newer || siblings.older) ? (

@@ -29,6 +29,8 @@ export interface BlogPost {
   content: string
   category?: string | CategoryReference
   hero?: ImageField
+  /** Raw HTML (may include <style>/<script>) rendered inside a sandboxed iframe. */
+  embedHtml?: string
   // microCMSのデフォルトフィールド
   createdAt: string
   updatedAt: string

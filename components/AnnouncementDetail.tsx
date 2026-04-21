@@ -36,6 +36,7 @@ export default async function AnnouncementDetail({
     publishedAt: announcement.publishedAt,
     category: announcement.category,
     image: announcement.read,
+    embedHtml: announcement.embedHtml,
   }
 
   return (
