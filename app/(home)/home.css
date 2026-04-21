@@ -334,11 +334,20 @@
     transform: none;
   }
 }
+@keyframes tsutsu-scroll-breathe {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.9; }
+}
 @media (prefers-reduced-motion: reduce) {
   .home-root .hero__main,
   .home-root .hero__main-line,
-  .home-root .hero__sub {
+  .home-root .hero__sub,
+  .home-root .hero__scroll-hint {
     animation: none;
+  }
+  .home-root .hero__scroll-hint__line,
+  .home-root .hero__scroll-hint__label {
+    opacity: 0.55;
   }
 }
 .home-root .hero__services-inline {
@@ -412,6 +421,36 @@
   .home-root .hero__sub {
     line-height: 1.7;
   }
+  .home-root .hero__scroll-hint {
+    position: absolute;
+    right: var(--pad-x);
+    bottom: clamp(20px, 4vh, 36px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    animation: tsutsu-hero-rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 800ms backwards,
+               tsutsu-scroll-breathe 2400ms ease-in-out 1400ms infinite;
+  }
+  .home-root .hero__scroll-hint__line {
+    display: block;
+    width: 1px;
+    height: 20px;
+    background: var(--ink-mute);
+    opacity: 0.55;
+  }
+  .home-root .hero__scroll-hint__label {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: var(--ink-mute);
+    opacity: 0.55;
+  }
+}
+
+.home-root .hero__scroll-hint {
+  display: none;
 }
 
 /* hero -> first section seam */
