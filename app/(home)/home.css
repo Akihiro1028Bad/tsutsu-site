@@ -554,6 +554,13 @@
   overflow: hidden;
   border: 1px solid var(--rule);
 }
+/* Parallax wrapper: extends ±6% above/below the figure so a small Y
+   translate (offset -60 ÷ 2 = ±30px) never reveals blank edges. */
+.home-root .work-feature__thumb-inner {
+  position: absolute;
+  inset: -6% 0;
+  height: 112%;
+}
 .home-root .work-feature__thumb img {
   position: absolute;
   inset: 0;
