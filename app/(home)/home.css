@@ -137,12 +137,21 @@
 .home-root .home-nav__list a:hover {
   opacity: 1;
 }
+.home-root .home-nav__list a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
 .home-root .home-nav__list a[aria-current="true"] {
   opacity: 1;
   color: var(--accent);
 }
 .home-root .home-nav__list a[aria-current="true"]::after {
   transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-root .home-nav__list a::after {
+    transition: none;
+  }
 }
 .home-root .home-nav__lang {
   font-family: var(--f-mono);
@@ -267,6 +276,7 @@
   line-height: 0.98;
   letter-spacing: -0.02em;
   margin: 0;
+  animation: tsutsu-hero-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 80ms backwards;
 }
 .home-root .hero__em {
   font-style: normal;
@@ -302,6 +312,27 @@
   font-weight: 500;
   color: var(--ink-soft);
   max-width: 560px;
+  animation: tsutsu-hero-rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 320ms backwards;
+}
+
+/* Hero entrance — runs once on first paint. Disabled when the user
+   prefers reduced motion (handled inside the keyframes block via the
+   media query below). */
+@keyframes tsutsu-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-root .hero__main,
+  .home-root .hero__sub {
+    animation: none;
+  }
 }
 .home-root .hero__services-inline {
   display: block;
@@ -1353,10 +1384,16 @@
   text-decoration: underline;
   text-decoration-color: color-mix(in oklch, var(--accent) 40%, transparent);
   text-underline-offset: 3px;
-  transition: text-decoration-color 0.2s ease;
+  text-decoration-thickness: 1px;
+  transition:
+    text-decoration-color 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+    text-decoration-thickness 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+    text-underline-offset 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .home-root .article-prose a:hover {
   text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }
 .home-root .article-prose strong {
   font-weight: 600;
@@ -3137,11 +3174,27 @@
  * element enters the viewport.
  */
 .home-root .reveal {
+  opacity: 0;
   transform: translateY(var(--reveal-translate));
-  transition: transform var(--reveal-duration) ease;
-  will-change: transform;
+  transition:
+    opacity var(--reveal-duration) cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform var(--reveal-duration) cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
 }
-.home-root .reveal.is-revealed {
+.home-root .reveal[data-direction="left"] {
+  transform: translateX(calc(-1 * var(--reveal-translate)));
+}
+.home-root .reveal[data-direction="right"] {
+  transform: translateX(var(--reveal-translate));
+}
+.home-root .reveal[data-direction="scale"] {
+  transform: scale(0.96);
+}
+.home-root .reveal.is-revealed,
+.home-root .reveal.is-revealed[data-direction="left"],
+.home-root .reveal.is-revealed[data-direction="right"],
+.home-root .reveal.is-revealed[data-direction="scale"] {
+  opacity: 1;
   transform: none;
 }
 
@@ -3149,6 +3202,9 @@
   .home-root {
     --reveal-duration: 0.001s;
     --reveal-translate: 0px;
+  }
+  .home-root .reveal {
+    opacity: 1;
   }
 }
 

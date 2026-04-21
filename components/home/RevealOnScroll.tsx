@@ -2,11 +2,21 @@
 
 import { useEffect, useRef, useState } from "react"
 
+export type RevealDirection = "up" | "left" | "right" | "scale"
+
 interface RevealOnScrollProps {
   children: React.ReactNode
   className?: string
   /** IntersectionObserver threshold. Defaults to the design's 0.12. */
   threshold?: number
+  /**
+   * Entrance direction applied while the element is below the threshold.
+   *   - up    : translateY(+) → 0     (default; legacy behaviour)
+   *   - left  : translateX(-) → 0
+   *   - right : translateX(+) → 0
+   *   - scale : scale(0.96)  → 1
+   */
+  direction?: RevealDirection
 }
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)"
@@ -15,6 +25,7 @@ export default function RevealOnScroll({
   children,
   className = "",
   threshold = 0.12,
+  direction = "up",
 }: RevealOnScrollProps) {
   const ref = useRef<HTMLDivElement | null>(null)
   const [revealed, setRevealed] = useState(false)
@@ -49,7 +60,12 @@ export default function RevealOnScroll({
     .join(" ")
 
   return (
-    <div ref={ref} data-revealed={revealed} className={wrapperClass}>
+    <div
+      ref={ref}
+      data-revealed={revealed}
+      data-direction={direction}
+      className={wrapperClass}
+    >
       {children}
     </div>
   )

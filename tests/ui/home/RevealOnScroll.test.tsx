@@ -193,4 +193,24 @@ describe("Phase 2: RevealOnScroll — behaviour", () => {
     expect(wrapper.className).toMatch(/reveal/)
     expect(wrapper.className).toMatch(/custom-x/)
   })
+
+  it("defaults to data-direction='up'", () => {
+    render(
+      <RevealOnScroll>
+        <p data-testid="child" />
+      </RevealOnScroll>
+    )
+    const wrapper = screen.getByTestId("child").parentElement!
+    expect(wrapper).toHaveAttribute("data-direction", "up")
+  })
+
+  it("forwards a custom direction to data-direction", () => {
+    render(
+      <RevealOnScroll direction="scale">
+        <p data-testid="child" />
+      </RevealOnScroll>
+    )
+    const wrapper = screen.getByTestId("child").parentElement!
+    expect(wrapper).toHaveAttribute("data-direction", "scale")
+  })
 })
