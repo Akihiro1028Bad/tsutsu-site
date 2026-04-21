@@ -27,6 +27,10 @@ export default function HeroSection() {
           </p>
         </div>
       </div>
+      <div className="hero__scroll-hint" aria-hidden="true">
+        <span className="hero__scroll-hint__line" />
+        <span className="hero__scroll-hint__label">SCROLL</span>
+      </div>
     </header>
   )
 }

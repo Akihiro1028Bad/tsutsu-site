@@ -53,4 +53,13 @@ describe("Phase 3: HeroSection — editorial first-fold", () => {
     expect(lines[2].textContent).toMatch(/カタチに/)
   })
 
+  it("renders a mobile-only scroll hint marked aria-hidden", () => {
+    render(<HeroSection />)
+    const banner = screen.getByRole("banner")
+    const hint = banner.querySelector(".hero__scroll-hint")
+    expect(hint).not.toBeNull()
+    expect(hint).toHaveAttribute("aria-hidden", "true")
+    expect(hint?.textContent).toMatch(/SCROLL/)
+  })
+
 })
