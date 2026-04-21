@@ -43,4 +43,14 @@ describe("Phase 3: HeroSection — editorial first-fold", () => {
     expect(banner.textContent).toMatch(/サポート/)
   })
 
+  it("splits the title into three spans for stagger animation", () => {
+    render(<HeroSection />)
+    const heading = screen.getByRole("heading", { level: 1 })
+    const lines = heading.querySelectorAll(".hero__main-line")
+    expect(lines).toHaveLength(3)
+    expect(lines[0].textContent).toMatch(/想いを/)
+    expect(lines[1].textContent).toMatch(/技術で/)
+    expect(lines[2].textContent).toMatch(/カタチに/)
+  })
+
 })

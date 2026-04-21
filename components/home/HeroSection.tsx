@@ -7,9 +7,11 @@ export default function HeroSection() {
       <div className="hero__grid">
         <div className="hero__title-block">
           <h1 className="hero__main">
-            想いを<em className="hero__em">技術</em>で
-            <br />
-            カタチに。
+            <span className="hero__main-line">想いを</span>
+            <span className="hero__main-line">
+              <em className="hero__em">技術</em>で
+            </span>
+            <span className="hero__main-line">カタチに。</span>
           </h1>
         </div>
         <div className="hero__sub-row">
