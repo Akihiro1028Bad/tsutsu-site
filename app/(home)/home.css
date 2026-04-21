@@ -811,6 +811,13 @@
 .home-root .services .section-head__rule em {
   background: var(--svc-rule);
 }
+/* The number ("02") inherits --accent (terracotta) by default which fails
+   contrast on the dark Services surface. Override to a brighter rust that
+   passes WCAG AA at 11px. */
+.home-root .services .section-head__rule > span:first-child,
+[data-style="modern"] .home-root .services .section-head__rule > span:first-child {
+  color: oklch(0.78 0.13 35);
+}
 .home-root .services .section-head__jp h2 {
   color: var(--bg);
 }
