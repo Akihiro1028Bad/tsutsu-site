@@ -1539,13 +1539,37 @@
   font-weight: 600;
 }
 
-/* ---- custom classes from microCMS リッチエディタv2 カスタムclass ----
-   - .lead      : opening paragraph — softer, slightly larger
-   - .callout   : highlighted soft box — info / aside
-   - .note      : inline small annotation with mono eyebrow "NOTE."
-   - .warn      : caution block — accent rule + "CAUTION" label
-   - .pullquote : display quote — large serif, centred, decorative rules
-   - .key       : key takeaway — thick ink bar + "KEY POINT" eyebrow */
+/* ---- editorial decoration classes (20 block + 1 inline) ----
+   Editorial core:
+   - .lead         : opening paragraph — softer, slightly larger
+   - .tldr         : short summary box — "TL;DR" eyebrow, ink top/bottom rule
+   - .key          : single-line claim — thick ink bar + "KEY POINT" eyebrow
+   - .pullquote    : display quote, third-party only — large serif, centred
+   - .postscript   : right-aligned P.S. afterthought at article end
+   - .note         : short annotation — "NOTE." mono eyebrow
+   - .aside        : tangential commentary — dotted line + italic
+   - .warn         : caution block — accent rule + "CAUTION" label
+
+   Structural:
+   - .step         : auto-numbered step — STEP 01/02 mono eyebrow
+   - .stat         : display-font figure — next <p> auto-captions
+   - .timeline     : date + body 2-col grid, uses data-date attr
+   - .divider      : decorative section break with centred glyph
+   - .update       : revision log — "UPDATE" eyebrow + dashed top rule
+   - .section-label: eyebrow shown above h2 — "§ 01" mono uppercase
+
+   Tech-specific:
+   - .terminal     : shell-style green-on-black, auto "$ " prefix
+   - .diagram      : ASCII / monospace diagram container
+
+   Editorial additions:
+   - .definition   : term definition box — "TERM" label, accent rule
+   - .spec         : key/value spec list — mono keys, ink values
+   - .compare      : 2-col comparison — "YES" / "NO" ink labels
+   - .caption      : figure/code caption — small mono, left accent
+
+   Inline:
+   - .bouten       : Japanese emphasis dots (text-emphasis) */
 
 /* A. lead — opening paragraph */
 .home-root .article-prose .lead {
@@ -1554,24 +1578,6 @@
   color: var(--ink-soft);
   letter-spacing: 0.005em;
   margin-bottom: clamp(20px, 2.4vw, 32px);
-}
-
-/* B. callout — soft highlight box */
-.home-root .article-prose .callout {
-  border-left: 2px solid var(--accent);
-  background: var(--bg-soft);
-  padding: clamp(14px, 1.6vw, 20px) clamp(16px, 2vw, 24px);
-  margin: clamp(20px, 2.4vw, 32px) 0;
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--ink);
-  border-radius: 2px;
-}
-.home-root .article-prose .callout > :first-child {
-  margin-top: 0;
-}
-.home-root .article-prose .callout > :last-child {
-  margin-bottom: 0;
 }
 
 /* C. note — inline editorial annotation with mono eyebrow */
@@ -1617,7 +1623,7 @@
   font-weight: 600;
 }
 
-/* E. pullquote — display quote */
+/* E. pullquote — display quote (third-party only) */
 .home-root .article-prose .pullquote {
   font-family: var(--f-display);
   font-size: clamp(22px, 2.6vw, 30px);
@@ -1792,53 +1798,6 @@
   margin: 0 18px;
 }
 
-/* M. epigraph — opening quote with em-dash attribution (small, italic) */
-.home-root .article-prose .epigraph {
-  margin: 0 0 clamp(32px, 4vw, 56px);
-  padding: 0 0 0 clamp(24px, 3vw, 40px);
-  font-family: var(--f-display);
-  font-size: 15px;
-  line-height: 1.7;
-  font-style: italic;
-  color: var(--ink-soft);
-  max-width: 34em;
-  border-left: 1px solid var(--rule);
-}
-
-/* N. dropcap — large decorative first letter */
-.home-root .article-prose .dropcap::first-letter {
-  font-family: var(--f-display);
-  font-size: clamp(54px, 7vw, 84px);
-  line-height: 0.85;
-  float: left;
-  margin: 6px 12px -6px 0;
-  color: var(--accent);
-  font-weight: 400;
-  font-style: normal;
-}
-.home-root .article-prose .dropcap {
-  font-size: 16px;
-  line-height: 1.75;
-  color: var(--ink);
-}
-
-/* O. marker — highlighter-style background sweep behind the paragraph text */
-.home-root .article-prose .marker {
-  display: inline;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  background: linear-gradient(
-    transparent 0 55%,
-    color-mix(in oklch, var(--accent) 22%, transparent) 55% 92%,
-    transparent 92% 100%
-  );
-  padding: 0 0.18em;
-  font-size: 16px;
-  line-height: 2.1;
-  color: var(--ink);
-  margin: clamp(24px, 3vw, 40px) 0;
-}
-
 /* P. timeline — date prefix (mono) + body, as a 2-col layout */
 .home-root .article-prose .timeline {
   display: grid;
@@ -1895,19 +1854,6 @@
   vertical-align: 2px;
 }
 
-/* R. haiku — centred display verse, generous line-height */
-.home-root .article-prose .haiku {
-  text-align: center;
-  font-family: var(--f-display);
-  font-size: clamp(18px, 2vw, 22px);
-  line-height: 2.2;
-  color: var(--ink);
-  margin: clamp(40px, 5vw, 64px) auto;
-  max-width: 20em;
-  letter-spacing: 0.1em;
-  white-space: pre-line;
-}
-
 /* S. bouten — Japanese literary emphasis dots above each character */
 .home-root .article-prose .bouten {
   font-size: 16px;
@@ -1920,251 +1866,6 @@
   text-emphasis-style: dot;
   text-emphasis-color: var(--accent);
   text-emphasis-position: over;
-}
-
-/* T. question — Q. prefix for posed questions */
-.home-root .article-prose .question {
-  position: relative;
-  padding-left: clamp(40px, 4.4vw, 52px);
-  margin: clamp(24px, 3vw, 36px) 0 clamp(10px, 1.2vw, 14px);
-  font-size: 16px;
-  line-height: 1.7;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.003em;
-}
-.home-root .article-prose .question::before {
-  content: "Q.";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-family: var(--f-display);
-  font-size: clamp(22px, 2.4vw, 28px);
-  line-height: 1;
-  color: var(--accent);
-  font-weight: 400;
-}
-
-/* U. answer — A. prefix for the reply */
-.home-root .article-prose .answer {
-  position: relative;
-  padding-left: clamp(40px, 4.4vw, 52px);
-  margin: 0 0 clamp(24px, 3vw, 36px);
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--ink-soft);
-}
-.home-root .article-prose .answer::before {
-  content: "A.";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-family: var(--f-display);
-  font-size: clamp(22px, 2.4vw, 28px);
-  line-height: 1;
-  color: var(--ink);
-  font-weight: 400;
-}
-
-/* V. wide — horizontal breakout, wider than body column */
-.home-root .article-prose .wide {
-  width: calc(100% + clamp(40px, 8vw, 120px));
-  margin-left: calc(-1 * clamp(20px, 4vw, 60px));
-  margin-right: calc(-1 * clamp(20px, 4vw, 60px));
-  margin-top: clamp(32px, 4vw, 56px);
-  margin-bottom: clamp(32px, 4vw, 56px);
-  padding: clamp(24px, 3vw, 40px) clamp(24px, 3.5vw, 56px);
-  background: var(--bg-soft);
-  font-size: 16px;
-  line-height: 1.75;
-  color: var(--ink);
-  border-radius: 2px;
-}
-
-/* W. arrow — large arrow prefix, action / CTA */
-.home-root .article-prose .arrow {
-  position: relative;
-  padding-left: clamp(40px, 5vw, 60px);
-  margin: clamp(24px, 3vw, 40px) 0;
-  font-size: 16px;
-  line-height: 1.6;
-  font-weight: 500;
-  color: var(--ink);
-  letter-spacing: -0.002em;
-}
-.home-root .article-prose .arrow::before {
-  content: "→";
-  position: absolute;
-  left: 0;
-  top: -2px;
-  font-size: clamp(22px, 2.6vw, 30px);
-  color: var(--accent);
-  font-weight: 400;
-  line-height: 1;
-}
-
-/* X. boxed — minimal rectangular outline around the paragraph */
-.home-root .article-prose .boxed {
-  border: 1px solid var(--ink);
-  padding: clamp(18px, 2.2vw, 28px) clamp(20px, 2.6vw, 32px);
-  margin: clamp(24px, 3vw, 40px) 0;
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--ink);
-  position: relative;
-}
-.home-root .article-prose .boxed::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border: 1px solid var(--ink);
-  pointer-events: none;
-}
-
-/* Y. typewriter — monospace with baseline rules (typewriter paper feel) */
-.home-root .article-prose .typewriter {
-  font-family: var(--f-mono);
-  font-size: 14px;
-  line-height: 1.9;
-  letter-spacing: 0.04em;
-  color: var(--ink);
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0 calc(1em * 1.9 - 1px),
-    var(--rule) calc(1em * 1.9 - 1px) calc(1em * 1.9)
-  );
-  padding: 0 4px;
-  margin: clamp(24px, 3vw, 40px) 0;
-}
-
-/* Z. redacted — blacked-out classified-style text */
-.home-root .article-prose .redacted {
-  color: transparent;
-  background: var(--ink);
-  padding: 0.1em 0.3em;
-  margin: clamp(20px, 2.4vw, 32px) 0;
-  border-radius: 1px;
-  user-select: none;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  font-size: 15px;
-  line-height: 1.9;
-}
-.home-root .article-prose p .redacted {
-  display: inline;
-  margin: 0;
-}
-
-/* AA. ticker — marquee-style scrolling banner (pure CSS) */
-.home-root .article-prose .ticker {
-  overflow: hidden;
-  white-space: nowrap;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding: 10px 0;
-  margin: clamp(24px, 3vw, 40px) 0;
-  font-family: var(--f-mono);
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  color: var(--ink);
-  text-transform: uppercase;
-  animation: tsutsu-ticker 24s linear infinite;
-}
-.home-root .article-prose .ticker:hover {
-  animation-play-state: paused;
-}
-@keyframes tsutsu-ticker {
-  0% { text-indent: 100%; }
-  100% { text-indent: -200%; }
-}
-
-/* AB. neon — glowing tube sign on dark panel */
-.home-root .article-prose .neon {
-  background: #0a0a0f;
-  color: #ff6b88;
-  padding: clamp(28px, 3.4vw, 44px) clamp(24px, 3vw, 36px);
-  margin: clamp(32px, 4vw, 56px) 0;
-  font-family: var(--f-display);
-  font-size: clamp(22px, 2.8vw, 32px);
-  line-height: 1.3;
-  text-align: center;
-  letter-spacing: 0.02em;
-  border: 1px solid #222;
-  border-radius: 4px;
-  text-shadow:
-    0 0 4px currentColor,
-    0 0 10px currentColor,
-    0 0 22px #ff3a5f,
-    0 0 42px #ff3a5f;
-}
-
-/* AC. newspaper — 2-column serif with drop cap */
-.home-root .article-prose .newspaper {
-  column-count: 2;
-  column-gap: clamp(24px, 3vw, 40px);
-  column-rule: 1px solid var(--rule);
-  font-family: var(--f-display);
-  font-size: 13px;
-  line-height: 1.75;
-  text-align: justify;
-  color: var(--ink);
-  margin: clamp(28px, 3.4vw, 48px) 0;
-  hyphens: auto;
-}
-.home-root .article-prose .newspaper::first-letter {
-  font-size: 3em;
-  float: left;
-  line-height: 0.9;
-  margin: 4px 8px -4px 0;
-  font-weight: 400;
-  color: var(--accent);
-}
-
-/* AD. polaroid — instant-camera style photo frame */
-.home-root .article-prose .polaroid {
-  display: block;
-  background: #fff;
-  padding: 14px 14px 44px;
-  margin: clamp(32px, 4vw, 56px) auto;
-  max-width: 360px;
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.12),
-    0 2px 6px rgba(0, 0, 0, 0.08);
-  transform: rotate(-1.5deg);
-  transition: transform 0.25s ease;
-  text-align: center;
-  font-family: var(--f-display);
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--ink-soft);
-  letter-spacing: 0.02em;
-}
-.home-root .article-prose .polaroid:hover {
-  transform: rotate(0);
-}
-.home-root .article-prose .polaroid img {
-  display: block;
-  margin: 0 auto 16px;
-  max-width: 100%;
-  height: auto;
-  background: var(--bg-soft);
-}
-
-/* AE. sticky — yellow note, slightly tilted, casual font */
-.home-root .article-prose .sticky {
-  background: #fff6a8;
-  color: #2b2716;
-  padding: clamp(20px, 2.4vw, 28px) clamp(22px, 2.8vw, 32px);
-  margin: clamp(32px, 4vw, 56px) auto;
-  max-width: 380px;
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.1),
-    0 2px 6px rgba(0, 0, 0, 0.06);
-  transform: rotate(-1.2deg);
-  font-family: var(--f-display);
-  font-size: 16px;
-  line-height: 1.7;
-  letter-spacing: 0.01em;
 }
 
 /* AF. terminal — shell-style green on black */
@@ -2186,43 +1887,6 @@
   font-weight: 600;
 }
 
-/* AG. quote-mark — giant decorative open-quote */
-.home-root .article-prose .quote-mark {
-  position: relative;
-  padding: clamp(32px, 4vw, 56px) 0 0 clamp(20px, 2.6vw, 36px);
-  margin: clamp(40px, 5vw, 64px) 0;
-  font-family: var(--f-display);
-  font-size: clamp(17px, 1.9vw, 20px);
-  line-height: 1.7;
-  color: var(--ink);
-  font-style: italic;
-  max-width: 34em;
-}
-.home-root .article-prose .quote-mark::before {
-  content: "\201C";
-  position: absolute;
-  top: -0.15em;
-  left: -0.12em;
-  font-size: clamp(96px, 12vw, 160px);
-  line-height: 0.8;
-  color: var(--accent);
-  opacity: 0.22;
-  font-family: var(--f-display);
-  font-style: normal;
-}
-
-/* AH. centered-bold — punchy centered statement */
-.home-root .article-prose .centered-bold {
-  text-align: center;
-  font-weight: 700;
-  font-size: clamp(18px, 2.2vw, 24px);
-  line-height: 1.4;
-  color: var(--ink);
-  margin: clamp(40px, 5vw, 64px) auto;
-  max-width: 28em;
-  letter-spacing: -0.005em;
-}
-
 /* AI. diagram — ASCII / monospace diagram container */
 .home-root .article-prose .diagram {
   font-family: var(--f-mono);
@@ -2240,62 +1904,174 @@
   letter-spacing: 0.02em;
 }
 
-/* AJ. flow — horizontal process flow, mono, arrows between terms */
-.home-root .article-prose .flow {
-  text-align: center;
-  font-family: var(--f-mono);
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  line-height: 1.8;
+/* ---- NEW editorial classes (added 2026-04) ---- */
+
+/* AM. definition — term + description box with accent rule and mono term label */
+.home-root .article-prose .definition {
+  position: relative;
+  padding: clamp(16px, 2vw, 22px) 0 clamp(14px, 1.6vw, 18px) clamp(18px, 2.2vw, 28px);
+  margin: clamp(24px, 3vw, 40px) 0;
+  border-left: 2px solid var(--ink);
+  font-size: 15px;
+  line-height: 1.75;
   color: var(--ink);
-  margin: clamp(28px, 3.4vw, 44px) 0;
-  padding: clamp(16px, 2vw, 24px) clamp(12px, 2vw, 20px);
-  border-top: 1px dashed var(--rule);
-  border-bottom: 1px dashed var(--rule);
+}
+.home-root .article-prose .definition::before {
+  content: "TERM";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.home-root .article-prose .definition > :first-child {
+  margin-top: 0;
+}
+.home-root .article-prose .definition > :last-child {
+  margin-bottom: 0;
+}
+.home-root .article-prose .definition strong {
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.002em;
+}
+
+/* AN. spec — key/value spec list, mono keys in left column, ink values in right */
+.home-root .article-prose .spec {
+  margin: clamp(24px, 3vw, 40px) 0;
+  padding: clamp(18px, 2.2vw, 24px) 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+.home-root .article-prose .spec::before {
+  content: "SPEC";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.home-root .article-prose .spec ul,
+.home-root .article-prose .spec ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.home-root .article-prose .spec li {
+  display: grid;
+  grid-template-columns: clamp(96px, 12vw, 140px) 1fr;
+  gap: clamp(14px, 2vw, 24px);
+  padding: 0;
+  margin: 0;
+  align-items: baseline;
+}
+.home-root .article-prose .spec li::before {
+  display: none;
+}
+.home-root .article-prose .spec li > strong:first-child {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--ink-mute);
+  font-weight: 500;
   text-transform: uppercase;
 }
-
-/* AK. annotation — labelled annotation with a leader line */
-.home-root .article-prose .annotation {
-  position: relative;
-  padding-left: clamp(28px, 3.4vw, 44px);
-  margin: clamp(20px, 2.4vw, 32px) 0;
-  font-family: var(--f-mono);
-  font-size: 12px;
-  line-height: 1.8;
-  color: var(--ink-soft);
-  letter-spacing: 0.04em;
-}
-.home-root .article-prose .annotation::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.75em;
-  width: clamp(18px, 2.4vw, 32px);
-  height: 1px;
-  background: var(--accent);
+@media (max-width: 640px) {
+  .home-root .article-prose .spec li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
 }
 
-/* AL. framed — neutral frame around image or block */
-.home-root .article-prose .framed {
-  border: 1px solid var(--ink-soft);
-  padding: clamp(14px, 1.8vw, 22px);
+/* AO. compare — 2-col editorial comparison (yes/no), ink labels, no colour fills */
+.home-root .article-prose .compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 2vw, 28px);
   margin: clamp(24px, 3vw, 40px) 0;
-  background: #fff;
   font-size: 14px;
   line-height: 1.75;
   color: var(--ink);
-  position: relative;
 }
-.home-root .article-prose .framed::after {
-  content: "";
-  position: absolute;
-  inset: -6px 0 0 -6px;
-  width: 14px;
-  height: 14px;
-  border-top: 1px solid var(--accent);
-  border-left: 1px solid var(--accent);
-  pointer-events: none;
+.home-root .article-prose .compare > * {
+  position: relative;
+  padding: clamp(14px, 1.8vw, 20px) 0 0;
+  border-top: 2px solid var(--ink);
+}
+.home-root .article-prose .compare > :first-child::before {
+  content: "YES";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.home-root .article-prose .compare > :last-child::before {
+  content: "NO";
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--ink-mute);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.home-root .article-prose .compare > :last-child {
+  border-top-color: var(--ink-mute);
+  color: var(--ink-soft);
+}
+@media (max-width: 640px) {
+  .home-root .article-prose .compare {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* AP. caption — figure / code / image caption, small mono with left accent rule */
+.home-root .article-prose .caption {
+  margin: clamp(6px, 0.8vw, 10px) 0 clamp(20px, 2.4vw, 32px);
+  padding-left: clamp(12px, 1.4vw, 18px);
+  border-left: 2px solid var(--accent);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+
+/* AQ. section-label — eyebrow shown above (or as the first line of) an h2 */
+.home-root .article-prose .section-label {
+  display: block;
+  margin: clamp(48px, 6vw, 80px) 0 clamp(10px, 1.2vw, 14px);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.home-root .article-prose .section-label + h2 {
+  margin-top: 0;
+}
+
+/* ---- reduced motion: opt out of transform/shadow tweaks on kept classes ---- */
+@media (prefers-reduced-motion: reduce) {
+  .home-root .article-prose * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 /* ---- rich-classes preview showcase (dev route /design/rich-classes) ---- */

@@ -8,8 +8,40 @@ import sanitizeHtmlLib from 'sanitize-html'
 import { connection } from 'next/server'
 
 /**
+ * tsutsu-site ブログで許可するエディトリアル装飾クラスのホワイトリスト。
+ * home.css 側の定義と 1:1 対応。ここに載っていないクラスは sanitize で除去される。
+ *
+ * 採用根拠: ai-secretary/.claude/agents/blog-writer.md（記事執筆エージェント仕様）。
+ */
+const ALLOWED_DECORATION_CLASSES = new Set<string>([
+  // Editorial core
+  'lead', 'tldr', 'key', 'pullquote', 'postscript', 'note', 'aside', 'warn',
+  // Structural
+  'step', 'stat', 'timeline', 'divider', 'update', 'section-label',
+  // Tech-specific
+  'terminal', 'diagram',
+  // Editorial additions (new)
+  'definition', 'spec', 'compare', 'caption',
+  // Inline
+  'bouten',
+])
+
+/**
+ * コードブロック / シンタックスハイライト用のクラス（hljs / language-xxx / filename等）を
+ * 許可するためのプレフィックス群。
+ */
+const ALLOWED_CLASS_PREFIXES = [
+  'hljs', 'language-', 'lang-', 'token', 'article-',
+] as const
+
+function isAllowedClass(cls: string): boolean {
+  if (ALLOWED_DECORATION_CLASSES.has(cls)) return true
+  return ALLOWED_CLASS_PREFIXES.some((p) => cls === p || cls.startsWith(p))
+}
+
+/**
  * HTMLコンテンツをサニタイズします
- * 
+ *
  * @param html - サニタイズするHTMLコンテンツ
  * @returns サニタイズされたHTMLコンテンツ
  */
@@ -36,6 +68,7 @@ export async function sanitizeHtml(html: string): Promise<string> {
         'title',
         'tabindex',
         'data-filename',
+        'data-date',
         'datetime',
         'dateTime',
       ],
@@ -48,6 +81,25 @@ export async function sanitizeHtml(html: string): Promise<string> {
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
     selfClosing: ['img', 'hr', 'br'],
     enforceHtmlBoundary: true,
+    transformTags: {
+      '*': (tagName, attribs) => {
+        const original = attribs.class
+        if (typeof original !== 'string' || original.length === 0) {
+          return { tagName, attribs }
+        }
+        const filtered = original
+          .split(/\s+/)
+          .filter((cls) => cls.length > 0 && isAllowedClass(cls))
+          .join(' ')
+        const next = { ...attribs }
+        if (filtered.length === 0) {
+          delete next.class
+        } else {
+          next.class = filtered
+        }
+        return { tagName, attribs: next }
+      },
+    },
   })
 
   // <p>タグ内の余分な空白行を削除
