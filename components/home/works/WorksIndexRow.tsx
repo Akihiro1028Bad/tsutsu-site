@@ -39,6 +39,13 @@ export default function WorksIndexRow({ work }: WorksIndexRowProps) {
             </span>
             <span className="t-jp">{work.summary}</span>
           </h2>
+          {work.stack.length > 0 ? (
+            <ul className="r-stack" aria-label="Stack">
+              {work.stack.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          ) : null}
           <div className="r-foot">
             <div className="r-client">
               <span className="lbl">Client</span>

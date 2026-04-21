@@ -64,7 +64,9 @@ describe("Phase 9: /works — index list", () => {
   it("renders one row per featured work", () => {
     render(<WorksPage />)
     const list = screen.getByRole("list", { name: /works index/i })
-    const items = within(list).getAllByRole("listitem")
+    // Count top-level <li> only — nested lists (e.g. stack chips) don't
+    // belong to the works-index count.
+    const items = list.querySelectorAll(":scope > li")
     expect(items).toHaveLength(WORKS_FEATURED.length)
   })
 
