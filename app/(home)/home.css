@@ -365,6 +365,8 @@
   background: linear-gradient(transparent 62%, var(--accent-soft) 62%);
   padding: 0 2px;
 }
+/* TODO(cleanup): .hero__scroll-cue is dead — never rendered by any TSX component.
+   Superseded by .hero__scroll-hint (Apr 2026 mobile rebalance). Remove in a follow-up PR. */
 .home-root .hero__scroll-cue {
   position: absolute;
   right: var(--pad-x);
@@ -411,6 +413,8 @@
   .home-root .hero__title-block {
     align-self: start;
   }
+  /* Specificity bump (.hero .hero__main = 0,3,0) needed to override
+     [data-style="modern"|"minimal"|"editorial-light"] .hero__main on mobile. */
   .home-root .hero .hero__main {
     font-size: clamp(56px, 14vw, 72px);
     line-height: 1.05;
