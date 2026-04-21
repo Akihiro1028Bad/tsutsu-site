@@ -27,7 +27,7 @@ export default function JournalSection({
           <p className="section-head__en">お知らせ・ブログ</p>
         </div>
         <p className="section-head__lead">
-          速報とじっくり、ふたつの時間軸で。
+          お知らせと、ブログの記事一覧。
         </p>
       </div>
 
