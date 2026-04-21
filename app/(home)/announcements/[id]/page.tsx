@@ -3,6 +3,7 @@ import { cacheTag, cacheLife } from 'next/cache'
 import { getListStatic, getDetailStatic } from '@/lib/microcms/server-client'
 import { Announcement } from '@/lib/types/announcement'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
+import ArticleBody from '@/components/ArticleBody'
 import AnnouncementDetail from '@/components/AnnouncementDetail'
 import type { ArticleSibling } from '@/components/ContentDetail'
 import { notFound } from 'next/navigation'
@@ -164,9 +165,9 @@ export default async function AnnouncementDetailPage({
   const siblings = pickSiblings(siblingList, id)
 
   return (
-    <main className="article-page" data-style="modern">
+    <ArticleBody>
       <AnnouncementDetail announcement={announcement} siblings={siblings} />
-    </main>
+    </ArticleBody>
   )
 }
 

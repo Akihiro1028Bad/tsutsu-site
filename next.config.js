@@ -15,6 +15,21 @@ const nextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        // Belt-and-suspenders protection for draft content:
+        //  - X-Robots-Tag stops crawlers that skip meta robots / JSON-LD.
+        //  - Referrer-Policy stops the draftKey leaking out via third-party
+        //    font CDN / analytics referers.
+        source: '/preview/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, nosnippet, noarchive' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

@@ -5,6 +5,7 @@ import { BlogPost } from '@/lib/types/blog'
 import { handleMicroCMSError } from '@/lib/utils/error-handler'
 import { getOptimizedImageUrl } from '@/lib/utils/blog'
 import { generateMetaDescription } from '@/lib/utils/text'
+import ArticleBody from '@/components/ArticleBody'
 import BlogDetail from '@/components/BlogDetail'
 import type { ArticleSibling } from '@/components/ContentDetail'
 import { notFound } from 'next/navigation'
@@ -283,9 +284,9 @@ export default async function BlogDetailPage({
   const siblings = pickSiblings(siblingList, slug)
 
   return (
-    <main className="article-page" data-style="modern">
+    <ArticleBody>
       <BlogDetail post={post} siblings={siblings} />
-    </main>
+    </ArticleBody>
   )
 }
 

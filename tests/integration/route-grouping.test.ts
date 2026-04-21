@@ -12,19 +12,6 @@ describe("Phase 0: Route Group restructure", () => {
       expect(existsSync(p("app/services/mens-esthe/page.tsx"))).toBe(false)
     })
 
-    it("places /preview dynamic routes under (site)", () => {
-      expect(
-        existsSync(p("app/(site)/preview/announcements/[id]/page.tsx"))
-      ).toBe(true)
-      expect(existsSync(p("app/(site)/preview/blog/[slug]/page.tsx"))).toBe(
-        true
-      )
-      expect(existsSync(p("app/preview/announcements/[id]/page.tsx"))).toBe(
-        false
-      )
-      expect(existsSync(p("app/preview/blog/[slug]/page.tsx"))).toBe(false)
-    })
-
     it("provides a (site) layout.tsx", () => {
       expect(existsSync(p("app/(site)/layout.tsx"))).toBe(true)
     })
@@ -52,6 +39,22 @@ describe("Phase 0: Route Group restructure", () => {
       expect(existsSync(p("app/(home)/announcements/[id]/page.tsx"))).toBe(true)
       expect(existsSync(p("app/(site)/announcements/page.tsx"))).toBe(false)
       expect(existsSync(p("app/announcements/page.tsx"))).toBe(false)
+    })
+
+    it("places /preview dynamic routes under (home) so they share HomeNav + article-page chrome", () => {
+      expect(
+        existsSync(p("app/(home)/preview/announcements/[id]/page.tsx"))
+      ).toBe(true)
+      expect(existsSync(p("app/(home)/preview/blog/[slug]/page.tsx"))).toBe(
+        true
+      )
+      // Old locations must be gone so no drift between prod and preview.
+      expect(
+        existsSync(p("app/(site)/preview/announcements/[id]/page.tsx"))
+      ).toBe(false)
+      expect(existsSync(p("app/(site)/preview/blog/[slug]/page.tsx"))).toBe(
+        false
+      )
     })
   })
 
