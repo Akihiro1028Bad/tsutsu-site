@@ -24,7 +24,8 @@ describe("Phase 4: ServicesSection — dark editorial section", () => {
     expect(
       screen.getByRole("heading", { level: 2, name: /services\./i })
     ).toBeInTheDocument()
-    expect(screen.getByText(/^02$/)).toBeInTheDocument()
+    // CountUp shows "00" pre-intersection; final value 02.
+    expect(screen.getByText(/^0[02]$/)).toBeInTheDocument()
   })
 
   it("renders one spread per service", () => {

@@ -1,3 +1,4 @@
+import CountUp from "@/components/motion/CountUp"
 import ContactForm from "@/components/home/ContactForm"
 
 interface AsideItem {
@@ -35,7 +36,9 @@ export default function ContactSection() {
     <section id="contact" className="contact">
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
-          <span>05</span>
+          <span>
+            <CountUp end={5} pad={2} duration={900} />
+          </span>
           <span>Contact</span>
         </div>
         <div className="section-head__jp">

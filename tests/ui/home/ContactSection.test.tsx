@@ -23,7 +23,8 @@ describe("Phase 6: ContactSection — editorial 05 block", () => {
     expect(
       screen.getByRole("heading", { level: 2, name: /contact\./i })
     ).toBeInTheDocument()
-    expect(screen.getByText(/^05$/)).toBeInTheDocument()
+    // CountUp shows "00" pre-intersection; final value 05.
+    expect(screen.getByText(/^0[05]$/)).toBeInTheDocument()
   })
 
   it("hosts the contact form", () => {

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import CountUp from "@/components/motion/CountUp"
 import JournalListRow from "@/components/home/JournalListRow"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
 import type {
@@ -19,7 +20,9 @@ export default function JournalSection({
     <section id="notes" className="journal">
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
-          <span>04</span>
+          <span>
+            <CountUp end={4} pad={2} duration={900} />
+          </span>
           <span>Journal</span>
         </div>
         <div className="section-head__jp">

@@ -1,3 +1,4 @@
+import CountUp from "@/components/motion/CountUp"
 import WorksCard from "@/components/home/WorksCard"
 import { WORKS_FEATURED, WORKS_INDEX_HREF } from "@/lib/home/works-data"
 
@@ -6,7 +7,9 @@ export default function WorksSection() {
     <section id="works" className="works">
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
-          <span>01</span>
+          <span>
+            <CountUp end={1} pad={2} duration={900} />
+          </span>
           <span>Works</span>
         </div>
         <div className="section-head__jp">

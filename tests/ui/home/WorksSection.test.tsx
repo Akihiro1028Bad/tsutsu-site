@@ -52,8 +52,8 @@ describe("Phase 3: WorksSection — editorial section head & feature card", () =
     render(<WorksSection />)
     const heading = screen.getByRole("heading", { level: 2, name: /works\./i })
     expect(heading).toBeInTheDocument()
-    // Number prefix
-    expect(screen.getByText(/^01$/)).toBeInTheDocument()
+    // Number prefix — CountUp shows "00" pre-intersection; final value 01.
+    expect(screen.getByText(/^0[01]$/)).toBeInTheDocument()
   })
 
   it("renders one article per featured work", () => {

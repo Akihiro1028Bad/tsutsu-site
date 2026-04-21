@@ -1,3 +1,4 @@
+import CountUp from "@/components/motion/CountUp"
 import { SERVICES } from "@/lib/home/services-data"
 
 export default function ServicesSection() {
@@ -5,7 +6,9 @@ export default function ServicesSection() {
     <section id="services" className="services" data-theme="dark">
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
-          <span>02</span>
+          <span>
+            <CountUp end={2} pad={2} duration={900} />
+          </span>
           <span>Services</span>
         </div>
         <div className="section-head__jp">

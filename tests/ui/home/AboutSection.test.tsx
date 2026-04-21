@@ -32,7 +32,8 @@ describe("Phase 4: AboutSection — profile section", () => {
     expect(
       screen.getByRole("heading", { level: 2, name: /about\./i })
     ).toBeInTheDocument()
-    expect(screen.getByText(/^03$/)).toBeInTheDocument()
+    // CountUp shows "00" pre-intersection; final value 03.
+    expect(screen.getByText(/^0[03]$/)).toBeInTheDocument()
   })
 
   it("shows the bilingual name", () => {

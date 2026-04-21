@@ -1,5 +1,6 @@
 import Image from "next/image"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
+import MaskReveal from "@/components/motion/MaskReveal"
 import Parallax from "@/components/motion/Parallax"
 import type { FeaturedWork } from "@/lib/types/home"
 
@@ -31,16 +32,18 @@ export default function WorksCard({ work }: WorksCardProps) {
             </ul>
           </div>
           <figure className="work-feature__thumb">
-            <Parallax offset={-60} className="work-feature__thumb-inner">
-              <Image
-                src={work.image.src}
-                alt={work.image.alt}
-                width={work.image.width}
-                height={work.image.height}
-                sizes="(max-width: 900px) 100vw, 60vw"
-                loading="lazy"
-              />
-            </Parallax>
+            <MaskReveal from="bottom" duration={1000} className="work-feature__thumb-mask">
+              <Parallax offset={-60} className="work-feature__thumb-inner">
+                <Image
+                  src={work.image.src}
+                  alt={work.image.alt}
+                  width={work.image.width}
+                  height={work.image.height}
+                  sizes="(max-width: 900px) 100vw, 60vw"
+                  loading="lazy"
+                />
+              </Parallax>
+            </MaskReveal>
             <span className="work-feature__extlink" aria-hidden="true">
               <span className="work-feature__extlink-icon work-feature__extlink-icon--default">
                 ↗

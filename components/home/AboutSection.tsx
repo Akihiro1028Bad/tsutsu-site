@@ -1,3 +1,4 @@
+import CountUp from "@/components/motion/CountUp"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
 import { ABOUT } from "@/lib/home/about-data"
 
@@ -6,7 +7,9 @@ export default function AboutSection() {
     <section id="about" className="about">
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
-          <span>03</span>
+          <span>
+            <CountUp end={3} pad={2} duration={900} />
+          </span>
           <span>About</span>
         </div>
         <div className="section-head__jp">

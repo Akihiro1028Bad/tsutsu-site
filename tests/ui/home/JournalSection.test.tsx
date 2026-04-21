@@ -86,7 +86,8 @@ describe("Phase 5: JournalSection — News + Blog fused editorial block", () => 
     expect(
       screen.getByRole("heading", { level: 2, name: /journal\./i })
     ).toBeInTheDocument()
-    expect(screen.getByText(/^04$/)).toBeInTheDocument()
+    // CountUp shows "00" pre-intersection; final value 04.
+    expect(screen.getByText(/^0[04]$/)).toBeInTheDocument()
   })
 
   it("renders the News. label group", () => {
