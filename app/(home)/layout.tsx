@@ -6,6 +6,7 @@ import {
 } from "next/font/google"
 import HomeNav from "@/components/home/HomeNav"
 import HomeFooter from "@/components/home/HomeFooter"
+import MotionProvider from "@/components/motion/MotionProvider"
 import "./home.css"
 
 // Latin-only display fonts: cheap to preload.
@@ -53,9 +54,11 @@ export default function HomeLayout({
 }) {
   return (
     <div className={`home-root ${fontVariableClass}`}>
-      <HomeNav />
-      {children}
-      <HomeFooter />
+      <MotionProvider>
+        <HomeNav />
+        {children}
+        <HomeFooter />
+      </MotionProvider>
     </div>
   )
 }
