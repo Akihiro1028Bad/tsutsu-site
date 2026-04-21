@@ -394,6 +394,11 @@
     display: none;
   }
 }
+
+.home-root .hero__scroll-hint {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .home-root .hero {
     padding-top: 88px;
@@ -447,10 +452,6 @@
     color: var(--ink-mute);
     opacity: 0.55;
   }
-}
-
-.home-root .hero__scroll-hint {
-  display: none;
 }
 
 /* hero -> first section seam */
