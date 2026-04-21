@@ -4,6 +4,7 @@ const nextConfig = {
   cacheComponents: true,
   experimental: {
     optimizePackageImports: ['lucide-react'],
+    viewTransition: true,
   },
   images: {
     remotePatterns: [
