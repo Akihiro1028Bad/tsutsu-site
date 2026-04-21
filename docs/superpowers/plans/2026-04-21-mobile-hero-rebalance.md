@@ -4,7 +4,7 @@
 
 **Goal:** モバイル (≤640px) ヒーローのデッドスペース 323px を 80px に圧縮し、stagger reveal + scroll hint で「呼吸する間」に転化する。デスクトップ表示は不変。
 
-**Architecture:** `HeroSection.tsx` の `<h1>` を 3 行 `<span>` に分割し、`<aside>` で scroll hint を追加。`home.css` の Hero ブロックに `@media (max-width: 640px)` を追加し、stagger 用 `animation-delay` を span 別に設定。`prefers-reduced-motion` 既存ブロックを拡張。
+**Architecture:** `HeroSection.tsx` の `<h1>` を 3 行 `<span>` に分割し、`<div class="hero__scroll-hint" aria-hidden="true">` で scroll hint を追加。`home.css` の Hero ブロックに `@media (max-width: 640px)` を追加し、stagger 用 `animation-delay` を span 別に設定。`prefers-reduced-motion` 既存ブロックを拡張。
 
 **Tech Stack:** Next.js 16 (App Router), React 19, TypeScript, vitest + @testing-library/react, Chrome DevTools MCP（モバイル emulation）
 

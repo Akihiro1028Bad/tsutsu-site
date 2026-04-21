@@ -59,7 +59,9 @@ describe("Phase 3: HeroSection — editorial first-fold", () => {
     const hint = banner.querySelector(".hero__scroll-hint")
     expect(hint).not.toBeNull()
     expect(hint).toHaveAttribute("aria-hidden", "true")
-    expect(hint?.textContent).toMatch(/SCROLL/)
+    expect(hint?.querySelector(".hero__scroll-hint__line")).not.toBeNull()
+    const label = hint?.querySelector(".hero__scroll-hint__label")
+    expect(label?.textContent).toMatch(/SCROLL/)
   })
 
 })
