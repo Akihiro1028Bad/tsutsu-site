@@ -114,6 +114,10 @@ export async function sanitizeHtml(html: string): Promise<string> {
       use: ['href', 'xlink:href'],
     },
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    // SVG の camelCase 属性（viewBox / preserveAspectRatio / markerWidth 等）は、
+    // htmlparser2 のデフォルトで小文字化されて allowedAttributes と照合できなくなる。
+    // lowerCaseAttributeNames:false で大文字小文字を保ったまま照合する。
+    parser: { lowerCaseAttributeNames: false },
     // Mermaid/SVG self-closing + 従来の img/hr/br
     selfClosing: [
       'img', 'hr', 'br',

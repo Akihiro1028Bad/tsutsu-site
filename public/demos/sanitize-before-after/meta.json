@@ -1,0 +1,14 @@
+{
+  "slug": "sanitize-before-after",
+  "concept": "Mermaid SVG が sanitize-html の class フィルタで崩壊 → SVG 系タグの class を素通しにして復活、という Before/After を左右スライダーで比較",
+  "type": "before-after",
+  "versions": [
+    {
+      "version": 1,
+      "writtenAt": "2026-04-21T13:14:04.865Z",
+      "size": 6726
+    }
+  ],
+  "createdAt": "2026-04-21T13:14:04.861Z",
+  "updatedAt": "2026-04-21T13:14:04.862Z"
+}
