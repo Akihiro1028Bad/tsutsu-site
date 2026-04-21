@@ -1,0 +1,14 @@
+{
+  "slug": "claude-evolution-timeline",
+  "concept": "Claude の主要リリースを時系列で一覧",
+  "type": "timeline",
+  "versions": [
+    {
+      "version": 1,
+      "writtenAt": "2026-04-21T09:19:49.500Z",
+      "size": 3753
+    }
+  ],
+  "createdAt": "2026-04-21T09:19:49.497Z",
+  "updatedAt": "2026-04-21T09:19:49.497Z"
+}

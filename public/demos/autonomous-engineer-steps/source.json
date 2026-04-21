@@ -1,0 +1,30 @@
+{
+  "title": "朝ブリーフから microCMS 下書きまでの 6 ステップ",
+  "description": "僕が朝起きる前と起きてからに、Claude Code の自律ループが何をしているか。Prev / Next で 1 日ぶんを追えます。",
+  "steps": [
+    {
+      "label": "07:00 launchd が起動",
+      "body": "Mac の <code>launchd</code>（OS 標準のジョブスケジューラ）に仕込んだ <code>com.tsutsumi.daily-brief.plist</code> が発火し、ヘッドレス Claude Code に <strong>「朝のブリーフを実行」</strong> というプロンプトを投入します。僕はまだ寝ています。"
+    },
+    {
+      "label": "並列起動 (calendar + news)",
+      "body": "親エージェント <code>ai-secretary</code> が <strong>calendar-watcher</strong>（Google Calendar から今日の予定を取得）と <strong>news-curator</strong>（登録済み RSS を巡回）を <em>並列</em> に起動。出力は <code>daily/2026-04-21.md</code> に append されます。"
+    },
+    {
+      "label": "ネタ提案 (blog-seed)",
+      "body": "news-curator の出力を受けて <strong>blog-seed</strong> が起動し、今日書けそうな記事案を <strong>3 本</strong> 生成します。各案にはタイトル、想定ペルソナ、リード文が 1 行ずつ。これも同じ daily ノートに追記されて、通知で先頭 3 行がプッシュされます。"
+    },
+    {
+      "label": "著者が選ぶ",
+      "body": "通知を見た僕が ai-secretary に返信する形で <code>「2 番、A と F で」</code> のように <strong>ネタ番号とペルソナ</strong>を指定。ここだけが人間の判断で、あとは再び自走します。ペルソナ未指定のまま執筆には入らないのが掟。"
+    },
+    {
+      "label": "執筆 → レビューのループ (最大 3 回)",
+      "body": "<strong>blog-writer</strong> が <code>drafts/YYYY-MM-DD-slug.md</code> に本文を生成 → <strong>blog-reviewer</strong> が静的チェッカ + LLM レビューで判定。<em>要修正</em> なら指摘を添えて writer に差し戻し。3 回回しても残った指摘は僕の判断待ちキューに入ります。"
+    },
+    {
+      "label": "承認 → microCMS に下書き投稿",
+      "body": "「<strong>公開 OK</strong>」を受けた僕が <code>microCMS に投稿して</code> と言った瞬間、<code>publish-draft.mjs</code> が下書き API に POST。公開ボタンは押さず <strong>下書き状態</strong> で止めます。最終チェックと公開は管理画面で手動。ここが A モードの生命線。"
+    }
+  ]
+}
