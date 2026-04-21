@@ -393,7 +393,7 @@
   .home-root .hero__title-block {
     align-self: start;
   }
-  .home-root .hero__main {
+  .home-root .hero .hero__main {
     font-size: clamp(56px, 14vw, 72px);
     line-height: 1.05;
   }
