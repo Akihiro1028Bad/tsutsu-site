@@ -200,11 +200,8 @@
 
 @media (max-width: 760px) {
   .home-root .home-nav {
-    background: color-mix(in oklch, var(--bg) 92%, transparent);
-    backdrop-filter: blur(8px);
-  }
-  .home-root .home-nav[data-theme="dark"] {
-    background: color-mix(in oklch, var(--ink) 92%, transparent);
+    background: transparent;
+    backdrop-filter: none;
   }
   .home-root .home-nav__toggle {
     display: inline-flex;
@@ -220,12 +217,16 @@
     flex-direction: column;
     gap: 0;
     padding: 8px var(--pad-x) 32px;
-    background: inherit;
+    background: color-mix(in oklch, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px);
     border-top: 1px solid var(--rule);
     transform: translateY(-12px);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .home-root .home-nav[data-theme="dark"] .home-nav__list {
+    background: color-mix(in oklch, var(--ink) 92%, transparent);
   }
   .home-root .home-nav__list[data-open="true"] {
     transform: none;
