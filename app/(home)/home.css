@@ -1545,7 +1545,7 @@
 .home-root .article-prose h2 {
   font-family: var(--f-body);
   font-weight: 700;
-  font-size: clamp(20px, 1.8vw, 24px);
+  font-size: clamp(22px, 1.8vw, 24px);  /* モバイル下限 22px: lead 18px との格差を確保し見出しの格を保つ */
   line-height: 1.35;
   margin-top: clamp(40px, 5vw, 64px);
   margin-bottom: 0.6em;
@@ -1810,6 +1810,19 @@
   color: var(--ink-mute);
   font-weight: 400;
   opacity: 0.7;
+}
+/* Mobile: note の 60px 左パディングが狭い画面で幅を圧迫するので step と同様に
+   eyebrow を block にして真上に置く。step::before (1968-1978 行) と同じパターン。 */
+@media (max-width: 640px) {
+  .home-root .article-prose .note {
+    padding-left: 0;
+  }
+  .home-root .article-prose .note::before {
+    position: static;
+    display: block;
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
 }
 
 /* D. warn — caution block */
@@ -2297,6 +2310,39 @@
 }
 .home-root .article-prose .section-label + h2 {
   margin-top: 0;
+}
+
+/* =========================================================================
+   M3 Mobile refinement — "narrow-reading comfort"
+   狭い画面（〜640px）では以下を調整して読み味を整える:
+     - 本文 16px → 17px に微増（iPhone で 16px は詰まって見える傾向）
+     - lead 18px は維持（見出し的な役割）
+     - eyebrow は 10px 下限（9.5px はモバイル閾値下）
+     - 装飾の左パディング縮小（段組内の本文が狭くなり過ぎないように）
+     - h2 は 22px 下限（lead との格差維持、対応は上の h2 定義側で済み）
+   ========================================================================= */
+@media (max-width: 640px) {
+  .home-root .article-prose {
+    font-size: 17px;
+  }
+  .home-root .article-prose .note::before,
+  .home-root .article-prose .key::before,
+  .home-root .article-prose .tldr::before,
+  .home-root .article-prose .warn::before,
+  .home-root .article-prose .definition::before,
+  .home-root .article-prose .spec::before,
+  .home-root .article-prose .compare > :first-child::before,
+  .home-root .article-prose .compare > :last-child::before {
+    font-size: 10px;
+  }
+  /* definition の左パディングを縮小（狭い幅で本文領域を確保） */
+  .home-root .article-prose .definition {
+    padding-left: 14px;
+  }
+  /* key の左バー内側パディングも軽量化 */
+  .home-root .article-prose .key {
+    padding-left: 12px;
+  }
 }
 
 /* ---- reduced motion: opt out of transform/shadow tweaks on kept classes ---- */
