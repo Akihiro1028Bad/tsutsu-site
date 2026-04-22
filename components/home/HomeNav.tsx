@@ -55,6 +55,11 @@ export default function HomeNav() {
 
     sections.forEach(({ el }) => observer.observe(el))
     return () => observer.disconnect()
+    // Intentionally [] — sections are discovered from `NAV_ITEMS`, which is
+    // module-level and stable. The current (home) layout is anchor-based, so
+    // client-side navigation within the group doesn't swap section DOM. If a
+    // future sub-page needs its own observed sections, add `pathname` (or a
+    // route-scoped section list) to the deps and verify re-init semantics.
   }, [])
 
   // Esc closes the mobile disclosure.

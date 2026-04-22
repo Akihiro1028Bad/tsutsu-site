@@ -80,6 +80,14 @@ export async function sanitizeHtml(html: string): Promise<string> {
       'mask', 'title', 'desc', 'style',
     ],
     allowedAttributes: {
+      // Trust model: microCMS content is authored only by the site owner.
+      // `style` is intentionally allowlisted globally because article body
+      // styling (Mermaid SVG CSS, Shiki inline colours, figure overrides)
+      // relies on it. This is safe ONLY as long as the content source stays
+      // single-author. If the CMS ever ingests third-party or user-submitted
+      // content, `style` must be removed from the `'*'` list (CSS can exfil
+      // via `background: url(...)`, overlay-phish via `position: fixed`,
+      // and visually track via `background-image` beacons).
       '*': [
         'class',
         'id',

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface HtmlEmbedProps {
   /** Raw HTML — may include <style> and <script> — rendered in a sandboxed iframe. */
@@ -29,9 +29,17 @@ export default function HtmlEmbed({
   title = "Embedded content",
 }: HtmlEmbedProps) {
   const [height, setHeight] = useState<number>(minHeight)
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
 
   useEffect(() => {
     function onMessage(event: MessageEvent) {
+      // Only trust messages from our own iframe. Without this guard, any
+      // other frame on the page (or a browser extension content script)
+      // could post a spoofed height message and inflate this iframe's
+      // height unboundedly. Mirrors the same guard in ProseContent.tsx.
+      if (event.source !== iframeRef.current?.contentWindow) {
+        return
+      }
       const data = event.data
       if (
         !data ||
@@ -56,6 +64,7 @@ export default function HtmlEmbed({
 
   return (
     <iframe
+      ref={iframeRef}
       title={title}
       srcDoc={buildEmbedDocument(html)}
       sandbox="allow-scripts allow-popups"

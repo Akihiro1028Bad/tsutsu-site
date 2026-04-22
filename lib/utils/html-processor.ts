@@ -50,6 +50,15 @@ export function extractCodeBlocks(html: string): CodeBlock[] {
     if (dataFilenameMatch) {
       filename = dataFilenameMatch[1].trim()
     } else {
+      // Legacy fallback: the outer regex is non-greedy and stops at the
+      // first `</div>`, so in practice `blockContent` cannot both contain a
+      // nested `<div class="code-filename">...</div>` AND the required
+      // `<pre><code>...` that gates `codeBlocks.push()` below. This branch
+      // is therefore unreachable given real-world input shapes and is kept
+      // only as defensive scaffolding for a flatter legacy format that no
+      // longer exists. Excluded from coverage to avoid forcing a synthetic
+      // test that wouldn't match any real CMS output.
+      /* v8 ignore next 4 */
       const filenameMatch = blockContent.match(/<div[^>]*class="[^"]*code-filename[^"]*"[^>]*>([^<]+)<\/div>/i)
       if (filenameMatch) {
         filename = filenameMatch[1].trim()
@@ -194,6 +203,9 @@ function escapeHtml(text: string): string {
     "'": '&#39;',
   }
   
+  // The regex class `[&<>"']` only matches the exact 5 keys of `map`, so
+  // the `|| char` fallback is defensive and cannot be reached in practice.
+  /* v8 ignore next */
   return text.replace(/[&<>"']/g, (char) => map[char] || char)
 }
 

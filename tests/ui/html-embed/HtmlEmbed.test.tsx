@@ -4,6 +4,23 @@ import HtmlEmbed from "@/components/HtmlEmbed"
 
 afterEach(cleanup)
 
+/**
+ * Dispatch a "message" event on window as if it came from a given iframe.
+ * The component validates `event.source === iframeRef.current.contentWindow`,
+ * so tests must forge the `source` to match the rendered iframe.
+ */
+function postFromIframe(
+  iframe: HTMLIFrameElement,
+  data: unknown,
+): void {
+  const event = new MessageEvent("message", { data })
+  Object.defineProperty(event, "source", {
+    value: iframe.contentWindow,
+    configurable: true,
+  })
+  window.dispatchEvent(event)
+}
+
 describe("HtmlEmbed", () => {
   it("renders nothing when html is empty", () => {
     const { container } = render(<HtmlEmbed html="" />)
@@ -46,69 +63,65 @@ describe("HtmlEmbed", () => {
 
   it("grows height when a larger height message arrives", () => {
     render(<HtmlEmbed html="<p>hi</p>" minHeight={200} />)
-    act(() => {
-      window.dispatchEvent(
-        new MessageEvent("message", {
-          data: { type: "tsutsu-embed-height", value: 512 },
-        })
-      )
-    })
     const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
+    act(() => {
+      postFromIframe(iframe, { type: "tsutsu-embed-height", value: 512 })
+    })
     expect(iframe.style.height).toBe("512px")
   })
 
   it("keeps height at minHeight when a smaller height is posted", () => {
     render(<HtmlEmbed html="<p>hi</p>" minHeight={400} />)
-    act(() => {
-      window.dispatchEvent(
-        new MessageEvent("message", {
-          data: { type: "tsutsu-embed-height", value: 100 },
-        })
-      )
-    })
     const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
+    act(() => {
+      postFromIframe(iframe, { type: "tsutsu-embed-height", value: 100 })
+    })
     expect(iframe.style.height).toBe("400px")
   })
 
   it("ignores messages with the wrong type", () => {
     render(<HtmlEmbed html="<p>hi</p>" minHeight={220} />)
-    act(() => {
-      window.dispatchEvent(
-        new MessageEvent("message", {
-          data: { type: "other", value: 800 },
-        })
-      )
-    })
     const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
+    act(() => {
+      postFromIframe(iframe, { type: "other", value: 800 })
+    })
     expect(iframe.style.height).toBe("220px")
   })
 
   it("ignores non-object message data", () => {
     render(<HtmlEmbed html="<p>hi</p>" minHeight={200} />)
+    const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
     act(() => {
-      window.dispatchEvent(new MessageEvent("message", { data: "string" }))
-      window.dispatchEvent(new MessageEvent("message", { data: null }))
+      postFromIframe(iframe, "string")
+      postFromIframe(iframe, null)
+      postFromIframe(iframe, { type: "tsutsu-embed-height", value: "not-number" })
+    })
+    expect(iframe.style.height).toBe("200px")
+  })
+
+  it("ignores messages from other frames (event.source mismatch)", () => {
+    render(<HtmlEmbed html="<p>hi</p>" minHeight={180} />)
+    const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
+    // A spoofed message with no `source` (or a foreign source) must not
+    // grow the iframe — this is the core security guard.
+    act(() => {
       window.dispatchEvent(
         new MessageEvent("message", {
-          data: { type: "tsutsu-embed-height", value: "not-number" },
-        })
+          data: { type: "tsutsu-embed-height", value: 9999 },
+        }),
       )
     })
-    const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
-    expect(iframe.style.height).toBe("200px")
+    expect(iframe.style.height).toBe("180px")
   })
 
   it("cleans up the message listener on unmount", () => {
     const { unmount } = render(<HtmlEmbed html="<p>hi</p>" minHeight={150} />)
+    const iframe = screen.getByTitle("Embedded content") as HTMLIFrameElement
     unmount()
     // Dispatching after unmount should not throw; there's nothing to assert
     // beyond the act not warning / state not changing after unmount.
     expect(() => {
-      window.dispatchEvent(
-        new MessageEvent("message", {
-          data: { type: "tsutsu-embed-height", value: 999 },
-        })
-      )
+      postFromIframe(iframe, { type: "tsutsu-embed-height", value: 999 })
     }).not.toThrow()
   })
 })

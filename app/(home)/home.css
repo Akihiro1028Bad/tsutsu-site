@@ -359,35 +359,9 @@
   background: linear-gradient(transparent 62%, var(--accent-soft) 62%);
   padding: 0 2px;
 }
-/* TODO(cleanup): .hero__scroll-cue is dead — never rendered by any TSX component.
-   Superseded by .hero__scroll-hint (Apr 2026 mobile rebalance). Remove in a follow-up PR. */
-.home-root .hero__scroll-cue {
-  position: absolute;
-  right: var(--pad-x);
-  top: clamp(110px, 16vh, 160px);
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-.home-root .hero__scroll-cue::before {
-  content: "";
-  display: block;
-  width: 1px;
-  height: 44px;
-  background: var(--ink-mute);
-  margin: 0 auto 14px;
-  opacity: 0.6;
-}
 @media (max-width: 900px) {
   .home-root .hero__sub {
     grid-column: 1 / -1;
-  }
-  .home-root .hero__scroll-cue {
-    display: none;
   }
 }
 
