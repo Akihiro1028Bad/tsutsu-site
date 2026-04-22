@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest"
 import { render, cleanup } from "@testing-library/react"
 
-const { lenisCtor, lenisDestroy, lenisRaf, pathnameRef } = vi.hoisted(() => {
+const { lenisCtor, lenisDestroy, lenisRaf } = vi.hoisted(() => {
   const destroy = vi.fn()
   const raf = vi.fn()
   const ctor = vi.fn(() => ({ destroy, raf }))
@@ -9,16 +9,11 @@ const { lenisCtor, lenisDestroy, lenisRaf, pathnameRef } = vi.hoisted(() => {
     lenisCtor: ctor,
     lenisDestroy: destroy,
     lenisRaf: raf,
-    pathnameRef: { value: "/" as string },
   }
 })
 
 vi.mock("lenis", () => ({
   default: lenisCtor,
-}))
-
-vi.mock("next/navigation", () => ({
-  usePathname: () => pathnameRef.value,
 }))
 
 import MotionProvider from "@/components/motion/MotionProvider"
@@ -51,7 +46,6 @@ describe("MotionProvider", () => {
     lenisCtor.mockClear()
     lenisDestroy.mockClear()
     lenisRaf.mockClear()
-    pathnameRef.value = "/"
     sessionStorage.clear()
   })
 
@@ -111,23 +105,4 @@ describe("MotionProvider", () => {
     expect(window.cancelAnimationFrame).toHaveBeenCalled()
   })
 
-  it("mounts the Loader on non-preview routes (first visit)", () => {
-    mockMatchMedia({
-      "(pointer: fine)": true,
-      "(prefers-reduced-motion: reduce)": false,
-    })
-    pathnameRef.value = "/"
-    const { container } = render(<MotionProvider>x</MotionProvider>)
-    expect(container.querySelector("[data-loader]")).not.toBeNull()
-  })
-
-  it("suppresses the Loader on /preview/* routes", () => {
-    mockMatchMedia({
-      "(pointer: fine)": true,
-      "(prefers-reduced-motion: reduce)": false,
-    })
-    pathnameRef.value = "/preview/blog/sample"
-    const { container } = render(<MotionProvider>x</MotionProvider>)
-    expect(container.querySelector("[data-loader]")).toBeNull()
-  })
 })

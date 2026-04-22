@@ -1,11 +1,9 @@
 "use client"
 
 import { Suspense, useEffect } from "react"
-import { usePathname } from "next/navigation"
 import Lenis from "lenis"
 import CustomCursor from "@/components/motion/CustomCursor"
 import GrainOverlay from "@/components/motion/GrainOverlay"
-import Loader from "@/components/motion/Loader"
 import { useIsDesktop } from "@/lib/motion/use-is-desktop"
 import { useReducedMotion } from "@/lib/motion/use-reduced-motion"
 
@@ -19,8 +17,6 @@ interface MotionProviderProps {
  * - Lenis (smooth scroll) is mounted only on desktop (`pointer: fine`) and
  *   only when the user has not requested reduced motion. On mobile and for
  *   reduced-motion users, native scrolling is preserved untouched.
- * - The Loader is suppressed on `/preview/*` surfaces so editors don't get
- *   the intro curtain on every preview reload.
  * - All dynamic client-hook reads live in {@link MotionEffects} which sits
  *   behind a Suspense boundary — Next.js 16's cacheComponents requires
  *   that uncached data is not accessed at the module's top level.
@@ -40,8 +36,6 @@ export default function MotionProvider({ children }: MotionProviderProps) {
 function MotionEffects() {
   const isDesktop = useIsDesktop()
   const reducedMotion = useReducedMotion()
-  const pathname = usePathname()
-  const isPreview = pathname?.startsWith("/preview") ?? false
 
   useEffect(() => {
     if (!isDesktop || reducedMotion) {
@@ -64,10 +58,5 @@ function MotionEffects() {
     }
   }, [isDesktop, reducedMotion])
 
-  return (
-    <>
-      <CustomCursor />
-      {!isPreview && <Loader />}
-    </>
-  )
+  return <CustomCursor />
 }

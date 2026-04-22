@@ -338,62 +338,6 @@ html.has-custom-cursor label {
 }
 
 /* ============================================================
-   Intro loader — first-visit curtain. Dark overlay + brand mark,
-   fades out. Only the `show` / `exit` phases render; once exited
-   the node is removed. Kept above grain and cursor.
-   ============================================================ */
-[data-loader] {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: grid;
-  place-items: center;
-  background: #0c0c0c;
-  color: #f7f3ec;
-  font-family: var(--f-en, "Canela", "Cormorant Garamond", Georgia, serif);
-  font-size: clamp(44px, 8vw, 96px);
-  letter-spacing: -0.02em;
-  font-weight: 400;
-  animation: tsutsu-loader-in 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-[data-loader][data-phase="exit"] {
-  animation: tsutsu-loader-out 600ms cubic-bezier(0.7, 0, 0.2, 1) both;
-}
-[data-loader-mark] {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 1px;
-  opacity: 0;
-  transform: translateY(12px);
-  animation: tsutsu-loader-mark-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) 120ms both;
-}
-[data-loader-mark] > span:last-child {
-  color: #b35a3b;
-}
-@keyframes tsutsu-loader-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes tsutsu-loader-out {
-  to {
-    opacity: 0;
-    clip-path: inset(0 0 100% 0);
-  }
-}
-@keyframes tsutsu-loader-mark-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-loader],
-  [data-loader-mark] {
-    animation: none;
-  }
-}
-
-/* ============================================================
    Preview banner — thin fixed strip on /preview/* surfaces.
    When mounted, <html> gets `.has-preview-banner` and the body /
    home-nav are pushed down by --preview-offset so the banner does
