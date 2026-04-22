@@ -14,7 +14,7 @@ export const ABOUT: AboutPayload = Object.freeze({
     Object.freeze([
       m("元消防士のフリーランスエンジニア"),
       t(
-        "。4年間の現場経験を経て、独学でプログラミングを学び、3年前にエンジニアへ転身しました。"
+        "。4年間の消防士経験を経て、独学でプログラミングを学び、3年前にエンジニアへ転身しました。"
       ),
     ]),
     Object.freeze([
