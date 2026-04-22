@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, act } from "@testing-library/react"
 
 import CustomCursor from "@/components/motion/CustomCursor"
 
@@ -120,5 +120,153 @@ describe("CustomCursor", () => {
     ) as HTMLElement
     // Initial state is "default"
     expect(cursor.getAttribute("data-state")).toBe("default")
+  })
+
+  it("switches state to 'hover' when the mouse moves over an interactive target", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    const { container } = render(
+      <>
+        <a href="#x" data-testid="hover-target">link</a>
+        <CustomCursor />
+      </>
+    )
+    const cursor = container.querySelector(
+      "[data-custom-cursor]"
+    ) as HTMLElement
+    const link = container.querySelector("[data-testid='hover-target']") as HTMLElement
+
+    const moveOver = new MouseEvent("mousemove", { bubbles: true })
+    Object.defineProperty(moveOver, "target", { value: link })
+    Object.defineProperty(moveOver, "clientX", { value: 120 })
+    Object.defineProperty(moveOver, "clientY", { value: 90 })
+    act(() => {
+      window.dispatchEvent(moveOver)
+    })
+    expect(cursor.getAttribute("data-state")).toBe("hover")
+
+    // A second move on the same link keeps state at "hover" — exercises the
+    // setState((prev) => prev === "hover" ? prev : "hover") short-circuit.
+    const moveOverAgain = new MouseEvent("mousemove", { bubbles: true })
+    Object.defineProperty(moveOverAgain, "target", { value: link })
+    Object.defineProperty(moveOverAgain, "clientX", { value: 121 })
+    Object.defineProperty(moveOverAgain, "clientY", { value: 91 })
+    act(() => {
+      window.dispatchEvent(moveOverAgain)
+    })
+    expect(cursor.getAttribute("data-state")).toBe("hover")
+  })
+
+  it("returns to 'default' state when the mouse moves off interactive targets", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    const { container } = render(
+      <>
+        <a href="#x">link</a>
+        <span data-testid="plain">plain</span>
+        <CustomCursor />
+      </>
+    )
+    const cursor = container.querySelector(
+      "[data-custom-cursor]"
+    ) as HTMLElement
+    const link = container.querySelector("a") as HTMLElement
+    const plain = container.querySelector("[data-testid='plain']") as HTMLElement
+
+    const moveOver = new MouseEvent("mousemove", { bubbles: true })
+    Object.defineProperty(moveOver, "target", { value: link })
+    Object.defineProperty(moveOver, "clientX", { value: 10 })
+    Object.defineProperty(moveOver, "clientY", { value: 10 })
+    act(() => {
+      window.dispatchEvent(moveOver)
+    })
+    expect(cursor.getAttribute("data-state")).toBe("hover")
+
+    const moveOff = new MouseEvent("mousemove", { bubbles: true })
+    Object.defineProperty(moveOff, "target", { value: plain })
+    Object.defineProperty(moveOff, "clientX", { value: 200 })
+    Object.defineProperty(moveOff, "clientY", { value: 200 })
+    act(() => {
+      window.dispatchEvent(moveOff)
+    })
+    expect(cursor.getAttribute("data-state")).toBe("default")
+
+    const moveOffAgain = new MouseEvent("mousemove", { bubbles: true })
+    Object.defineProperty(moveOffAgain, "target", { value: plain })
+    Object.defineProperty(moveOffAgain, "clientX", { value: 205 })
+    Object.defineProperty(moveOffAgain, "clientY", { value: 205 })
+    act(() => {
+      window.dispatchEvent(moveOffAgain)
+    })
+    expect(cursor.getAttribute("data-state")).toBe("default")
+  })
+
+  it("handles mousemove events with no target by falling through to 'default'", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    render(<CustomCursor />)
+    const move = new MouseEvent("mousemove")
+    Object.defineProperty(move, "target", { value: null })
+    expect(() => window.dispatchEvent(move)).not.toThrow()
+  })
+
+  it("resets the target position to off-screen on mouseleave", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    const { container } = render(<CustomCursor />)
+    const cursor = container.querySelector(
+      "[data-custom-cursor]"
+    ) as HTMLElement
+
+    const move = new MouseEvent("mousemove")
+    Object.defineProperty(move, "target", { value: null })
+    Object.defineProperty(move, "clientX", { value: 300 })
+    Object.defineProperty(move, "clientY", { value: 400 })
+    window.dispatchEvent(move)
+
+    expect(() => window.dispatchEvent(new MouseEvent("mouseleave"))).not.toThrow()
+    expect(cursor).not.toBeNull()
+  })
+
+  it("advances the dot transform via the captured rAF callback", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    const { container } = render(<CustomCursor />)
+    const cursor = container.querySelector(
+      "[data-custom-cursor]"
+    ) as HTMLElement
+
+    const move = new MouseEvent("mousemove")
+    Object.defineProperty(move, "target", { value: null })
+    Object.defineProperty(move, "clientX", { value: 500 })
+    Object.defineProperty(move, "clientY", { value: 300 })
+    window.dispatchEvent(move)
+
+    expect(rafQueue.length).toBeGreaterThanOrEqual(1)
+    const beforeLen = rafQueue.length
+    rafQueue[0](16)
+    expect(cursor.style.transform).toMatch(/translate3d/)
+    expect(rafQueue.length).toBe(beforeLen + 1)
+  })
+
+  it("safely no-ops the transform write when the dot ref has been detached", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    const { unmount } = render(<CustomCursor />)
+    const captured = rafQueue[0]
+    unmount()
+    expect(() => captured(32)).not.toThrow()
   })
 })

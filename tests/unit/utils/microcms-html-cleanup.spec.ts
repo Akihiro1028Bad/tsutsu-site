@@ -77,6 +77,13 @@ describe("cleanupMicroCmsHtml", () => {
     expect(cleanupMicroCmsHtml(input)).toBe(input)
   })
 
+  it("preserves text that appears before a <pre> block and cleans only the text chunk", () => {
+    const input = "<p>before<br><br><br>middle</p><pre><code>x<br><br><br>y</code></pre>"
+    expect(cleanupMicroCmsHtml(input)).toBe(
+      "<p>before<br>middle</p><pre><code>x<br><br><br>y</code></pre>"
+    )
+  })
+
   it("handles mixed clutter end-to-end", () => {
     const input =
       "<h3>Intro<br></h3><p>hi</p><p><br><br></p><h1><br>Section</h1><p>text<br><br><br>more</p>"

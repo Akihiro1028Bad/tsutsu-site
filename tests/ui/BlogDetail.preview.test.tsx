@@ -54,8 +54,28 @@ describe("BlogDetail — preview mode suppresses JSON-LD", () => {
     const { container } = render(ui)
     const script = container.querySelector("script[type='application/ld+json']")
     expect(script).not.toBeNull()
-    const payload = script?.getAttribute("data-payload") ?? ""
+    const payload = (script as HTMLElement).getAttribute("data-payload")
     expect(payload).toMatch(/"@type":"BlogPosting"/)
+  })
+
+  it("falls back from revisedAt → updatedAt → publishedAt for dateModified in JSON-LD", async () => {
+    // Missing revisedAt → dateModified picks up updatedAt.
+    const noRevised: BlogPost = { ...fixture, revisedAt: "" }
+    const ui1 = (await BlogDetail({ post: noRevised })) as React.ReactElement
+    const { container: c1 } = render(ui1)
+    const payload1 = (c1.querySelector("script[type='application/ld+json']") as HTMLElement)
+      .getAttribute("data-payload") as string
+    expect(JSON.parse(payload1).dateModified).toBe(fixture.updatedAt)
+
+    cleanup()
+
+    // Both revisedAt and updatedAt missing → dateModified falls back to publishedAt.
+    const onlyPublished: BlogPost = { ...fixture, revisedAt: "", updatedAt: "" }
+    const ui2 = (await BlogDetail({ post: onlyPublished })) as React.ReactElement
+    const { container: c2 } = render(ui2)
+    const payload2 = (c2.querySelector("script[type='application/ld+json']") as HTMLElement)
+      .getAttribute("data-payload") as string
+    expect(JSON.parse(payload2).dateModified).toBe(fixture.publishedAt)
   })
 
   it("omits JSON-LD when isPreview is true (draft content, no crawler leak)", async () => {

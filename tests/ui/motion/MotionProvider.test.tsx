@@ -94,6 +94,24 @@ describe("MotionProvider", () => {
     expect(window.requestAnimationFrame).toHaveBeenCalled()
   })
 
+  it("passes a critically-damped easing function to Lenis", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    render(<MotionProvider>x</MotionProvider>)
+    const calls = lenisCtor.mock.calls as unknown as Array<
+      Array<{ easing: (t: number) => number }>
+    >
+    const easing = calls[0][0].easing
+    expect(typeof easing).toBe("function")
+    expect(easing(0)).toBeCloseTo(0, 2)
+    expect(easing(1)).toBeCloseTo(1, 2)
+    const mid = easing(0.5)
+    expect(mid).toBeGreaterThan(0)
+    expect(mid).toBeLessThan(1)
+  })
+
   it("destroys Lenis and cancels rAF on unmount", () => {
     mockMatchMedia({
       "(pointer: fine)": true,
@@ -103,6 +121,27 @@ describe("MotionProvider", () => {
     unmount()
     expect(lenisDestroy).toHaveBeenCalled()
     expect(window.cancelAnimationFrame).toHaveBeenCalled()
+  })
+
+  it("drives the Lenis raf loop — invoking the captured rAF callback forwards the timestamp to Lenis and schedules the next frame", () => {
+    mockMatchMedia({
+      "(pointer: fine)": true,
+      "(prefers-reduced-motion: reduce)": false,
+    })
+    const callbacks: FrameRequestCallback[] = []
+    window.requestAnimationFrame = vi.fn((cb: FrameRequestCallback) => {
+      callbacks.push(cb)
+      return callbacks.length
+    }) as unknown as typeof window.requestAnimationFrame
+
+    render(<MotionProvider>x</MotionProvider>)
+    expect(callbacks.length).toBeGreaterThanOrEqual(1)
+    const snapshot = callbacks.slice()
+    for (const cb of snapshot) {
+      cb(16)
+    }
+    expect(lenisRaf).toHaveBeenCalledWith(16)
+    expect(callbacks.length).toBeGreaterThan(snapshot.length)
   })
 
 })

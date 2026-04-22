@@ -31,10 +31,12 @@ export default defineConfig({
         "components/home/variants/**",
         "app/(home)/design/**",
       ],
-      // Coverage is measured and reported (text/html/lcov) but not enforced
-      // with a failing threshold. Re-introduce thresholds in a dedicated PR
-      // once the baseline has been raised step by step (e.g. 80% → 90% →
-      // 100%).
+      thresholds: {
+        lines: 100,
+        functions: 100,
+        branches: 100,
+        statements: 100,
+      },
     },
   },
 })

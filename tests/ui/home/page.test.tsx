@@ -23,13 +23,14 @@ vi.mock("next/image", () => ({
 
 import { getLatestAnnouncements } from "@/lib/utils/announcement-server"
 import { getLatestBlogPosts } from "@/lib/utils/blog-server"
+import type { Announcement } from "@/lib/types/announcement"
 
-const announcements = [
+const announcements: Announcement[] = [
   {
     id: "n1",
     title: "News headline",
     content: "",
-    category: "Site",
+    category: "更新情報",
     publishedAt: "2026-03-01T00:00:00.000Z",
     createdAt: "2026-03-01T00:00:00.000Z",
     updatedAt: "2026-03-01T00:00:00.000Z",

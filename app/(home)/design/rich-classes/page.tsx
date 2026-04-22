@@ -346,6 +346,7 @@ const VARIANTS: readonly Variant[] = [
     intent: "画像を白い厚紙フレームで囲み、わずかに傾けた親密なスタイル。旅行記・日記・制作過程のスナップ写真など、パーソナルな記事に相性◎。ホバーで傾き解除。",
     demo: (
       <p className="polaroid">
+        {/* eslint-disable-next-line @next/next/no-img-element -- design preview demo using external picsum URL; not production content */}
         <img
           src="https://picsum.photos/seed/tsutsu-polaroid/640/400"
           alt="Sample polaroid"

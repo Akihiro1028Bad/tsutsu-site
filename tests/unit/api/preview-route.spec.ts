@@ -92,4 +92,49 @@ describe("/api/preview — microCMS preview bootstrap", () => {
       /\/preview\/announcements\/ann-1\?draftKey=Vexlz0vn1x$/
     )
   })
+
+  it("returns 400 when the fetched blog post has no slug", async () => {
+    getDetailNoStore.mockResolvedValueOnce({
+      id: "blog-2",
+      slug: "",
+      title: "t",
+      content: "<p>c</p>",
+      createdAt: "",
+      updatedAt: "",
+      publishedAt: "",
+      revisedAt: "",
+    })
+    const res = await GET(
+      req(
+        "https://example.com/api/preview?draftKey=k&contentId=blog-2&endpoint=blog"
+      )
+    )
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toMatch(/slug/i)
+  })
+
+  it("returns 500 when microCMS fetch throws for blog", async () => {
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+    getDetailNoStore.mockRejectedValueOnce(new Error("microCMS down"))
+    const res = await GET(
+      req(
+        "https://example.com/api/preview?draftKey=k&contentId=blog-3&endpoint=blog"
+      )
+    )
+    expect(res.status).toBe(500)
+    const body = await res.json()
+    expect(body.error).toMatch(/Failed to fetch blog post/)
+    expect(errSpy).toHaveBeenCalled()
+    errSpy.mockRestore()
+  })
+
+  it("returns 400 for announcements without a contentId", async () => {
+    const res = await GET(
+      req("https://example.com/api/preview?draftKey=k&endpoint=announcements")
+    )
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toMatch(/contentId is required/i)
+  })
 })

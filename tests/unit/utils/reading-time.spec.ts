@@ -23,4 +23,16 @@ describe("estimateReadingTimeMin", () => {
   it("ignores whitespace", () => {
     expect(estimateReadingTimeMin("<p>あ</p>" + "\n".repeat(1000))).toBe(1)
   })
+
+  it("returns 1 for non-string input (defensive guard for corrupt microCMS data)", () => {
+    // @ts-expect-error intentional: runtime guard for non-string values
+    expect(estimateReadingTimeMin(undefined)).toBe(1)
+    // @ts-expect-error intentional: runtime guard for non-string values
+    expect(estimateReadingTimeMin(null)).toBe(1)
+  })
+
+  it("returns 1 when HTML contains only tags and whitespace (no text chars)", () => {
+    expect(estimateReadingTimeMin("<p></p>")).toBe(1)
+    expect(estimateReadingTimeMin("<p>   </p><br><br>")).toBe(1)
+  })
 })
