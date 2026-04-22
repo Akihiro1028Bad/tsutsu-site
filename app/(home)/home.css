@@ -1618,13 +1618,66 @@
   font-style: italic;
   color: var(--ink-soft);
 }
+/* ---- editorial list markers ----
+   Tailwind preflight strips list-style / padding from ul/ol site-wide, so
+   we rebuild markers here in the article-prose aesthetic: em-dash for
+   unordered lists (mono-mute), leading-zero mono counter for ordered
+   lists. Nested levels step down to "·" then "›" so hierarchy stays
+   readable without shouting. Custom prose classes that co-opt ul/li
+   (e.g. .spec) suppress their own marker via ::before { display: none }. */
 .home-root .article-prose ul,
 .home-root .article-prose ol {
-  padding-left: 1.4em;
+  list-style: none;
+  padding-left: 0;
+  margin: 0.6em 0;
   color: var(--ink);
 }
 .home-root .article-prose li {
   margin: 0.4em 0;
+  line-height: 1.75;
+}
+
+/* ul — em-dash mark, muted mono */
+.home-root .article-prose ul > li {
+  position: relative;
+  padding-left: 1.6em;
+}
+.home-root .article-prose ul > li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--ink-mute);
+  font-family: var(--f-mono);
+  line-height: 1.75;
+}
+/* Nested ul — step down to middle dot, then right-angle quote */
+.home-root .article-prose ul ul > li::before {
+  content: "·";
+}
+.home-root .article-prose ul ul ul > li::before {
+  content: "›";
+}
+
+/* ol — leading-zero mono counter. Each ol scope resets its own counter,
+   so nested ols restart at 01 naturally. */
+.home-root .article-prose ol {
+  counter-reset: prose-ol;
+}
+.home-root .article-prose ol > li {
+  counter-increment: prose-ol;
+  position: relative;
+  padding-left: 2.6em;
+}
+.home-root .article-prose ol > li::before {
+  content: counter(prose-ol, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  font-family: var(--f-mono);
+  font-size: 0.78em;
+  color: var(--ink-mute);
+  letter-spacing: 0.08em;
   line-height: 1.75;
 }
 .home-root .article-prose blockquote {
