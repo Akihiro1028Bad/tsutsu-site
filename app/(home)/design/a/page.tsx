@@ -16,6 +16,7 @@ import { getLatestBlogPosts } from "@/lib/utils/blog-server"
 export const metadata: Metadata = {
   title: "Design A — Minimal · tsutsu",
   description: "Minimal style preview — sans-serif only, stripped decorations.",
+  robots: { index: false, follow: false },
 }
 
 export default async function DesignAPage() {

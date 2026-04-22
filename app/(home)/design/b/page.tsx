@@ -16,6 +16,7 @@ import { getLatestBlogPosts } from "@/lib/utils/blog-server"
 export const metadata: Metadata = {
   title: "Design B — Modern · tsutsu",
   description: "Modern style preview — Stripe/Vercel-inspired clean UI.",
+  robots: { index: false, follow: false },
 }
 
 export default async function DesignBPage() {

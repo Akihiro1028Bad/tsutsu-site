@@ -20,15 +20,6 @@ const SITE_LINKS: FooterColumn = {
   ],
 }
 
-const SOCIAL_LINKS: FooterColumn = {
-  heading: "Social",
-  links: [
-    { label: "X / Twitter", href: "https://x.com/" },
-    { label: "GitHub", href: "https://github.com/" },
-    { label: "Zenn", href: "https://zenn.dev/" },
-  ],
-}
-
 const CONTACT_LINKS: FooterColumn = {
   heading: "Contact",
   links: [
@@ -37,11 +28,7 @@ const CONTACT_LINKS: FooterColumn = {
   ],
 }
 
-const COLUMNS: ReadonlyArray<FooterColumn> = [
-  SITE_LINKS,
-  SOCIAL_LINKS,
-  CONTACT_LINKS,
-]
+const COLUMNS: ReadonlyArray<FooterColumn> = [SITE_LINKS, CONTACT_LINKS]
 
 export default function HomeFooter() {
   return (

@@ -62,16 +62,19 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     ).toHaveAttribute("href", "#notes")
   })
 
-  it("renders Social column links (X, GitHub, Zenn)", () => {
+  it("does not render a Social column (no SNS accounts)", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
+    // Social heading should not exist at all.
     expect(
-      within(footer).getByRole("link", { name: /x.*twitter/i })
-    ).toBeInTheDocument()
+      within(footer).queryByRole("heading", { name: /^social$/i })
+    ).toBeNull()
+    // Typical SNS link labels should not leak in.
     expect(
-      within(footer).getByRole("link", { name: /github/i })
-    ).toBeInTheDocument()
-    expect(within(footer).getByRole("link", { name: /zenn/i })).toBeInTheDocument()
+      within(footer).queryByRole("link", { name: /x.*twitter/i })
+    ).toBeNull()
+    expect(within(footer).queryByRole("link", { name: /^github$/i })).toBeNull()
+    expect(within(footer).queryByRole("link", { name: /^zenn$/i })).toBeNull()
   })
 
   it("renders Contact column links (mailto and form anchor)", () => {
@@ -94,7 +97,8 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     const footer = screen.getByRole("contentinfo")
     const h3s = within(footer).getAllByRole("heading", { level: 3 })
     const labels = h3s.map((h) => h.textContent)
-    expect(labels).toEqual(expect.arrayContaining(["Site", "Social", "Contact"]))
+    expect(labels).toEqual(expect.arrayContaining(["Site", "Contact"]))
+    expect(labels).not.toContain("Social")
     // No stray h4/h5 in the footer
     expect(
       within(footer).queryAllByRole("heading", { level: 4 })

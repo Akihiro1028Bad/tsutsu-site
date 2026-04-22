@@ -16,6 +16,7 @@ import { getLatestBlogPosts } from "@/lib/utils/blog-server"
 export const metadata: Metadata = {
   title: "Design C — Editorial Light · tsutsu",
   description: "Editorial-light style preview — quieter editorial, no decorative noise.",
+  robots: { index: false, follow: false },
 }
 
 export default async function DesignCPage() {

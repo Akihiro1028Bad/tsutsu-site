@@ -1826,37 +1826,39 @@
   margin: clamp(18px, 2.2vw, 28px) 0;
 }
 .home-root .article-prose .note::before {
-  content: "NOTE.";
+  content: "Note";
   position: absolute;
   left: 0;
-  top: 0.2em;
+  top: 0.25em;
   font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
   color: var(--ink-mute);
-  font-weight: 500;
+  font-weight: 400;
+  opacity: 0.7;
 }
 
 /* D. warn — caution block */
 .home-root .article-prose .warn {
   position: relative;
-  padding: clamp(16px, 2vw, 22px) 0 clamp(14px, 1.6vw, 18px);
+  padding: clamp(14px, 1.8vw, 20px) 0 clamp(12px, 1.4vw, 16px);
   border-top: 1px solid var(--accent);
   border-bottom: 1px solid var(--rule);
-  margin: clamp(24px, 3vw, 40px) 0;
+  margin: clamp(20px, 2.4vw, 32px) 0;
   color: var(--ink);
   font-size: 15px;
   line-height: 1.75;
 }
 .home-root .article-prose .warn::before {
-  content: "CAUTION";
+  content: "Caution";
   display: block;
   font-family: var(--f-mono);
   font-size: 10px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.14em;
   color: var(--accent);
-  margin-bottom: 10px;
-  font-weight: 600;
+  margin-bottom: 8px;
+  font-weight: 500;
+  opacity: 0.85;
 }
 
 /* E. pullquote — display quote (third-party only) */
@@ -1893,7 +1895,7 @@
 .home-root .article-prose .key {
   border-left: 3px solid var(--ink);
   padding: 2px 0 2px clamp(14px, 1.6vw, 20px);
-  margin: clamp(24px, 3vw, 40px) 0;
+  margin: clamp(20px, 2.4vw, 32px) 0;
   font-size: 17px;
   line-height: 1.55;
   font-weight: 500;
@@ -1902,21 +1904,22 @@
   position: relative;
 }
 .home-root .article-prose .key::before {
-  content: "KEY POINT";
+  content: "Key point";
   display: block;
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
   color: var(--ink-mute);
   margin-bottom: 6px;
-  font-weight: 500;
+  font-weight: 400;
+  opacity: 0.7;
 }
 
 /* G. tldr — short summary box with "TL;DR" mono label */
 .home-root .article-prose .tldr {
   position: relative;
-  padding: clamp(18px, 2vw, 24px) 0;
-  margin: clamp(24px, 3vw, 40px) 0;
+  padding: clamp(14px, 1.8vw, 20px) 0;
+  margin: clamp(20px, 2.4vw, 32px) 0;
   border-top: 1px solid var(--ink);
   border-bottom: 1px solid var(--ink);
   font-size: 15px;
@@ -1927,11 +1930,12 @@
   content: "TL;DR";
   display: block;
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.22em;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
   color: var(--ink-mute);
-  margin-bottom: 10px;
-  font-weight: 600;
+  margin-bottom: 8px;
+  font-weight: 500;
+  opacity: 0.75;
 }
 
 /* H. step — numbered step with auto counter. Parent resets counter. */
@@ -1949,15 +1953,16 @@
   min-height: 36px;
 }
 .home-root .article-prose .step::before {
-  content: "STEP " counter(step-counter, decimal-leading-zero);
+  content: "Step " counter(step-counter, decimal-leading-zero);
   position: absolute;
   left: 0;
-  top: 0.2em;
+  top: 0.25em;
   font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-size: 10px;
+  letter-spacing: 0.12em;
   color: var(--accent);
-  font-weight: 600;
+  font-weight: 500;
+  opacity: 0.85;
 }
 /* Mobile: stack the STEP label above the body copy. The desktop layout
    leaves 60-84px of left padding for the mono label, which eats too much
@@ -2001,7 +2006,7 @@
   margin: clamp(20px, 2.4vw, 32px) 0;
   padding-left: clamp(16px, 2vw, 24px);
   border-left: 1px dotted var(--ink-mute);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.75;
   color: var(--ink-soft);
   font-style: italic;
@@ -2162,22 +2167,23 @@
 /* AM. definition — term + description box with accent rule and mono term label */
 .home-root .article-prose .definition {
   position: relative;
-  padding: clamp(16px, 2vw, 22px) 0 clamp(14px, 1.6vw, 18px) clamp(18px, 2.2vw, 28px);
-  margin: clamp(24px, 3vw, 40px) 0;
+  padding: clamp(14px, 1.8vw, 20px) 0 clamp(12px, 1.4vw, 16px) clamp(16px, 2vw, 24px);
+  margin: clamp(20px, 2.4vw, 32px) 0;
   border-left: 2px solid var(--ink);
   font-size: 15px;
   line-height: 1.75;
   color: var(--ink);
 }
 .home-root .article-prose .definition::before {
-  content: "TERM";
+  content: "Term";
   display: block;
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
   color: var(--ink-mute);
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 400;
+  opacity: 0.7;
 }
 .home-root .article-prose .definition > :first-child {
   margin-top: 0;
@@ -2193,23 +2199,24 @@
 
 /* AN. spec — key/value spec list, mono keys in left column, ink values in right */
 .home-root .article-prose .spec {
-  margin: clamp(24px, 3vw, 40px) 0;
-  padding: clamp(18px, 2.2vw, 24px) 0;
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  padding: clamp(16px, 2vw, 22px) 0;
   border-top: 1px solid var(--ink);
   border-bottom: 1px solid var(--rule);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--ink);
 }
 .home-root .article-prose .spec::before {
-  content: "SPEC";
+  content: "Spec";
   display: block;
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
   color: var(--ink-mute);
-  margin-bottom: 14px;
-  font-weight: 600;
+  margin-bottom: 12px;
+  font-weight: 400;
+  opacity: 0.7;
 }
 .home-root .article-prose .spec ul,
 .home-root .article-prose .spec ol {
@@ -2245,45 +2252,44 @@
   }
 }
 
-/* AO. compare — 2-col editorial comparison (yes/no), ink labels, no colour fills */
+/* AO. compare — 2-col editorial comparison, slim labels (A/B), restrained rules */
 .home-root .article-prose .compare {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(16px, 2vw, 28px);
-  margin: clamp(24px, 3vw, 40px) 0;
-  font-size: 14px;
+  margin: clamp(20px, 2.4vw, 32px) 0;
+  font-size: 15px;
   line-height: 1.75;
   color: var(--ink);
 }
 .home-root .article-prose .compare > * {
   position: relative;
-  padding: clamp(14px, 1.8vw, 20px) 0 0;
-  border-top: 2px solid var(--ink);
+  padding: clamp(12px, 1.6vw, 18px) 0 0;
+  border-top: 1px solid var(--ink);
 }
 .home-root .article-prose .compare > :first-child::before {
-  content: "YES";
+  content: "A";
   display: block;
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  color: var(--ink);
-  margin-bottom: 10px;
-  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
+  font-weight: 400;
+  opacity: 0.75;
 }
 .home-root .article-prose .compare > :last-child::before {
-  content: "NO";
+  content: "B";
   display: block;
   font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.22em;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
   color: var(--ink-mute);
-  margin-bottom: 10px;
-  font-weight: 600;
+  margin-bottom: 8px;
+  font-weight: 400;
+  opacity: 0.75;
 }
-.home-root .article-prose .compare > :last-child {
-  border-top-color: var(--ink-mute);
-  color: var(--ink-soft);
-}
+/* compare: both sides treated as peer in M1 refresh (was YES/NO biased) */
 @media (max-width: 640px) {
   .home-root .article-prose .compare {
     grid-template-columns: 1fr;
@@ -2308,11 +2314,12 @@
   display: block;
   margin: clamp(48px, 6vw, 80px) 0 clamp(10px, 1.2vw, 14px);
   font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  font-size: 10px;
+  letter-spacing: 0.16em;
   color: var(--accent);
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
+  opacity: 0.85;
 }
 .home-root .article-prose .section-label + h2 {
   margin-top: 0;
@@ -3178,7 +3185,7 @@
 .home-root .home-footer__cols {
   grid-column: 7 / -1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 .home-root .home-footer__cols h3 {
