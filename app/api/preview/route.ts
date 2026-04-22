@@ -12,11 +12,15 @@ import { BlogPost } from '@/lib/types/blog'
  * - contentId: コンテンツID（{CONTENT_ID}から取得）
  * - endpoint: エンドポイント名（'blog' または 'announcements'）
  * 
- * セキュリティ:
- * - 環境変数MICROCMS_PREVIEW_KEYが設定されている場合、draftKeyの検証を行います
- * - 本番環境では必ずMICROCMS_PREVIEW_KEYを設定することを推奨します
- * 
- * 使用例（microCMS管理画面の設定）:
+ * セキュリティモデル:
+ * - microCMS の draftKey は下書きごとにローテーションする動的トークン。
+ *   したがって本ルートで固定シークレットと比較するのは不適切。
+ *   draftKey はそのまま microCMS API に渡し、microCMS 側が検証する
+ *   (無効なら 0 件が返り、本ルートは 404 相当を返す)。
+ * - 追加のハードニングが必要なら、microCMS 管理画面側のプレビュー URL に
+ *   別途 `secret=...` を付与し、ここで環境変数と比較する設計にすること。
+ *
+ * 使用例（microCMS管理画面の「画面プレビュー」遷移先URL）:
  * https://your-domain.com/api/preview?draftKey={DRAFT_KEY}&contentId={CONTENT_ID}&endpoint=blog
  */
 export async function GET(request: Request) {
@@ -30,15 +34,6 @@ export async function GET(request: Request) {
     return NextResponse.json(
       { error: 'draftKey is required' },
       { status: 400 }
-    )
-  }
-
-  // プレビューキーの検証（環境変数が設定されている場合）
-  const validPreviewKey = process.env.MICROCMS_PREVIEW_KEY
-  if (validPreviewKey && draftKey !== validPreviewKey) {
-    return NextResponse.json(
-      { error: 'Invalid preview key' },
-      { status: 401 }
     )
   }
 

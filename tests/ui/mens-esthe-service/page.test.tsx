@@ -51,7 +51,7 @@ vi.mock("@/components/MensEstheService/ContactCTA", () => ({
 
 describe("MensEstheServicePage", () => {
   it("TC-SEO-003: title、description、OGPタグが存在する", async () => {
-    const { metadata } = await import("@/app/services/mens-esthe/page")
+    const { metadata } = await import("@/app/(site)/services/mens-esthe/page")
 
     expect(metadata?.title).toBeTypeOf("string")
     expect(metadata?.description).toBeTypeOf("string")
@@ -61,7 +61,7 @@ describe("MensEstheServicePage", () => {
   })
 
   it("TC-005-004: ページに3つのCTAが存在する", async () => {
-    const { default: MensEstheServicePage } = await import("@/app/services/mens-esthe/page")
+    const { default: MensEstheServicePage } = await import("@/app/(site)/services/mens-esthe/page")
 
     render(<MensEstheServicePage />)
     expect(screen.getAllByRole("button", { name: "お問い合わせセクションへ移動" })).toHaveLength(3)

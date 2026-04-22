@@ -26,9 +26,66 @@ export function ProseContent({ html, className }: ProseContentProps) {
   useEffect(() => {
     if (!containerRef.current) return
 
+    const cleanupFunctions: Array<() => void> = []
+
+    // :::demo → iframe 展開
+    // microCMS 本文は <div class="demo" data-src="SLUG"></div> の空タグ。
+    // slug は /^[a-z0-9-]+$/ に限定（path traversal 防御）。
+    // iframe は sandbox="allow-scripts"、postMessage で高さ追従。
+    const demoBlocks = containerRef.current.querySelectorAll(
+      'div.demo[data-src]',
+    )
+    demoBlocks.forEach((block) => {
+      if (block.querySelector('iframe')) return // 展開済み
+      const el = block as HTMLElement
+      const rawSlug = el.dataset.src ?? ''
+      if (!/^[a-z0-9-]+$/.test(rawSlug)) {
+        el.setAttribute('aria-invalid', 'true')
+        el.textContent = 'invalid demo slug'
+        return
+      }
+      const minHeightAttr = el.dataset.minHeight
+      const minHeight = Math.min(
+        Math.max(Number(minHeightAttr) || 320, 120),
+        2000,
+      )
+
+      const iframe = document.createElement('iframe')
+      iframe.src = `/demos/${rawSlug}.html`
+      iframe.setAttribute('sandbox', 'allow-scripts')
+      iframe.setAttribute('loading', 'lazy')
+      iframe.setAttribute('referrerpolicy', 'no-referrer')
+      iframe.setAttribute('title', `demo-${rawSlug}`)
+      iframe.style.width = '100%'
+      iframe.style.border = '0'
+      iframe.style.minHeight = `${minHeight}px`
+      iframe.style.display = 'block'
+
+      // 子 iframe からの postMessage で高さを受け取る
+      // origin は sandbox opaque origin のため "null"。source で検証する。
+      const onMessage = (event: MessageEvent) => {
+        if (event.source !== iframe.contentWindow) return
+        const data = event.data
+        if (
+          !data ||
+          typeof data !== 'object' ||
+          data.type !== 'tsutsu-demo-height'
+        )
+          return
+        const v = Number(data.value)
+        if (!Number.isFinite(v) || v < 50 || v > 8000) return
+        iframe.style.height = `${Math.ceil(v)}px`
+      }
+      window.addEventListener('message', onMessage)
+      cleanupFunctions.push(() => {
+        window.removeEventListener('message', onMessage)
+      })
+
+      el.replaceChildren(iframe)
+    })
+
     // .code-blockを検出
     const codeBlocks = containerRef.current.querySelectorAll('.code-block')
-    const cleanupFunctions: Array<() => void> = []
     
     codeBlocks.forEach((block) => {
       // 既にコピーボタンが追加されている場合はスキップ

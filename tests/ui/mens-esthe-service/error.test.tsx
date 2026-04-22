@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import ErrorPage from "@/app/services/mens-esthe/error"
+import ErrorPage from "@/app/(site)/services/mens-esthe/error"
 
 describe("MensEstheService error", () => {
   it("TC-ERR-001: エラーメッセージと再試行ボタンの表示", () => {

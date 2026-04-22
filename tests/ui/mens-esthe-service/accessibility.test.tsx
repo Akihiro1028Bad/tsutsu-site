@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react"
 import { useState } from "react"
 import { describe, expect, it, vi } from "vitest"
 
-import MensEstheServicePage from "@/app/services/mens-esthe/page"
+import MensEstheServicePage from "@/app/(site)/services/mens-esthe/page"
 
 vi.mock("@/lib/utils/mens-esthe-service", () => ({
   generateStructuredData: () => ({ "@type": "Service" }),

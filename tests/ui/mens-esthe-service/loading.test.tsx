@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
-import Loading from "@/app/services/mens-esthe/loading"
+import Loading from "@/app/(site)/services/mens-esthe/loading"
 
 describe("MensEstheService loading", () => {
   it("TC-ERR-003: スケルトンUIの表示", () => {
