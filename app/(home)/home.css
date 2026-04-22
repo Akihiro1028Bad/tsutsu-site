@@ -171,8 +171,7 @@
 .home-root .home-nav__toggle {
   display: none;
   background: transparent;
-  border: 1px solid currentColor;
-  border-radius: 999px;
+  border: none;
   width: 38px;
   height: 38px;
   align-items: center;
@@ -180,22 +179,16 @@
   cursor: pointer;
   color: inherit;
   font-family: var(--f-mono);
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1;
   padding: 0;
   margin-left: auto;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 .home-root .home-nav__toggle:hover,
 .home-root .home-nav__toggle:focus-visible {
-  background: var(--ink);
-  color: var(--bg);
+  opacity: 0.6;
   outline: none;
-}
-.home-root .home-nav[data-theme="dark"] .home-nav__toggle:hover,
-.home-root .home-nav[data-theme="dark"] .home-nav__toggle:focus-visible {
-  background: var(--bg);
-  color: var(--ink);
 }
 
 @media (max-width: 760px) {
