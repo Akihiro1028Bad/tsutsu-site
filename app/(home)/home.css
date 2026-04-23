@@ -3250,6 +3250,80 @@
   }
 }
 
+/* =========================================================================
+   Sticky Stack — section layering via position: sticky + z-index + bg.
+   Opt-in via <main data-sticky-stack="on"> on the home route only (not
+   design preview pages /design/a|b|c). Desktop ≥901px only; mobile keeps
+   natural scroll. Each section pins at the viewport top and is covered by
+   the next as it rises, giving a subtle editorial "sheet overlap" feel.
+   ========================================================================= */
+@media (min-width: 901px) {
+  .home-root main[data-sticky-stack="on"] > header,
+  .home-root main[data-sticky-stack="on"] > section {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;   /* Safari 14 fallback */
+    min-height: 100svh;  /* iOS URL-bar safe where supported */
+    /* Faint hairline on the leading edge of each sheet — reads as an
+       editorial "paper overlap" without demanding attention. */
+    box-shadow: 0 -1px 0 0 color-mix(in oklch, var(--ink) 6%, transparent);
+  }
+
+  /* Opaque backgrounds on every sheet prevent bleed-through of the sheet
+     below. Services already ships a dark background (home.css:~956), so
+     only the cream sheets need an explicit bg here. Z-index ascends so
+     later sections rise and cover earlier ones. */
+  .home-root main[data-sticky-stack="on"] > header#top       { background: var(--bg); z-index: 1; }
+  .home-root main[data-sticky-stack="on"] > section#works    { background: var(--bg); z-index: 2; }
+  .home-root main[data-sticky-stack="on"] > section#services {                         z-index: 3; }
+  .home-root main[data-sticky-stack="on"] > section#about    { background: var(--bg); z-index: 4; }
+  .home-root main[data-sticky-stack="on"] > section#notes    { background: var(--bg); z-index: 5; }
+  .home-root main[data-sticky-stack="on"] > section#contact  { background: var(--bg); z-index: 6; }
+}
+
+/* Pinned Typography — Works / Journal only.
+   Hero has its own in-section reveal choreography; Services' dark takeover
+   is the star of that section; Contact is short. About retains its existing
+   `.about__name` sticky (home.css:1072 area) which is element-level and
+   scopes to the About stacking context, so it co-exists cleanly with the
+   section-level sticky above. */
+@media (min-width: 901px) {
+  .home-root main[data-sticky-stack="on"] section#works,
+  .home-root main[data-sticky-stack="on"] section#notes {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: clamp(32px, 4vw, 64px);
+  }
+  .home-root main[data-sticky-stack="on"] section#works > .section-head,
+  .home-root main[data-sticky-stack="on"] section#notes > .section-head {
+    position: sticky;
+    top: clamp(96px, 14vh, 132px); /* Under the fixed nav — matches .about__name */
+    align-self: start;
+  }
+}
+
+/* Reduced-motion fallback — collapse sticky-stack + pinned typography back
+   to normal document flow. Sticky is visually motion-like even without JS
+   animation, so the strictest interpretation of the user's preference is
+   to disable it entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .home-root main[data-sticky-stack="on"] > header,
+  .home-root main[data-sticky-stack="on"] > section {
+    position: static;
+    min-height: auto;
+    z-index: auto;
+    box-shadow: none;
+  }
+  .home-root main[data-sticky-stack="on"] section#works,
+  .home-root main[data-sticky-stack="on"] section#notes {
+    display: block;
+  }
+  .home-root main[data-sticky-stack="on"] section#works > .section-head,
+  .home-root main[data-sticky-stack="on"] section#notes > .section-head {
+    position: static;
+  }
+}
+
 /* ============================================================
    /works index page (page-head / page-meta / index-list / coming)
    ============================================================ */
