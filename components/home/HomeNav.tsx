@@ -50,7 +50,13 @@ export default function HomeNav() {
           }
         }
       },
-      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+      // Sticky-stack aware: with pinned sections layering, the dominant
+      // "active" section is the one whose top edge has risen past ~15% of
+      // the viewport (i.e. just covered the previous pinned sheet). A
+      // narrow band near the top fires hand-offs that match the visual
+      // stacking order, avoiding the flip-flop that a centred band causes
+      // when multiple sections intersect simultaneously.
+      { rootMargin: "-15% 0px -80% 0px", threshold: 0 }
     )
 
     sections.forEach(({ el }) => observer.observe(el))

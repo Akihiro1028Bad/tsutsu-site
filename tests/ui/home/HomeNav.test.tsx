@@ -193,6 +193,25 @@ describe("Phase 2: HomeNav — scroll spy", () => {
     expect(lastObserver?.disconnect).toHaveBeenCalledTimes(1)
     section.remove()
   })
+
+  it("configures the observer with the sticky-stack aware rootMargin (top band)", () => {
+    // Sticky Stack layers multiple sections simultaneously at the top of
+    // the viewport. A narrow top-biased band (-15% top / -80% bottom)
+    // produces clean active-state hand-offs when sections rise to cover
+    // the pinned one; a centred band causes flip-flop here.
+    const section = placeSection("about")
+    render(<HomeNav />)
+    const ctor = globalThis.IntersectionObserver as unknown as ReturnType<
+      typeof vi.fn
+    >
+    expect(ctor).toHaveBeenCalled()
+    const lastCall = ctor.mock.calls.at(-1) as [unknown, IntersectionObserverInit]
+    expect(lastCall[1]).toMatchObject({
+      rootMargin: "-15% 0px -80% 0px",
+      threshold: 0,
+    })
+    section.remove()
+  })
 })
 
 describe("Phase 10: HomeNav — mobile disclosure (C-1)", () => {
