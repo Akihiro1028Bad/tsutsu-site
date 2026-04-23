@@ -3251,29 +3251,38 @@
 }
 
 /* =========================================================================
-   Sticky Stack — section layering via position: sticky + z-index + bg.
-   Opt-in via <main data-sticky-stack="on"> on the home route only (not
-   design preview pages /design/a|b|c). Desktop ≥901px only; mobile keeps
-   natural scroll. Each section pins at the viewport top and is covered by
-   the next as it rises, giving a subtle editorial "sheet overlap" feel.
+   Sticky Stack (Hero-only variant) — section layering via Hero sticky +
+   z-index + hairline edges. Opt-in via <main data-sticky-stack="on"> on
+   the home route only (not /design/a|b|c). Desktop ≥901px only.
+
+   Why Hero-only: a full sticky-all-sections stack clips content taller
+   than 100vh (only the top 100vh of each section is ever visible), which
+   broke content scrolling. Hero fits 100vh by design, so pinning it is
+   safe. Subsequent sections flow naturally so users can read all content,
+   while z-index + opaque backgrounds + hairline still produce the
+   editorial "sheet overlap" feel — especially at the Hero→Works crossover
+   where Works rises up and covers the pinned Hero.
    ========================================================================= */
 @media (min-width: 901px) {
-  .home-root main[data-sticky-stack="on"] > header,
-  .home-root main[data-sticky-stack="on"] > section {
+  .home-root main[data-sticky-stack="on"] > header#top {
     position: sticky;
     top: 0;
     min-height: 100vh;   /* Safari 14 fallback */
     min-height: 100svh;  /* iOS URL-bar safe where supported */
-    /* Faint hairline on the leading edge of each sheet — reads as an
-       editorial "paper overlap" without demanding attention. */
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  /* Hairline "sheet edge" on every boundary — subtle enough to read as
+     paper, not a hard divider. */
+  .home-root main[data-sticky-stack="on"] > header,
+  .home-root main[data-sticky-stack="on"] > section {
     box-shadow: 0 -1px 0 0 color-mix(in oklch, var(--ink) 6%, transparent);
   }
 
-  /* Opaque backgrounds on every sheet prevent bleed-through of the sheet
-     below. Services already ships a dark background (home.css:~956), so
-     only the cream sheets need an explicit bg here. Z-index ascends so
-     later sections rise and cover earlier ones. */
-  .home-root main[data-sticky-stack="on"] > header#top       { background: var(--bg); z-index: 1; }
+  /* Non-hero sections: ascending z-index + opaque background so Works
+     visibly covers Hero during the first-screen crossover. Services keeps
+     its own dark bg from the section's base styles. */
   .home-root main[data-sticky-stack="on"] > section#works    { background: var(--bg); z-index: 2; }
   .home-root main[data-sticky-stack="on"] > section#services {                         z-index: 3; }
   .home-root main[data-sticky-stack="on"] > section#about    { background: var(--bg); z-index: 4; }
