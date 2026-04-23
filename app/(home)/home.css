@@ -3273,9 +3273,9 @@
     z-index: 1;
   }
 
-  /* Hairline "sheet edge" on every boundary — subtle enough to read as
-     paper, not a hard divider. */
-  .home-root main[data-sticky-stack="on"] > header,
+  /* Hairline "sheet edge" on non-hero section boundaries. Offset is -1px
+     so the line renders just above the section's top edge — on Hero the
+     fixed nav covers that zone, so hairline is applied to sections only. */
   .home-root main[data-sticky-stack="on"] > section {
     box-shadow: 0 -1px 0 0 color-mix(in oklch, var(--ink) 6%, transparent);
   }
@@ -3290,31 +3290,18 @@
   .home-root main[data-sticky-stack="on"] > section#contact  { background: var(--bg); z-index: 6; }
 }
 
-/* Pinned Typography — Works / Journal only.
-   Hero has its own in-section reveal choreography; Services' dark takeover
-   is the star of that section; Contact is short. About retains its existing
-   `.about__name` sticky (home.css:1072 area) which is element-level and
-   scopes to the About stacking context, so it co-exists cleanly with the
-   section-level sticky above. */
-@media (min-width: 901px) {
-  .home-root main[data-sticky-stack="on"] section#works,
-  .home-root main[data-sticky-stack="on"] section#notes {
-    display: grid;
-    grid-template-columns: 5fr 7fr;
-    gap: clamp(32px, 4vw, 64px);
-  }
-  .home-root main[data-sticky-stack="on"] section#works > .section-head,
-  .home-root main[data-sticky-stack="on"] section#notes > .section-head {
-    position: sticky;
-    top: clamp(96px, 14vh, 132px); /* Under the fixed nav — matches .about__name */
-    align-self: start;
-  }
-}
+/* Pinned Typography (display: grid split on Works/Journal) was removed
+   2026-04-23: the 2-col grid caused layout breakage because (a) Works has
+   3 direct children so `.works__all` auto-placed into row 2 col 1 and
+   collided with the sticky `.section-head`, and (b) Journal's
+   `.journal__body` already has `grid-column: 1 / -1` which forced a
+   full-width span that defeated the intended split. Proper implementation
+   requires DOM restructuring and is out of scope for this PR. The Hero→
+   Works crossover above still delivers the primary "sheet overlap" feel. */
 
-/* Reduced-motion fallback — collapse sticky-stack + pinned typography back
-   to normal document flow. Sticky is visually motion-like even without JS
-   animation, so the strictest interpretation of the user's preference is
-   to disable it entirely. */
+/* Reduced-motion fallback — collapse the Hero sticky + layering back to
+   normal document flow so motion-sensitive users see a plain stacked
+   layout. */
 @media (prefers-reduced-motion: reduce) {
   .home-root main[data-sticky-stack="on"] > header,
   .home-root main[data-sticky-stack="on"] > section {
@@ -3322,14 +3309,6 @@
     min-height: auto;
     z-index: auto;
     box-shadow: none;
-  }
-  .home-root main[data-sticky-stack="on"] section#works,
-  .home-root main[data-sticky-stack="on"] section#notes {
-    display: block;
-  }
-  .home-root main[data-sticky-stack="on"] section#works > .section-head,
-  .home-root main[data-sticky-stack="on"] section#notes > .section-head {
-    position: static;
   }
 }
 
