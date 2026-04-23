@@ -88,7 +88,23 @@ export default function HomeNav() {
       data-theme={theme}
       data-menu-open={isOpen ? "true" : "false"}
     >
-      <a className="home-nav__brand" href={brandHref} aria-label="tsutsu">
+      <a
+        className="home-nav__brand"
+        href={brandHref}
+        aria-label="tsutsu"
+        onClick={(e) => {
+          // When on the home page, the Hero is `position: sticky; top: 0`
+          // so the browser's default anchor navigation treats it as
+          // already-in-view and refuses to scroll (y stays unchanged).
+          // Explicitly scroll to the document top instead, matching the
+          // user intent "go back to the hero".
+          if (isHome && !e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+            e.preventDefault()
+            window.scrollTo({ top: 0, behavior: "smooth" })
+            setIsOpen(false)
+          }
+        }}
+      >
         <Image
           src="/logo.png"
           alt="tsutsu"
