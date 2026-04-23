@@ -98,7 +98,14 @@ export default function HomeNav() {
           // already-in-view and refuses to scroll (y stays unchanged).
           // Explicitly scroll to the document top instead, matching the
           // user intent "go back to the hero".
-          if (isHome && !e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+          if (
+            isHome &&
+            !e.metaKey &&
+            !e.ctrlKey &&
+            !e.shiftKey &&
+            !e.altKey &&
+            e.button === 0
+          ) {
             e.preventDefault()
             window.scrollTo({ top: 0, behavior: "smooth" })
             setIsOpen(false)
