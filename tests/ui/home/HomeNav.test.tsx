@@ -274,6 +274,53 @@ describe("Phase 10: HomeNav — mobile disclosure (C-1)", () => {
   })
 })
 
+describe("HomeNav — brand logo click behavior", () => {
+  it("scrolls to document top on home-page logo click (bypasses sticky-hero anchor trap)", async () => {
+    vi.mocked(usePathname).mockReturnValue("/")
+    const scrollSpy = vi.spyOn(window, "scrollTo").mockImplementation(() => {})
+    const user = userEvent.setup()
+    render(<HomeNav />)
+    const brand = screen.getByRole("link", { name: /tsutsu/i })
+    await user.click(brand)
+    expect(scrollSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ top: 0, behavior: "smooth" }),
+    )
+    scrollSpy.mockRestore()
+  })
+
+  it("does not intercept logo click when modifier keys are held", () => {
+    vi.mocked(usePathname).mockReturnValue("/")
+    const scrollSpy = vi.spyOn(window, "scrollTo").mockImplementation(() => {})
+    render(<HomeNav />)
+    const brand = screen.getByRole("link", { name: /tsutsu/i })
+    // Simulate cmd/ctrl-click (opening link in new tab) — the default
+    // anchor behavior must be preserved so the browser can open the new tab.
+    const event = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      metaKey: true,
+    })
+    brand.dispatchEvent(event)
+    expect(scrollSpy).not.toHaveBeenCalled()
+    expect(event.defaultPrevented).toBe(false)
+    scrollSpy.mockRestore()
+  })
+
+  it("does not intercept logo click when off the home page", () => {
+    vi.mocked(usePathname).mockReturnValue("/blog")
+    const scrollSpy = vi.spyOn(window, "scrollTo").mockImplementation(() => {})
+    render(<HomeNav />)
+    const brand = screen.getByRole("link", { name: /tsutsu/i })
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true })
+    brand.dispatchEvent(event)
+    // Off-home brand href is "/" — should not call scrollTo, should let
+    // browser navigate.
+    expect(scrollSpy).not.toHaveBeenCalled()
+    expect(event.defaultPrevented).toBe(false)
+    scrollSpy.mockRestore()
+  })
+})
+
 describe("HomeNav — cross-page navigation (non-home pathnames)", () => {
   it("links the brand to '/' when viewed outside the home page", () => {
     vi.mocked(usePathname).mockReturnValue("/announcements")
