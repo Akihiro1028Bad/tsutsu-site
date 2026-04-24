@@ -4,16 +4,20 @@ import {
   motion,
   useReducedMotion as useFramerReducedMotion,
 } from "framer-motion"
+import { useIsDesktop } from "@/lib/motion/use-is-desktop"
 
 /**
  * Hairline accent painted along the top edge of the Works section.
  * Sweeps in (scaleX 0 → 1) on first viewport entry to reinforce the
- * "sheet overlap" moment where Works covers the pinned Hero. Opts out
- * entirely under prefers-reduced-motion.
+ * "sheet overlap" moment where Works covers the pinned Hero. Only
+ * rendered on desktop with motion allowed — matches the gating of the
+ * other three crossover surfaces (Hero depth, glass band, tilt) so
+ * touch and reduced-motion users get a consistent static fallback.
  */
 export default function WorksEdgeAccent() {
+  const isDesktop = useIsDesktop()
   const reduced = useFramerReducedMotion()
-  if (reduced) {
+  if (!isDesktop || reduced) {
     return null
   }
   return (
