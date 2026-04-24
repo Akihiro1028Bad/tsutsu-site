@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     description: 'Webサイト制作、アプリ開発、システム開発支援、未経験エンジニアの学習キャリア支援を行っている個人事業主のホームページ。',
     images: [
       {
-        url: '/logo.png',
-        width: 1200,
-        height: 630,
+        url: '/ogp.png',
+        width: 1536,
+        height: 1024,
         alt: 'tsutsu - Web開発・システム開発支援',
       },
     ],
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'tsutsu | Web開発・システム開発支援',
     description: 'Webサイト制作、アプリ開発、システム開発支援、未経験エンジニアの学習キャリア支援を行っている個人事業主のホームページ。',
-    images: ['/logo.png'],
+    images: ['/ogp.png'],
   },
   robots: {
     index: true,

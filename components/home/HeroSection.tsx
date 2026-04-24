@@ -1,9 +1,21 @@
+import Image from "next/image"
+
 /**
  * Editorial first-fold. Server-only — entirely static text + ambient marks.
  */
 export default function HeroSection() {
   return (
     <header id="top" className="hero hero--wrap">
+      <figure className="hero__figure" aria-hidden="true">
+        <Image
+          src="/home/hero-mark.png"
+          alt=""
+          width={1024}
+          height={1536}
+          priority
+          sizes="(max-width: 900px) 0px, 22vw"
+        />
+      </figure>
       <div className="hero__grid">
         <div className="hero__title-block">
           <h1 className="hero__main">

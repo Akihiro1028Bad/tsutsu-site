@@ -257,6 +257,50 @@
   row-gap: clamp(12px, 1.6vw, 28px);
   align-items: end;
   flex-grow: 1;
+  position: relative;
+  z-index: 1;
+}
+/* Editorial figure — sepia architectural mark anchored to the top-right
+   of the hero. Purely decorative (aria-hidden). Hidden on narrow viewports
+   to keep typography as the sole hero subject on mobile. */
+.home-root .hero__figure {
+  position: absolute;
+  top: clamp(96px, 14vh, 150px);
+  right: var(--pad-x);
+  width: clamp(180px, 22vw, 320px);
+  margin: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 0;
+  animation: tsutsu-hero-figure-rise 1200ms cubic-bezier(0.2, 0.7, 0.2, 1)
+    720ms forwards;
+  mix-blend-mode: multiply;
+}
+.home-root .hero__figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+@keyframes tsutsu-hero-figure-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 0.92;
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  .home-root .hero__figure {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-root .hero__figure {
+    animation: none;
+    opacity: 0.92;
+  }
 }
 .home-root .hero__title-block {
   grid-column: 1 / -1;
