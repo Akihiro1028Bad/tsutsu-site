@@ -1,10 +1,54 @@
-import { describe, it, expect } from "vitest"
-import { render, screen, within } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import { render, screen, within, cleanup } from "@testing-library/react"
 import React from "react"
+
+const { framerReducedMotion } = vi.hoisted(() => ({
+  framerReducedMotion: { value: false as boolean },
+}))
+
+// Bypass framer-motion scroll + transform hooks in jsdom — the Hero depth
+// animation is visual-only and not the concern of these structural tests.
+vi.mock("framer-motion", async () => {
+  const actual = await vi.importActual<typeof import("framer-motion")>(
+    "framer-motion"
+  )
+  return {
+    ...actual,
+    useReducedMotion: () => framerReducedMotion.value,
+    useScroll: () => ({
+      scrollYProgress: { get: () => 0, on: () => () => {} },
+    }),
+    useTransform: () => 0,
+  }
+})
+
+interface FakeMql {
+  matches: boolean
+  addEventListener: ReturnType<typeof vi.fn>
+  removeEventListener: ReturnType<typeof vi.fn>
+}
+
+function mockMatchMedia(map: Record<string, boolean>) {
+  window.matchMedia = vi.fn((query: string): FakeMql => ({
+    matches: map[query] === true,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })) as unknown as typeof window.matchMedia
+}
 
 import HeroSection from "@/components/home/HeroSection"
 
 describe("Phase 3: HeroSection — editorial first-fold", () => {
+  let originalMatchMedia: typeof window.matchMedia
+  beforeEach(() => {
+    originalMatchMedia = window.matchMedia
+    framerReducedMotion.value = false
+  })
+  afterEach(() => {
+    window.matchMedia = originalMatchMedia
+    cleanup()
+  })
+
   it("renders a banner landmark anchored at #top", () => {
     render(<HeroSection />)
     const banner = screen.getByRole("banner")
@@ -62,6 +106,30 @@ describe("Phase 3: HeroSection — editorial first-fold", () => {
     expect(hint?.querySelector(".hero__scroll-hint__line")).not.toBeNull()
     const label = hint?.querySelector(".hero__scroll-hint__label")
     expect(label?.textContent).toMatch(/SCROLL/)
+  })
+
+  it("marks the depth sheet data-hero-depth='off' on touch / reduced-motion", () => {
+    mockMatchMedia({ "(pointer: fine)": false })
+    framerReducedMotion.value = false
+    const { container } = render(<HeroSection />)
+    const sheet = container.querySelector(".hero__grid") as HTMLElement
+    expect(sheet.getAttribute("data-hero-depth")).toBe("off")
+  })
+
+  it("marks the depth sheet data-hero-depth='on' on desktop with motion allowed", () => {
+    mockMatchMedia({ "(pointer: fine)": true })
+    framerReducedMotion.value = false
+    const { container } = render(<HeroSection />)
+    const sheet = container.querySelector(".hero__grid") as HTMLElement
+    expect(sheet.getAttribute("data-hero-depth")).toBe("on")
+  })
+
+  it("marks the depth sheet data-hero-depth='off' when reduced-motion is preferred", () => {
+    mockMatchMedia({ "(pointer: fine)": true })
+    framerReducedMotion.value = true
+    const { container } = render(<HeroSection />)
+    const sheet = container.querySelector(".hero__grid") as HTMLElement
+    expect(sheet.getAttribute("data-hero-depth")).toBe("off")
   })
 
 })

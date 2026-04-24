@@ -3331,7 +3331,74 @@
 /* Non-hero sections: ascending z-index + opaque background so Works
    visibly covers Hero during the first-screen crossover. Services keeps
    its own dark bg from the section's base styles. */
-.home-root main[data-sticky-stack="on"] > section#works    { background: var(--bg); z-index: 2; }
+/* Works: gradient top so Hero bleeds through the glass band at the seam
+   (solid var(--bg) takes over below ~160px so the rest of the section
+   still covers Hero cleanly during the Sticky Stack crossover). */
+.home-root main[data-sticky-stack="on"] > section#works {
+  background: linear-gradient(
+    to bottom,
+    transparent 0px,
+    color-mix(in oklch, var(--bg) 45%, transparent) 80px,
+    var(--bg) 160px,
+    var(--bg) 100%
+  );
+  z-index: 2;
+  position: relative;
+  perspective: 1800px;
+  perspective-origin: 50% 0%;
+  /* Limit paint/layout compositing scope so the glass band's
+     backdrop-filter + the tilt's 3D transforms don't force the
+     browser to re-paint the rest of the page on scroll. */
+  contain: layout paint;
+}
+
+/* Non-fine-pointer (mobile / keyboard-only / assistive): glass band
+   (::before) is disabled here, so the wide 160px transparent→bg gradient
+   just exposes a long Hero-bleed strip without the frosted pane to
+   justify it. Compress the gradient to ~60px so the Hero→Works seam
+   reads as a tight edge. `not (pointer: fine)` catches both `coarse`
+   (touch) and `none` (keyboard-only) — keeps the override in lock-step
+   with the `(pointer: fine)` gate on the glass band pseudo. */
+@media not (pointer: fine) {
+  .home-root main[data-sticky-stack="on"] > section#works {
+    background: linear-gradient(
+      to bottom,
+      transparent 0px,
+      color-mix(in oklch, var(--bg) 55%, transparent) 28px,
+      var(--bg) 60px,
+      var(--bg) 100%
+    );
+  }
+}
+
+/* Glass band — Works "sheet" sliding over Hero reads as a frosted
+   pane rather than an opaque block. Pseudo-element so no extra DOM;
+   backdrop-filter blurs the receding Hero beneath the seam. The band
+   fades out with a mask so it only affects the top ~140px. Gated by
+   (pointer: fine) because backdrop-filter is expensive on mobile GPUs
+   and the crossover effect itself is desktop-focused. */
+@media (pointer: fine) {
+  .home-root main[data-sticky-stack="on"] > section#works::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 160px;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--bg) 28%, transparent) 0%,
+      color-mix(in oklch, var(--bg) 18%, transparent) 60%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+  }
+}
 .home-root main[data-sticky-stack="on"] > section#services {                         z-index: 3; }
 .home-root main[data-sticky-stack="on"] > section#about    { background: var(--bg); z-index: 4; }
 .home-root main[data-sticky-stack="on"] > section#notes    { background: var(--bg); z-index: 5; }
@@ -3346,6 +3413,40 @@
    requires DOM restructuring and is out of scope for this PR. The Hero→
    Works crossover above still delivers the primary "sheet overlap" feel. */
 
+/* Works edge accent — hairline "sheet crease" painted along the top of
+   the Works section. A client component (WorksEdgeAccent) animates it
+   from scaleX 0 → 1 the first time it enters the viewport, reinforcing
+   the Hero→Works crossover moment. Purely decorative (aria-hidden).
+   z-index:4 keeps it above the glass band (::before @ z-index:2) and
+   the tilted content wrapper. */
+.home-root .works__edge-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklch, var(--accent) 50%, transparent) 22%,
+    color-mix(in oklch, var(--accent) 88%, transparent) 50%,
+    color-mix(in oklch, var(--accent) 50%, transparent) 78%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Tilt shell — all Works content lives here and receives the subtle
+   scroll-linked rotateX "landing" transform from WorksTilt.tsx. Stays
+   above the glass band (::before @ z-index:2) so typography and cards
+   are never blurred by the frosted seam above. */
+.home-root .works__tilt {
+  position: relative;
+  z-index: 3;
+}
+
 /* Reduced-motion fallback — collapse the Hero sticky + layering back to
    normal document flow so motion-sensitive users see a plain stacked
    layout. */
@@ -3356,6 +3457,16 @@
     min-height: auto;
     z-index: auto;
     box-shadow: none;
+  }
+  .home-root main[data-sticky-stack="on"] > section#works {
+    background: var(--bg);
+    perspective: none;
+  }
+  .home-root main[data-sticky-stack="on"] > section#works::before {
+    display: none;
+  }
+  .home-root .works__edge-accent {
+    display: none;
   }
 }
 
