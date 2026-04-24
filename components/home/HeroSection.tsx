@@ -53,9 +53,6 @@ export default function HeroSection() {
           opacity,
           filter,
           transformOrigin: "50% 45%",
-          willChange: shouldAnimate
-            ? "transform, opacity, filter"
-            : undefined,
         }}
         data-hero-depth={shouldAnimate ? "on" : "off"}
       >

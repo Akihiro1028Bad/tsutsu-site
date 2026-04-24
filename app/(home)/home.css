@@ -3346,31 +3346,39 @@
   position: relative;
   perspective: 1800px;
   perspective-origin: 50% 0%;
+  /* Limit paint/layout compositing scope so the glass band's
+     backdrop-filter + the tilt's 3D transforms don't force the
+     browser to re-paint the rest of the page on scroll. */
+  contain: layout paint;
 }
 
 /* Glass band — Works "sheet" sliding over Hero reads as a frosted
    pane rather than an opaque block. Pseudo-element so no extra DOM;
    backdrop-filter blurs the receding Hero beneath the seam. The band
-   fades out with a mask so it only affects the top ~140px. */
-.home-root main[data-sticky-stack="on"] > section#works::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 160px;
-  pointer-events: none;
-  z-index: 2;
-  backdrop-filter: blur(18px) saturate(125%);
-  -webkit-backdrop-filter: blur(18px) saturate(125%);
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklch, var(--bg) 28%, transparent) 0%,
-    color-mix(in oklch, var(--bg) 18%, transparent) 60%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+   fades out with a mask so it only affects the top ~140px. Gated by
+   (pointer: fine) because backdrop-filter is expensive on mobile GPUs
+   and the crossover effect itself is desktop-focused. */
+@media (pointer: fine) {
+  .home-root main[data-sticky-stack="on"] > section#works::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 160px;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--bg) 28%, transparent) 0%,
+      color-mix(in oklch, var(--bg) 18%, transparent) 60%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+  }
 }
 .home-root main[data-sticky-stack="on"] > section#services {                         z-index: 3; }
 .home-root main[data-sticky-stack="on"] > section#about    { background: var(--bg); z-index: 4; }
