@@ -21,7 +21,6 @@ vi.mock("next/image", () => ({
   default: ({
     src,
     alt,
-    ...rest
   }: {
     src: string | { src: string }
     alt: string
@@ -29,7 +28,7 @@ vi.mock("next/image", () => ({
   }) => {
     const resolvedSrc = typeof src === "string" ? src : src.src
     // eslint-disable-next-line @next/next/no-img-element -- mock for next/image in tests
-    return <img src={resolvedSrc} alt={alt} {...rest} />
+    return <img src={resolvedSrc} alt={alt} />
   },
 }))
 
