@@ -3352,6 +3352,22 @@
   contain: layout paint;
 }
 
+/* Touch / mobile: glass band (::before) is disabled here, so the wide
+   160px transparent→bg gradient just exposes a long Hero-bleed strip
+   without the frosted pane to justify it. Compress the gradient to
+   ~60px so the Hero→Works seam reads as a tight edge on mobile. */
+@media (pointer: coarse) {
+  .home-root main[data-sticky-stack="on"] > section#works {
+    background: linear-gradient(
+      to bottom,
+      transparent 0px,
+      color-mix(in oklch, var(--bg) 55%, transparent) 28px,
+      var(--bg) 60px,
+      var(--bg) 100%
+    );
+  }
+}
+
 /* Glass band — Works "sheet" sliding over Hero reads as a frosted
    pane rather than an opaque block. Pseudo-element so no extra DOM;
    backdrop-filter blurs the receding Hero beneath the seam. The band
