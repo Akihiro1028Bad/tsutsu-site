@@ -11,7 +11,7 @@ export const WORKS_FEATURED: ReadonlyArray<FeaturedWork> = Object.freeze([
     id: "pickle-bang-theory",
     indexNumber: "001",
     title: "THE PICKLE BANG THEORY.",
-    titleJa: "ザピックルバンセオリー / インドアピックルボール施設",
+    titleJa: "ザ ピックル バン セオリー / インドアピックルボール施設",
     description:
       "クロスミントン世界王者が手がける、本八幡駅徒歩1分・24時間営業のインドアピックルボール施設。予約導線・世界観の表現まで一貫して設計・実装しました。初心者から上級者まで楽しめる空間を、Webでも体感できるかたちに。",
     summary:
