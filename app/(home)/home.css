@@ -1179,7 +1179,7 @@
 .home-root .journal__news-list a,
 .home-root .journal__blog-list a {
   display: grid;
-  grid-template-columns: 80px repeat(var(--col), 1fr);
+  grid-template-columns: 120px repeat(var(--col), 1fr);
   column-gap: clamp(12px, 1.6vw, 28px);
   padding: 20px 0;
   align-items: center;
@@ -1194,8 +1194,8 @@
   grid-column: 1 / 2;
   display: block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: var(--bg-soft);
   border: 1px solid var(--rule);
@@ -1206,6 +1206,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 0.4s ease;
 }
 .home-root .journal__news-list a:hover .journal__thumb img,
@@ -1338,15 +1339,15 @@
 @media (max-width: 900px) {
   .home-root .journal__news-list a,
   .home-root .journal__blog-list a {
-    grid-template-columns: 56px 1fr auto;
+    grid-template-columns: 84px 1fr auto;
     column-gap: 14px;
     row-gap: 4px;
   }
   .home-root .journal__thumb {
     grid-column: 1;
     grid-row: 1 / span 3;
-    width: 56px;
-    height: 56px;
+    width: 84px;
+    aspect-ratio: 3 / 2;
   }
   .home-root .journal__thumb-mark {
     font-size: 20px;
@@ -1391,7 +1392,7 @@
 /* Skeleton rows while loading */
 .home-root .archive-page__skeleton-row {
   display: grid;
-  grid-template-columns: 80px 1fr;
+  grid-template-columns: 120px 1fr;
   gap: clamp(12px, 1.6vw, 28px);
   padding: 20px 0;
   border-bottom: 1px solid var(--rule);
@@ -1404,8 +1405,8 @@
   animation: archive-skeleton 1.3s ease-in-out infinite;
 }
 .home-root .archive-page__skeleton--thumb {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  aspect-ratio: 3 / 2;
   border-radius: 0;
 }
 .home-root .archive-page__skeleton--line {
@@ -1451,11 +1452,11 @@
 }
 @media (max-width: 900px) {
   .home-root .archive-page__skeleton-row {
-    grid-template-columns: 56px 1fr;
+    grid-template-columns: 84px 1fr;
   }
   .home-root .archive-page__skeleton--thumb {
-    width: 56px;
-    height: 56px;
+    width: 84px;
+    aspect-ratio: 3 / 2;
   }
 }
 

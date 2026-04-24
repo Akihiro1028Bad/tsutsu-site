@@ -30,9 +30,8 @@ function Thumb({
         <Image
           src={image.src}
           alt={image.alt}
-          width={image.width}
-          height={image.height}
-          sizes="(max-width: 900px) 56px, 80px"
+          fill
+          sizes="(max-width: 900px) 84px, 120px"
           loading="lazy"
         />
       </span>
