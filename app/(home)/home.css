@@ -3352,11 +3352,14 @@
   contain: layout paint;
 }
 
-/* Touch / mobile: glass band (::before) is disabled here, so the wide
-   160px transparent→bg gradient just exposes a long Hero-bleed strip
-   without the frosted pane to justify it. Compress the gradient to
-   ~60px so the Hero→Works seam reads as a tight edge on mobile. */
-@media (pointer: coarse) {
+/* Non-fine-pointer (mobile / keyboard-only / assistive): glass band
+   (::before) is disabled here, so the wide 160px transparent→bg gradient
+   just exposes a long Hero-bleed strip without the frosted pane to
+   justify it. Compress the gradient to ~60px so the Hero→Works seam
+   reads as a tight edge. `not (pointer: fine)` catches both `coarse`
+   (touch) and `none` (keyboard-only) — keeps the override in lock-step
+   with the `(pointer: fine)` gate on the glass band pseudo. */
+@media not (pointer: fine) {
   .home-root main[data-sticky-stack="on"] > section#works {
     background: linear-gradient(
       to bottom,
