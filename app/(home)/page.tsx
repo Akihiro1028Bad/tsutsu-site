@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/ogp.png",
+        url: "/hero.png",
         width: 1536,
         height: 1024,
         alt: "tsutsu",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
-    images: ["/ogp.png"],
+    images: ["/hero.png"],
   },
 }
 

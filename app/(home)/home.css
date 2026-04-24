@@ -260,46 +260,38 @@
   position: relative;
   z-index: 1;
 }
-/* Editorial figure — sepia architectural mark anchored to the top-right
-   of the hero. Purely decorative (aria-hidden). Hidden on narrow viewports
-   to keep typography as the sole hero subject on mobile. */
+/* Hero figure — full-bleed 3D orb image. Sits behind the typography
+   (z-index: 0) with a subtle fade-in. Purely decorative (aria-hidden).
+   Uses object-fit: cover so a single landscape master survives
+   portrait-mobile cropping. */
 .home-root .hero__figure {
   position: absolute;
-  top: clamp(96px, 14vh, 150px);
-  right: var(--pad-x);
-  width: clamp(180px, 22vw, 320px);
+  inset: 0;
   margin: 0;
   pointer-events: none;
   opacity: 0;
   z-index: 0;
   animation: tsutsu-hero-figure-rise 1200ms cubic-bezier(0.2, 0.7, 0.2, 1)
-    720ms forwards;
-  mix-blend-mode: multiply;
+    200ms forwards;
 }
 .home-root .hero__figure img {
-  width: 100%;
-  height: auto;
-  display: block;
+  object-fit: cover;
+  object-position: center;
 }
 @keyframes tsutsu-hero-figure-rise {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: scale(1.02);
   }
   to {
-    opacity: 0.92;
+    opacity: 1;
     transform: none;
-  }
-}
-@media (max-width: 900px) {
-  .home-root .hero__figure {
-    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-root .hero__figure {
     animation: none;
-    opacity: 0.92;
+    opacity: 1;
   }
 }
 .home-root .hero__title-block {

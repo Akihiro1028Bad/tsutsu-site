@@ -8,12 +8,11 @@ export default function HeroSection() {
     <header id="top" className="hero hero--wrap">
       <figure className="hero__figure" aria-hidden="true">
         <Image
-          src="/home/hero-mark.png"
+          src="/hero.png"
           alt=""
-          width={1024}
-          height={1536}
+          fill
           priority
-          sizes="(max-width: 900px) 0px, 22vw"
+          sizes="100vw"
         />
       </figure>
       <div className="hero__grid">
