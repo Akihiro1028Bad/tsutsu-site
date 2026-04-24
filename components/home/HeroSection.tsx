@@ -12,6 +12,7 @@ export default function HeroSection() {
           alt=""
           fill
           priority
+          quality={92}
           sizes="100vw"
         />
       </figure>

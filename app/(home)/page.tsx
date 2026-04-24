@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/hero.png",
-        width: 1536,
+        width: 2048,
         height: 1024,
         alt: "tsutsu",
       },
