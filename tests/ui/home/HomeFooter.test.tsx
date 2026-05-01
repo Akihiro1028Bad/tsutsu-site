@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, vi } from "vitest"
+import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import React from "react"
 
@@ -19,6 +19,13 @@ vi.mock("next/image", () => ({
   },
 }))
 
+// next/navigation mock — drives `usePathname()` so footer href generation
+// can be exercised across home and non-home routes.
+const pathnameMock = vi.fn<() => string>(() => "/")
+vi.mock("next/navigation", () => ({
+  usePathname: () => pathnameMock(),
+}))
+
 import HomeFooter from "@/components/home/HomeFooter"
 
 const FIXED_YEAR = 2031
@@ -30,6 +37,10 @@ beforeAll(() => {
 
 afterAll(() => {
   vi.useRealTimers()
+})
+
+beforeEach(() => {
+  pathnameMock.mockReturnValue("/")
 })
 
 describe("Phase 2: HomeFooter — content & a11y", () => {
@@ -90,6 +101,31 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
   it("renders the current year in the copyright meta row", () => {
     render(<HomeFooter />)
     expect(screen.getByText(new RegExp(`© ${FIXED_YEAR}`))).toBeInTheDocument()
+  })
+
+  it("prefixes section anchors with `/` when rendered outside the home route", () => {
+    pathnameMock.mockReturnValue("/blog/some-slug")
+    render(<HomeFooter />)
+    const footer = screen.getByRole("contentinfo")
+    expect(
+      within(footer).getByRole("link", { name: /^about$/i })
+    ).toHaveAttribute("href", "/#about")
+    expect(
+      within(footer).getByRole("link", { name: /^works$/i })
+    ).toHaveAttribute("href", "/#works")
+    expect(
+      within(footer).getByRole("link", { name: /^services$/i })
+    ).toHaveAttribute("href", "/#services")
+    expect(
+      within(footer).getByRole("link", { name: /^notes$/i })
+    ).toHaveAttribute("href", "/#notes")
+    expect(
+      within(footer).getByRole("link", { name: /問い合わせ|contact/i })
+    ).toHaveAttribute("href", "/#contact")
+    // mailto link must not be route-rewritten.
+    expect(
+      within(footer).getByRole("link", { name: /hello@tsutsu\.dev/i })
+    ).toHaveAttribute("href", "mailto:hello@tsutsu.dev")
   })
 
   it("uses h3 for column headings so the document doesn't skip heading levels", () => {
