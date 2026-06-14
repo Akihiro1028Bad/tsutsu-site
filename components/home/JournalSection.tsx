@@ -3,6 +3,7 @@ import CountUp from "@/components/motion/CountUp"
 import MagneticLink from "@/components/motion/MagneticLink"
 import JournalListRow from "@/components/home/JournalListRow"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
+import SectionEdgeAccent from "@/components/home/SectionEdgeAccent"
 import type {
   JournalBlogItem,
   JournalNewsItem,
@@ -19,6 +20,7 @@ export default function JournalSection({
 }: JournalSectionProps) {
   return (
     <section id="notes" className="journal">
+      <SectionEdgeAccent />
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>

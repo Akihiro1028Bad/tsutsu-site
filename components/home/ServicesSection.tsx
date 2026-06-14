@@ -1,9 +1,11 @@
 import CountUp from "@/components/motion/CountUp"
+import SectionEdgeAccent from "@/components/home/SectionEdgeAccent"
 import { SERVICES } from "@/lib/home/services-data"
 
 export default function ServicesSection() {
   return (
     <section id="services" className="services" data-theme="dark">
+      <SectionEdgeAccent className="section__edge-accent--light" />
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>
