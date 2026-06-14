@@ -45,4 +45,62 @@ describe("Phase 1: app/(home)/home.css — editorial base stylesheet", () => {
       expect(source).toMatch(/\.home-root/)
     })
   })
+
+  describe("Sticky Stack — Prototype A glass bands", () => {
+    it("has glass band ::before for section#services (Works→Services boundary)", () => {
+      expect(source).toContain(
+        '.home-root main[data-sticky-stack="on"] > section#services::before'
+      )
+    })
+
+    it("has glass band ::before for section#about (Services→About boundary)", () => {
+      expect(source).toContain(
+        '.home-root main[data-sticky-stack="on"] > section#about::before'
+      )
+    })
+
+    it("has glass band ::before for section#notes (About→Journal boundary)", () => {
+      expect(source).toContain(
+        '.home-root main[data-sticky-stack="on"] > section#notes::before'
+      )
+    })
+
+    it("has glass band ::before for section#contact (Journal→Contact boundary)", () => {
+      expect(source).toContain(
+        '.home-root main[data-sticky-stack="on"] > section#contact::before'
+      )
+    })
+
+    it("gates all glass bands behind (pointer: fine)", () => {
+      const pointerFineBlocks = source.match(/@media\s*\(pointer:\s*fine\)([\s\S]*?)\n\}/g)
+      expect(pointerFineBlocks).not.toBeNull()
+      const combined = (pointerFineBlocks as string[]).join("\n")
+      expect(combined).toContain("section#services::before")
+      expect(combined).toContain("section#about::before")
+      expect(combined).toContain("section#notes::before")
+      expect(combined).toContain("section#contact::before")
+    })
+
+    it("hides all glass band ::before in prefers-reduced-motion", () => {
+      const reducedBlocks = source.match(
+        /@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*?\n\}/g
+      )
+      expect(reducedBlocks).not.toBeNull()
+      const combined = (reducedBlocks as string[]).join("\n")
+      expect(combined).toContain("section#services::before")
+      expect(combined).toContain("section#about::before")
+      expect(combined).toContain("section#notes::before")
+      expect(combined).toContain("section#contact::before")
+    })
+
+    it("uses var(--ink) base for the dark Services boundary", () => {
+      expect(source).toMatch(/section#services::before[\s\S]*?var\(--ink\)/)
+    })
+
+    it("uses var(--bg) base for light-to-light boundaries (About, Notes, Contact)", () => {
+      expect(source).toMatch(/section#about::before[\s\S]*?var\(--bg\)/)
+      expect(source).toMatch(/section#notes::before[\s\S]*?var\(--bg\)/)
+      expect(source).toMatch(/section#contact::before[\s\S]*?var\(--bg\)/)
+    })
+  })
 })
