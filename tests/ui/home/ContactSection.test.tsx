@@ -8,6 +8,12 @@ vi.mock("@/components/home/ContactForm", () => ({
   default: () => <form data-testid="mock-contact-form" />,
 }))
 
+vi.mock("@/components/home/SectionEdgeAccent", () => ({
+  default: ({ className }: { className?: string }) => (
+    <div data-testid="section-edge-accent" className={className} />
+  ),
+}))
+
 import ContactSection from "@/components/home/ContactSection"
 
 describe("Phase 6: ContactSection — editorial 05 block", () => {
@@ -39,5 +45,10 @@ describe("Phase 6: ContactSection — editorial 05 block", () => {
     expect(screen.getByText(/Location/i)).toBeInTheDocument()
     expect(screen.getByText(/リモート/)).toBeInTheDocument()
     expect(screen.getByText(/六本木/)).toBeInTheDocument()
+  })
+
+  it("renders SectionEdgeAccent at the top of the section", () => {
+    render(<ContactSection />)
+    expect(screen.getByTestId("section-edge-accent")).toBeInTheDocument()
   })
 })
