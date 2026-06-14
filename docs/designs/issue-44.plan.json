@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "plan_depth": "full",
+  "ui_impact": true,
+  "summary": "トップページの全セクション境界（Works→Services、Services→About、About→Journal、Journal→Contact）に、現在Hero→Worksのみで使われている「重なるデザイン」を拡張する。まずPrototype A（ガラスバンドCSS）・B（エッジアクセント汎用コンポーネント）・C（スクロール後退アニメーション）の3案をdesign/dページで並列比較し、確認後に本番セクションへ統合する。",
+  "test_cases": [
+    "SectionEdgeAccent: desktop+motion許可時にアクセント要素がレンダリングされること",
+    "SectionEdgeAccent: タッチデバイス(pointer:coarse)でnullを返すこと",
+    "SectionEdgeAccent: prefers-reduced-motionでnullを返すこと",
+    "SectionDepthWrapper: childrenが正しくレンダリングされること",
+    "SectionDepthWrapper: desktop以外・reduced-motion時はアニメーションなしでchildrenをそのまま返すこと",
+    "home-css.test.ts: section#services::before・section#about::before・section#notes::before・section#contact::beforeのCSSセレクターが存在すること",
+    "各セクションコンポーネント: SectionEdgeAccentがレンダリングされていること"
+  ],
+  "architecture": "新規に SectionEdgeAccent（WorksEdgeAccentの汎用化）と SectionDepthWrapper（HeroSectionのインラインアニメーションの抽出）の2コンポーネントを追加。home.cssのSticky Stackブロックに各セクション境界のガラスバンド::before疑似要素を追記。design/d ルートにプロトタイプ比較ページを作成し、URLクエリ?variant=a|b|c|abでデータ属性経由のスタイル切り替えを実現。本番統合はプロトタイプ確認後に各セクションコンポーネントへSectionEdgeAccentを追加する形で行う。",
+  "subtasks": [
+    {
+      "id": 1,
+      "title": "CSS 全境界ガラスバンド拡張 (Prototype A)"
+    },
+    {
+      "id": 2,
+      "title": "SectionEdgeAccent 汎用コンポーネント (Prototype B)"
+    },
+    {
+      "id": 3,
+      "title": "SectionDepthWrapper スクロール後退アニメーション (Prototype C)"
+    },
+    {
+      "id": 4,
+      "title": "プロトタイプ比較ページ (design/d)"
+    },
+    {
+      "id": 5,
+      "title": "本番セクションへの統合"
+    },
+    {
+      "id": 6,
+      "title": "既存テスト更新"
+    }
+  ]
+}

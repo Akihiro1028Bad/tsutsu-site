@@ -1,10 +1,12 @@
 import CountUp from "@/components/motion/CountUp"
 import RevealOnScroll from "@/components/home/RevealOnScroll"
+import SectionEdgeAccent from "@/components/home/SectionEdgeAccent"
 import { ABOUT } from "@/lib/home/about-data"
 
 export default function AboutSection() {
   return (
     <section id="about" className="about">
+      <SectionEdgeAccent />
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>

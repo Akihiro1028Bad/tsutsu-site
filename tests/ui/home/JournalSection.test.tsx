@@ -2,6 +2,12 @@ import { describe, it, expect, vi } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import React from "react"
 
+vi.mock("@/components/home/SectionEdgeAccent", () => ({
+  default: ({ className }: { className?: string }) => (
+    <div data-testid="section-edge-accent" className={className} />
+  ),
+}))
+
 vi.mock("@/components/home/RevealOnScroll", () => ({
   default: ({
     children,
@@ -211,5 +217,10 @@ describe("Phase 5: JournalSection — News + Blog fused editorial block", () => 
       name: /すべて.*記事|すべて.*ブログ|all notes|view all/i,
     })
     expect(cta).toHaveAttribute("href", "/blog")
+  })
+
+  it("renders SectionEdgeAccent at the top of the section", () => {
+    render(<JournalSection newsItems={news} blogItems={blog} />)
+    expect(screen.getByTestId("section-edge-accent")).toBeInTheDocument()
   })
 })

@@ -2,6 +2,12 @@ import { describe, it, expect, vi } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import React from "react"
 
+vi.mock("@/components/home/SectionEdgeAccent", () => ({
+  default: ({ className }: { className?: string }) => (
+    <div data-testid="section-edge-accent" className={className} />
+  ),
+}))
+
 vi.mock("@/components/home/RevealOnScroll", () => ({
   default: ({
     children,
@@ -64,5 +70,10 @@ describe("Phase 4: AboutSection — profile section", () => {
   it("wraps the profile body in RevealOnScroll", () => {
     render(<AboutSection />)
     expect(screen.getByTestId("reveal-wrapper")).toBeInTheDocument()
+  })
+
+  it("renders SectionEdgeAccent at the top of the section", () => {
+    render(<AboutSection />)
+    expect(screen.getByTestId("section-edge-accent")).toBeInTheDocument()
   })
 })

@@ -3399,10 +3399,100 @@
     -webkit-mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
   }
 }
-.home-root main[data-sticky-stack="on"] > section#services {                         z-index: 3; }
-.home-root main[data-sticky-stack="on"] > section#about    { background: var(--bg); z-index: 4; }
-.home-root main[data-sticky-stack="on"] > section#notes    { background: var(--bg); z-index: 5; }
-.home-root main[data-sticky-stack="on"] > section#contact  { background: var(--bg); z-index: 6; }
+
+/* Glass bands for remaining section boundaries — Prototype A.
+   Works→Services: light→dark, so use var(--ink) base to blend with dark bg.
+   Services→About, About→Journal, Journal→Contact: use var(--bg) base. */
+@media (pointer: fine) {
+  /* Works → Services (light → dark): dark-tinted band */
+  .home-root main[data-sticky-stack="on"] > section#services::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(14px) saturate(110%);
+    -webkit-backdrop-filter: blur(14px) saturate(110%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--ink) 18%, transparent) 0%,
+      color-mix(in oklch, var(--ink) 10%, transparent) 55%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  }
+  /* Services → About (dark → light): light-tinted band */
+  .home-root main[data-sticky-stack="on"] > section#about::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--bg) 22%, transparent) 0%,
+      color-mix(in oklch, var(--bg) 14%, transparent) 55%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  }
+  /* About → Journal (light → light) */
+  .home-root main[data-sticky-stack="on"] > section#notes::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--bg) 22%, transparent) 0%,
+      color-mix(in oklch, var(--bg) 14%, transparent) 55%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  }
+  /* Journal → Contact (light → light) */
+  .home-root main[data-sticky-stack="on"] > section#contact::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    pointer-events: none;
+    z-index: 2;
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--bg) 22%, transparent) 0%,
+      color-mix(in oklch, var(--bg) 14%, transparent) 55%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  }
+}
+.home-root main[data-sticky-stack="on"] > section#services { position: relative; z-index: 3; contain: layout paint; }
+.home-root main[data-sticky-stack="on"] > section#about    { position: relative; background: var(--bg); z-index: 4; contain: layout paint; }
+.home-root main[data-sticky-stack="on"] > section#notes    { position: relative; background: var(--bg); z-index: 5; contain: layout paint; }
+.home-root main[data-sticky-stack="on"] > section#contact  { position: relative; background: var(--bg); z-index: 6; contain: layout paint; }
 
 /* Pinned Typography (display: grid split on Works/Journal) was removed
    2026-04-23: the 2-col grid caused layout breakage because (a) Works has
@@ -3412,6 +3502,41 @@
    full-width span that defeated the intended split. Proper implementation
    requires DOM restructuring and is out of scope for this PR. The Hero→
    Works crossover above still delivers the primary "sheet overlap" feel. */
+
+/* Generic section edge accent — hairline "sheet crease" for all
+   section boundaries after Works. Same animation contract as the
+   works__edge-accent; SectionEdgeAccent.tsx drives scaleX 0 → 1 on
+   viewport entry. z-index:4 keeps it above the glass band (z-index:2).
+   --light modifier inverts to white for sections with dark backgrounds. */
+.home-root .section__edge-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklch, var(--accent) 50%, transparent) 22%,
+    color-mix(in oklch, var(--accent) 88%, transparent) 50%,
+    color-mix(in oklch, var(--accent) 50%, transparent) 78%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 4;
+}
+
+.home-root .section__edge-accent--light {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklch, var(--bg) 50%, transparent) 22%,
+    color-mix(in oklch, var(--bg) 88%, transparent) 50%,
+    color-mix(in oklch, var(--bg) 50%, transparent) 78%,
+    transparent 100%
+  );
+}
 
 /* Works edge accent — hairline "sheet crease" painted along the top of
    the Works section. A client component (WorksEdgeAccent) animates it
@@ -3462,10 +3587,15 @@
     background: var(--bg);
     perspective: none;
   }
-  .home-root main[data-sticky-stack="on"] > section#works::before {
+  .home-root main[data-sticky-stack="on"] > section#works::before,
+  .home-root main[data-sticky-stack="on"] > section#services::before,
+  .home-root main[data-sticky-stack="on"] > section#about::before,
+  .home-root main[data-sticky-stack="on"] > section#notes::before,
+  .home-root main[data-sticky-stack="on"] > section#contact::before {
     display: none;
   }
-  .home-root .works__edge-accent {
+  .home-root .works__edge-accent,
+  .home-root .section__edge-accent {
     display: none;
   }
 }

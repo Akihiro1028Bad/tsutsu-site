@@ -1,5 +1,6 @@
 import CountUp from "@/components/motion/CountUp"
 import ContactForm from "@/components/home/ContactForm"
+import SectionEdgeAccent from "@/components/home/SectionEdgeAccent"
 
 interface AsideItem {
   readonly term: string
@@ -34,6 +35,7 @@ const ASIDE_ITEMS: ReadonlyArray<AsideItem> = [
 export default function ContactSection() {
   return (
     <section id="contact" className="contact">
+      <SectionEdgeAccent />
       <div className="section-head section-head--hero">
         <div className="section-head__rule">
           <span>

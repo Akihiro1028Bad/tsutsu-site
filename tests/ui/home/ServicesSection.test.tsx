@@ -1,6 +1,12 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vi } from "vitest"
 import { render, screen, within } from "@testing-library/react"
 import React from "react"
+
+vi.mock("@/components/home/SectionEdgeAccent", () => ({
+  default: ({ className }: { className?: string }) => (
+    <div data-testid="section-edge-accent" className={className} />
+  ),
+}))
 
 import ServicesSection from "@/components/home/ServicesSection"
 import { SERVICES } from "@/lib/home/services-data"
@@ -26,6 +32,13 @@ describe("Phase 4: ServicesSection — dark editorial section", () => {
     ).toBeInTheDocument()
     // CountUp shows "00" pre-intersection; final value 02.
     expect(screen.getByText(/^0[02]$/)).toBeInTheDocument()
+  })
+
+  it("renders SectionEdgeAccent with light variant class for dark theme", () => {
+    render(<ServicesSection />)
+    const accent = screen.getByTestId("section-edge-accent")
+    expect(accent).toBeInTheDocument()
+    expect(accent.className).toContain("section__edge-accent--light")
   })
 
   it("renders one spread per service", () => {
