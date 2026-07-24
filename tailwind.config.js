@@ -8,6 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Blueprint design tokens (spec: 2026-07-24-design-renewal-blueprint)
+        paper: '#F7F5F0',
+        ink: { DEFAULT: '#1E2A3A', soft: '#5A6A7D' },
+        seal: '#D43D2A',
+        blueprint: '#3D6EA5',
+        pencil: '#8A97A5',
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -47,7 +53,9 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-noto-sans-jp)', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'sans-serif'],
-        serif: ['var(--font-noto-serif-jp)', 'Hiragino Mincho ProN', 'Yu Mincho', 'Meiryo', 'serif'],
+        display: ['var(--font-zen-kaku)', 'Hiragino Kaku Gothic ProN', 'sans-serif'],
+        hand: ['var(--font-zen-kurenaido)', 'Hiragino Kaku Gothic ProN', 'sans-serif'],
+        label: ['var(--font-space-grotesk)', 'ui-monospace', 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',
