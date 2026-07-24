@@ -108,23 +108,22 @@ describe("Phase 2: HomeNav — structural rendering", () => {
     expect(brand).toHaveAttribute("href", "#top")
   })
 
-  it("renders the brand logo image inside the anchor", () => {
+  it("renders the seal mark (堤) inside the brand anchor instead of an image", () => {
     render(<HomeNav />)
     const brand = screen.getByRole("link", { name: /tsutsu/i })
-    const img = brand.querySelector("img") as HTMLImageElement | null
-    expect(img).not.toBeNull()
-    expect(img?.getAttribute("src")).toBe("/logo.png")
-    expect(img?.getAttribute("alt")).toMatch(/tsutsu/i)
+    expect(brand.querySelector("img")).toBeNull()
+    expect(brand.textContent).toContain("堤")
+    expect(brand.textContent).toContain("TSUTSU")
   })
 
-  it("renders all five section anchors with the design's hrefs", () => {
+  it("renders the four section anchors and the consult CTA", () => {
     render(<HomeNav />)
     const expected = [
-      { name: /^about$/i, href: "#about" },
-      { name: /^works$/i, href: "#works" },
       { name: /^services$/i, href: "#services" },
-      { name: /^notes$/i, href: "#notes" },
-      { name: /^contact$/i, href: "#contact" },
+      { name: /^works$/i, href: "#works" },
+      { name: /^about$/i, href: "#about" },
+      { name: /^journal$/i, href: "#notes" },
+      { name: /相談する/, href: "#contact" },
     ]
     for (const e of expected) {
       const link = screen.getByRole("link", { name: e.name })
@@ -139,29 +138,26 @@ describe("Phase 2: HomeNav — structural rendering", () => {
   })
 })
 
-describe("Phase 10: HomeNav — theme switching (C-3)", () => {
+describe("Blueprint: HomeNav — theme switching", () => {
   it("starts with the light theme when no section is active", () => {
     render(<HomeNav />)
-    const nav = screen.getByRole("navigation")
-    expect(nav).toHaveAttribute("data-theme", "light")
+    expect(screen.getByRole("navigation")).toHaveAttribute("data-theme", "light")
   })
 
-  it("switches to the dark theme when the Services section becomes active", () => {
-    const services = placeSection("services")
+  it("switches to the dark theme when the Contact section becomes active", () => {
+    const contact = placeSection("contact")
     render(<HomeNav />)
-    fireIntersection(services)
-    const nav = screen.getByRole("navigation")
-    expect(nav).toHaveAttribute("data-theme", "dark")
-    services.remove()
+    fireIntersection(contact)
+    expect(screen.getByRole("navigation")).toHaveAttribute("data-theme", "dark")
+    contact.remove()
   })
 
   it("stays on the light theme when a non-dark section is active", () => {
-    const works = placeSection("works")
+    const services = placeSection("services")
     render(<HomeNav />)
-    fireIntersection(works)
-    const nav = screen.getByRole("navigation")
-    expect(nav).toHaveAttribute("data-theme", "light")
-    works.remove()
+    fireIntersection(services)
+    expect(screen.getByRole("navigation")).toHaveAttribute("data-theme", "light")
+    services.remove()
   })
 })
 
@@ -194,11 +190,10 @@ describe("Phase 2: HomeNav — scroll spy", () => {
     section.remove()
   })
 
-  it("configures the observer with the sticky-stack aware rootMargin (top band)", () => {
-    // Sticky Stack layers multiple sections simultaneously at the top of
-    // the viewport. A narrow top-biased band (-15% top / -80% bottom)
-    // produces clean active-state hand-offs when sections rise to cover
-    // the pinned one; a centred band causes flip-flop here.
+  it("configures the observer with the top-biased rootMargin band", () => {
+    // A narrow top-biased band (-15% top / -80% bottom) produces clean
+    // active-state hand-offs as sections scroll past the fixed nav; a
+    // centred band causes flip-flop when adjacent sections both intersect.
     const section = placeSection("about")
     render(<HomeNav />)
     const ctor = globalThis.IntersectionObserver as unknown as ReturnType<
@@ -286,11 +281,11 @@ describe("HomeNav — cross-page navigation (non-home pathnames)", () => {
     vi.mocked(usePathname).mockReturnValue("/blog")
     render(<HomeNav />)
     const expectations = [
-      { name: /^about$/i, href: "/#about" },
-      { name: /^works$/i, href: "/#works" },
       { name: /^services$/i, href: "/#services" },
-      { name: /^notes$/i, href: "/#notes" },
-      { name: /^contact$/i, href: "/#contact" },
+      { name: /^works$/i, href: "/#works" },
+      { name: /^about$/i, href: "/#about" },
+      { name: /^journal$/i, href: "/#notes" },
+      { name: /相談する/, href: "/#contact" },
     ]
     for (const e of expectations) {
       expect(screen.getByRole("link", { name: e.name })).toHaveAttribute(

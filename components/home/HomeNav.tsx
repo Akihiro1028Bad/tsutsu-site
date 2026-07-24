@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -10,15 +9,18 @@ interface NavItem {
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
-  { id: "about", label: "About" },
-  { id: "works", label: "Works" },
   { id: "services", label: "Services" },
-  { id: "notes", label: "Notes" },
-  { id: "contact", label: "Contact" },
+  { id: "works", label: "Works" },
+  { id: "about", label: "About" },
+  { id: "notes", label: "Journal" },
 ]
 
 /** Sections rendered on dark surfaces; nav switches to light text over them. */
-const DARK_SECTIONS: ReadonlySet<string> = new Set(["services"])
+const DARK_SECTIONS: ReadonlySet<string> = new Set(["contact"])
+
+/** All observed section ids: nav items + the contact section (theme driver). */
+const OBSERVED_IDS: readonly string[] = [...NAV_ITEMS.map((i) => i.id), "contact"]
+
 const PANEL_ID = "home-nav-panel"
 
 export default function HomeNav() {
@@ -31,9 +33,9 @@ export default function HomeNav() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const sections = NAV_ITEMS.map((item) => ({
-      id: item.id,
-      el: document.getElementById(item.id),
+    const sections = OBSERVED_IDS.map((id) => ({
+      id,
+      el: document.getElementById(id),
     })).filter((entry): entry is { id: string; el: HTMLElement } =>
       entry.el !== null
     )
@@ -89,15 +91,8 @@ export default function HomeNav() {
       data-menu-open={isOpen ? "true" : "false"}
     >
       <a className="home-nav__brand" href={brandHref} aria-label="tsutsu">
-        <Image
-          src="/logo.png"
-          alt="tsutsu"
-          width={88}
-          height={88}
-          priority
-          unoptimized
-          className="home-nav__logo"
-        />
+        <span className="home-nav__seal" aria-hidden="true">堤</span>
+        <span className="home-nav__brand-name">TSUTSU</span>
       </a>
 
       <button
@@ -132,6 +127,13 @@ export default function HomeNav() {
         })}
       </ul>
 
+      <a
+        className="home-nav__cta"
+        href={sectionHref("contact")}
+        onClick={() => setIsOpen(false)}
+      >
+        相談する
+      </a>
     </nav>
   )
 }
