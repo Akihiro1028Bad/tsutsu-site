@@ -239,6 +239,18 @@ describe("Phase 10: HomeNav — mobile disclosure (C-1)", () => {
     expect(toggle).toHaveAttribute("aria-expanded", "false")
   })
 
+  it("closes the panel when the consult CTA is clicked", async () => {
+    const user = userEvent.setup()
+    render(<HomeNav />)
+    const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute("aria-expanded", "true")
+
+    const cta = screen.getByRole("link", { name: /相談する/ })
+    await user.click(cta)
+    expect(toggle).toHaveAttribute("aria-expanded", "false")
+  })
+
   it("closes the panel when Escape is pressed", async () => {
     const user = userEvent.setup()
     render(<HomeNav />)
