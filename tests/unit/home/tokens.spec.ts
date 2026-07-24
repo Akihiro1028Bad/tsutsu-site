@@ -1,61 +1,60 @@
 import { describe, it, expect } from "vitest"
 import { COLORS, FONT_STACKS } from "@/lib/home/tokens"
 
-describe("Phase 1: lib/home/tokens — colour palette", () => {
-  it("defines the cream page background using oklch", () => {
-    expect(COLORS.bg).toMatch(/^oklch\(/)
+describe("Blueprint: lib/home/tokens — カラーパレット", () => {
+  it("製図紙(ベース背景)を定義する", () => {
+    expect(COLORS.paper).toBe("#F7F5F0")
   })
 
-  it("defines a slightly darker cream for soft surfaces", () => {
-    expect(COLORS.bgSoft).toMatch(/^oklch\(/)
-    expect(COLORS.bgSoft).not.toEqual(COLORS.bg)
+  it("方眼グリッド線の色を定義する", () => {
+    expect(COLORS.paperGrid).toBe("rgba(30, 42, 58, 0.05)")
   })
 
-  it("defines the deep-navy ink tone", () => {
-    expect(COLORS.ink).toMatch(/^oklch\(/)
+  it("製図インク(本文・見出し)を定義する", () => {
+    expect(COLORS.ink).toBe("#1E2A3A")
   })
 
-  it("defines softer and muted ink tones", () => {
-    expect(COLORS.inkSoft).toMatch(/^oklch\(/)
-    expect(COLORS.inkMute).toMatch(/^oklch\(/)
-    expect(COLORS.inkSoft).not.toEqual(COLORS.ink)
-    expect(COLORS.inkMute).not.toEqual(COLORS.inkSoft)
+  it("補助インク(淡色)を定義する", () => {
+    expect(COLORS.inkSoft).toBe("#5A6A7D")
   })
 
-  it("defines a hairline rule colour", () => {
-    expect(COLORS.rule).toMatch(/^oklch\(/)
+  it("朱印(アクセント・CTA)を定義する", () => {
+    expect(COLORS.seal).toBe("#D43D2A")
   })
 
-  it("defines the terracotta accent (applied overlay in the design)", () => {
-    expect(COLORS.accent).toMatch(/^oklch\(/)
-    expect(COLORS.accentSoft).toMatch(/^oklch\(/)
-  })
-})
-
-describe("Phase 1: lib/home/tokens — font stacks", () => {
-  it("exposes a display serif stack (DM Serif fallback)", () => {
-    expect(FONT_STACKS.display).toMatch(/DM Serif Display|serif/)
+  it("青図(リンク・図面線)を定義する", () => {
+    expect(COLORS.blueprint).toBe("#3D6EA5")
   })
 
-  it("exposes a Japanese display stack (Shippori Mincho fallback)", () => {
-    expect(FONT_STACKS.jpDisplay).toMatch(/Shippori Mincho|serif/)
-  })
-
-  it("exposes a Japanese body stack (Zen Kaku Gothic fallback)", () => {
-    expect(FONT_STACKS.body).toMatch(/Zen Kaku Gothic New|sans-serif/)
-  })
-
-  it("exposes a monospace stack (Space Mono fallback)", () => {
-    expect(FONT_STACKS.mono).toMatch(/Space Mono|monospace/)
+  it("鉛筆(注釈・補助線)を定義する", () => {
+    expect(COLORS.pencil).toBe("#8A97A5")
   })
 })
 
-describe("Phase 1: lib/home/tokens — immutability", () => {
-  it("freezes the COLORS record to prevent mutation", () => {
+describe("Blueprint: lib/home/tokens — フォントスタック", () => {
+  it("見出し: Zen Kaku Gothic New", () => {
+    expect(FONT_STACKS.display).toContain("Zen Kaku Gothic New")
+  })
+
+  it("手描き注釈: Zen Kurenaido", () => {
+    expect(FONT_STACKS.hand).toContain("Zen Kurenaido")
+  })
+
+  it("英字ラベル: Space Grotesk", () => {
+    expect(FONT_STACKS.label).toContain("Space Grotesk")
+  })
+
+  it("本文: Noto Sans JP", () => {
+    expect(FONT_STACKS.body).toContain("Noto Sans JP")
+  })
+})
+
+describe("Blueprint: lib/home/tokens — 不変性", () => {
+  it("COLORS は凍結されている", () => {
     expect(Object.isFrozen(COLORS)).toBe(true)
   })
 
-  it("freezes the FONT_STACKS record to prevent mutation", () => {
+  it("FONT_STACKS は凍結されている", () => {
     expect(Object.isFrozen(FONT_STACKS)).toBe(true)
   })
 })
