@@ -8,19 +8,24 @@
    Design tokens + base typography
    ============================================================ */
 .home-root {
-  --bg: oklch(0.98 0.005 85);
-  --bg-soft: oklch(0.955 0.008 85);
-  --ink: oklch(0.2 0.012 260);
-  --ink-soft: oklch(0.35 0.012 260);
-  --ink-mute: oklch(0.55 0.01 260);
-  --rule: oklch(0.88 0.008 85);
-  --accent: oklch(0.55 0.16 30);
-  --accent-soft: oklch(0.94 0.05 30);
+  /* Blueprint palette (spec: 2026-07-24-design-renewal-blueprint) */
+  --bg: #F7F5F0;               /* 製図紙 */
+  --bg-soft: #EFECE4;          /* 製図紙の影 */
+  --ink: #1E2A3A;              /* 製図インク */
+  --ink-soft: #5A6A7D;         /* 補助インク */
+  --ink-mute: #8A97A5;         /* 鉛筆 */
+  --rule: #D8D3C8;             /* 罫線(紙上のヘアライン) */
+  --accent: #D43D2A;           /* 朱印 */
+  --accent-soft: #F7E2DE;      /* 朱印の淡色 */
+  --blueprint: #3D6EA5;        /* 青図 */
+  --grid-line: rgba(30, 42, 58, 0.05); /* 方眼 */
 
-  --f-display: var(--font-dm-serif), "Shippori Mincho", serif;
-  --f-jp-display: var(--font-shippori), "Zen Kaku Gothic New", serif;
-  --f-body: var(--font-zen-kaku), system-ui, sans-serif;
-  --f-mono: var(--font-space-mono), ui-monospace, monospace;
+  --f-display: var(--font-zen-kaku), "Hiragino Kaku Gothic ProN", sans-serif;
+  --f-jp-display: var(--font-zen-kaku), "Hiragino Kaku Gothic ProN", sans-serif;
+  --f-hand: var(--font-zen-kurenaido), "Hiragino Kaku Gothic ProN", sans-serif;
+  --f-label: var(--font-space-grotesk), ui-monospace, monospace;
+  --f-mono: var(--font-space-grotesk), ui-monospace, monospace;
+  --f-body: var(--font-noto-sans-jp), "Hiragino Kaku Gothic ProN", sans-serif;
 
   --pad-x: clamp(20px, 5vw, 72px);
   --col: 12;
@@ -29,7 +34,12 @@
   --reveal-duration: 0.9s;
   --reveal-translate: 24px;
 
-  background: var(--bg);
+  /* 方眼紙ベース */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: var(--ink);
   font-family: var(--f-body);
   font-feature-settings: "palt";

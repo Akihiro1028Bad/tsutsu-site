@@ -11,28 +11,29 @@ describe("Phase 1: app/(home)/home.css — editorial base stylesheet", () => {
 
   const source = readFileSync(cssPath, "utf-8")
 
-  describe("CSS custom properties", () => {
-    it("declares --bg with an oklch value", () => {
-      expect(source).toMatch(/--bg:\s*oklch\(/)
+  describe("CSS custom properties (blueprint palette)", () => {
+    it("declares --bg with the paper hex", () => {
+      expect(source).toMatch(/--bg:\s*#F7F5F0/i)
     })
 
-    it("declares --ink with an oklch value", () => {
-      expect(source).toMatch(/--ink:\s*oklch\(/)
+    it("declares --ink with the drafting-ink hex", () => {
+      expect(source).toMatch(/--ink:\s*#1E2A3A/i)
     })
 
-    it("declares --accent with an oklch value", () => {
-      expect(source).toMatch(/--accent:\s*oklch\(/)
+    it("declares --accent with the seal hex", () => {
+      expect(source).toMatch(/--accent:\s*#D43D2A/i)
     })
 
-    it("declares hairline --rule token", () => {
-      expect(source).toMatch(/--rule:\s*oklch\(/)
+    it("declares --blueprint and --grid-line tokens", () => {
+      expect(source).toMatch(/--blueprint:\s*#3D6EA5/i)
+      expect(source).toMatch(/--grid-line:/)
     })
 
-    it("declares font-family variables for all four families", () => {
+    it("declares font-family variables for all four roles", () => {
       expect(source).toMatch(/--f-display:/)
-      expect(source).toMatch(/--f-jp-display:/)
+      expect(source).toMatch(/--f-hand:/)
+      expect(source).toMatch(/--f-label:/)
       expect(source).toMatch(/--f-body:/)
-      expect(source).toMatch(/--f-mono:/)
     })
   })
 
