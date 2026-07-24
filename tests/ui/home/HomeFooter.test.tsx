@@ -49,28 +49,36 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     expect(screen.getByRole("contentinfo")).toBeInTheDocument()
   })
 
-  it("renders the brand logo image", () => {
+  it("renders the seal mark instead of a logo image", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
-    const logo = within(footer).getByRole("img", { name: /tsutsu/i }) as HTMLImageElement
-    expect(logo.getAttribute("src")).toBe("/logo.png")
+    expect(within(footer).queryByRole("img")).toBeNull()
+    expect(footer.textContent).toContain("堤")
+    expect(footer.textContent).toContain("TSUTSU")
   })
 
-  it("renders the Site column links (About, Works, Services, Notes)", () => {
+  it("renders the Site column links (Services, Works, About, Journal)", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
-    expect(
-      within(footer).getByRole("link", { name: /^about$/i })
-    ).toHaveAttribute("href", "#about")
-    expect(
-      within(footer).getByRole("link", { name: /^works$/i })
-    ).toHaveAttribute("href", "#works")
     expect(
       within(footer).getByRole("link", { name: /^services$/i })
     ).toHaveAttribute("href", "#services")
     expect(
-      within(footer).getByRole("link", { name: /^notes$/i })
+      within(footer).getByRole("link", { name: /^works$/i })
+    ).toHaveAttribute("href", "#works")
+    expect(
+      within(footer).getByRole("link", { name: /^about$/i })
+    ).toHaveAttribute("href", "#about")
+    expect(
+      within(footer).getByRole("link", { name: /^journal$/i })
     ).toHaveAttribute("href", "#notes")
+  })
+
+  it("renders the drawing title-block meta row", () => {
+    render(<HomeFooter />)
+    const footer = screen.getByRole("contentinfo")
+    expect(footer.textContent).toContain("SCALE 1:1")
+    expect(footer.textContent).toContain("DRAWN & BUILT IN TOKYO")
   })
 
   it("does not render a Social column (no SNS accounts)", () => {
@@ -108,16 +116,16 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
     expect(
-      within(footer).getByRole("link", { name: /^about$/i })
-    ).toHaveAttribute("href", "/#about")
+      within(footer).getByRole("link", { name: /^services$/i })
+    ).toHaveAttribute("href", "/#services")
     expect(
       within(footer).getByRole("link", { name: /^works$/i })
     ).toHaveAttribute("href", "/#works")
     expect(
-      within(footer).getByRole("link", { name: /^services$/i })
-    ).toHaveAttribute("href", "/#services")
+      within(footer).getByRole("link", { name: /^about$/i })
+    ).toHaveAttribute("href", "/#about")
     expect(
-      within(footer).getByRole("link", { name: /^notes$/i })
+      within(footer).getByRole("link", { name: /^journal$/i })
     ).toHaveAttribute("href", "/#notes")
     expect(
       within(footer).getByRole("link", { name: /問い合わせ|contact/i })

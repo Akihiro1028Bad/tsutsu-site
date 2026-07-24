@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Suspense } from "react"
 import FooterYear from "@/components/home/FooterYear"
@@ -19,10 +18,10 @@ interface FooterColumn {
 const SITE_LINKS: FooterColumn = {
   heading: "Site",
   links: [
-    { label: "About", target: { kind: "section", id: "about" } },
-    { label: "Works", target: { kind: "section", id: "works" } },
     { label: "Services", target: { kind: "section", id: "services" } },
-    { label: "Notes", target: { kind: "section", id: "notes" } },
+    { label: "Works", target: { kind: "section", id: "works" } },
+    { label: "About", target: { kind: "section", id: "about" } },
+    { label: "Journal", target: { kind: "section", id: "notes" } },
   ],
 }
 
@@ -51,14 +50,8 @@ export default function HomeFooter() {
     <footer className="home-footer">
       <div className="home-footer__grid">
         <div className="home-footer__brand">
-          <Image
-            src="/logo.png"
-            alt="tsutsu"
-            width={56}
-            height={56}
-            unoptimized
-            className="home-footer__logo"
-          />
+          <span className="home-footer__seal" aria-hidden="true">堤</span>
+          <span className="home-footer__brand-name">TSUTSU</span>
           <div className="home-footer__tag">Freelance engineer — Tokyo</div>
         </div>
         <div className="home-footer__cols">
@@ -83,7 +76,7 @@ export default function HomeFooter() {
             </Suspense>{" "}
             tsutsu — all rights reserved
           </span>
-          <span>Designed &amp; built in Tokyo / JP</span>
+          <span>SCALE 1:1 — DRAWN &amp; BUILT IN TOKYO / JP</span>
         </div>
       </div>
     </footer>

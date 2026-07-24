@@ -3197,84 +3197,118 @@
 }
 
 /* ============================================================
-   Footer
+   Footer — 青焼きタイトルブロック
    ============================================================ */
 .home-root .home-footer {
-  padding: 64px var(--pad-x) 40px;
-  border-top: 1px solid var(--rule);
-  background: var(--bg);
+  background: var(--ink);
+  background-image:
+    linear-gradient(rgba(247, 245, 240, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247, 245, 240, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--bg);
+  padding: clamp(48px, 8vh, 80px) clamp(16px, 4vw, 40px) 28px;
 }
+
 .home-root .home-footer__grid {
+  max-width: 1100px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(var(--col), 1fr);
-  column-gap: clamp(12px, 1.6vw, 28px);
-  align-items: end;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  border: 1px solid color-mix(in srgb, var(--bg) 30%, transparent);
+  padding: clamp(24px, 4vw, 40px);
 }
+
 .home-root .home-footer__brand {
-  grid-column: 1 / span 6;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-self: start;
 }
-.home-root .home-footer__logo {
-  display: block;
-  width: clamp(56px, 7vw, 88px);
-  height: clamp(56px, 7vw, 88px);
-  object-fit: contain;
+
+.home-root .home-footer__seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 19px;
+  border-radius: 3px;
 }
+
+.home-root .home-footer__brand-name {
+  font-family: var(--f-label);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.1em;
+}
+
 .home-root .home-footer__tag {
-  font-family: var(--f-mono);
+  flex-basis: 100%;
+  font-family: var(--f-label);
   font-size: 11px;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-top: 12px;
+  color: color-mix(in srgb, var(--bg) 55%, transparent);
 }
+
 .home-root .home-footer__cols {
-  grid-column: 7 / -1;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  display: flex;
+  gap: clamp(32px, 6vw, 72px);
 }
+
 .home-root .home-footer__cols h3 {
-  font-family: var(--f-mono);
+  font-family: var(--f-label);
   font-size: 11px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: color-mix(in srgb, var(--bg) 55%, transparent);
   margin: 0 0 14px;
-  font-weight: 500;
 }
+
 .home-root .home-footer__cols ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 10px;
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
+
+.home-root .home-footer__cols a {
+  color: var(--bg);
+  text-decoration: none;
+  font-size: 13px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.home-root .home-footer__cols a:hover {
+  border-bottom-color: var(--accent);
+}
+
 .home-root .home-footer__meta {
   grid-column: 1 / -1;
   display: flex;
   justify-content: space-between;
-  margin-top: 56px;
-  padding-top: 22px;
-  border-top: 1px solid var(--rule);
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--ink-mute);
-  text-transform: uppercase;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px dashed color-mix(in srgb, var(--bg) 30%, transparent);
+  padding-top: 16px;
+  font-family: var(--f-label);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: color-mix(in srgb, var(--bg) 55%, transparent);
 }
-@media (max-width: 760px) {
-  .home-root .home-footer__brand,
-  .home-root .home-footer__cols {
-    grid-column: 1 / -1;
-  }
-  .home-root .home-footer__cols {
-    margin-top: 48px;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .home-root .home-footer__meta {
-    flex-direction: column;
-    gap: 8px;
+
+@media (max-width: 767px) {
+  .home-root .home-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
 }
 
