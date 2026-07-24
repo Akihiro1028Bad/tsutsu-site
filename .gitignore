@@ -38,3 +38,6 @@ next-env.d.ts
 
 # local dev scratch (manual iframe-expansion sanity check)
 public/_iframe-test.html
+
+# superpowers brainstorm sessions
+.superpowers/
