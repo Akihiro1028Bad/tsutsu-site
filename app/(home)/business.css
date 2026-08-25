@@ -254,8 +254,8 @@
 /* ── 一覧行(お知らせ・ブログ共用) ────── */
 .home-root .biz-row {
   display: grid;
-  grid-template-columns: 106px 1fr auto;
-  align-items: baseline;
+  grid-template-columns: 108px 106px 1fr auto;
+  align-items: center;
   gap: clamp(12px, 2vw, 26px);
   padding: 17px var(--biz-gut) 17px clamp(18px, 2.4vw, 34px);
   border-bottom: 1px solid var(--rule);
@@ -265,6 +265,21 @@
 }
 .home-root .biz-row:last-child { border-bottom: 0; }
 .home-root .biz-row:hover { background: var(--tint); }
+/* アイキャッチ。未設定の記事でも枠を確保して行を揃える。 */
+.home-root .biz-row__thumb {
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--tint);
+  border: 1px solid var(--rule);
+}
+.home-root .biz-row__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .home-root .biz-row__date {
   font-family: var(--f-mono);
   font-size: 11.5px;
@@ -351,7 +366,13 @@
 }
 
 @media (max-width: 640px) {
-  .home-root .biz-row { grid-template-columns: 92px 1fr; }
+  .home-root .biz-row {
+    grid-template-columns: 78px 1fr;
+    column-gap: 14px;
+    row-gap: 4px;
+    align-items: center;
+  }
+  .home-root .biz-row__thumb { grid-row: span 2; }
   .home-root .biz-row__kind { display: none; }
   .home-root .biz-overview { grid-template-columns: 98px 1fr; }
 }

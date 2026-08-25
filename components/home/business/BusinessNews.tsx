@@ -1,4 +1,4 @@
-import Link from "next/link"
+import BusinessListRow from "@/components/home/business/BusinessListRow"
 import SectionShell from "@/components/home/business/SectionShell"
 import type { JournalNewsItem } from "@/lib/home/adapters"
 
@@ -20,11 +20,14 @@ export default function BusinessNews({ items }: BusinessNewsProps) {
         <p className="biz-row__empty">現在お知らせはありません。</p>
       ) : (
         items.map((item) => (
-          <Link className="biz-row" href={item.href} key={item.id}>
-            <span className="biz-row__date">{item.dateDisplay}</span>
-            <span className="biz-row__title">{item.title}</span>
-            <span className="biz-row__kind">{item.kind}</span>
-          </Link>
+          <BusinessListRow
+            key={item.id}
+            href={item.href}
+            dateDisplay={item.dateDisplay}
+            title={item.title}
+            kind={item.kind}
+            image={item.image}
+          />
         ))
       )}
     </SectionShell>
