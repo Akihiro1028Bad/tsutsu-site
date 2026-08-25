@@ -9,10 +9,8 @@ vi.mock("@/components/home/HomeFooter", () => ({
   default: () => <div data-testid="mock-home-footer">HOME_FOOTER</div>,
 }))
 vi.mock("next/font/google", () => ({
-  Zen_Kaku_Gothic_New: () => ({ className: "f-zen", variable: "v-f-display" }),
-  Zen_Kurenaido: () => ({ className: "f-kurenaido", variable: "v-f-hand" }),
-  Space_Grotesk: () => ({ className: "f-grotesk", variable: "v-f-label" }),
-  Noto_Sans_JP: () => ({ className: "f-noto", variable: "v-f-body" }),
+  IBM_Plex_Sans_JP: () => ({ className: "f-plex", variable: "v-f-body" }),
+  IBM_Plex_Mono: () => ({ className: "f-plex-mono", variable: "v-f-mono" }),
 }))
 // Sentinel mocks: legacy Header/Footer must NOT be referenced by (home) layout.
 vi.mock("@/components/Header", () => ({

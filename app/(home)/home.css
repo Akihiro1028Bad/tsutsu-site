@@ -8,24 +8,30 @@
    Design tokens + base typography
    ============================================================ */
 .home-root {
-  /* Blueprint palette (spec: 2026-07-24-design-renewal-blueprint) */
-  --bg: #F7F5F0;               /* 製図紙 */
-  --bg-soft: #EFECE4;          /* 製図紙の影 */
-  --ink: #1E2A3A;              /* 製図インク */
-  --ink-soft: #5A6A7D;         /* 補助インク */
-  --ink-mute: #8A97A5;         /* 鉛筆 */
-  --rule: #D8D3C8;             /* 罫線(紙上のヘアライン) */
-  --accent: #D43D2A;           /* 朱印 */
-  --accent-soft: #F7E2DE;      /* 朱印の淡色 */
-  --blueprint: #3D6EA5;        /* 青図 */
-  --grid-line: rgba(30, 42, 58, 0.05); /* 方眼 */
+  /* Business-site palette (spec: 2026-08-25-business-site-redesign).
+     Monochrome by design — colour comes only from work screenshots.
+     Variable NAMES are kept from the previous direction so sections that
+     have not been rewritten yet keep rendering; they now resolve to the
+     new neutral values. Aliases are removed as each section is replaced. */
+  --bg: #FFFFFF;
+  --bg-soft: #F2F2F3;
+  --ink: #0A0A0A;
+  --ink-soft: #55585E;
+  --ink-mute: #8E9198;
+  --rule: #DEDFE2;
+  --tint: #F2F2F3;
+  /* No accent colour: legacy `--accent` resolves to ink so un-migrated
+     sections render monochrome rather than breaking. */
+  --accent: #0A0A0A;
+  --accent-soft: #F2F2F3;
 
-  --f-display: var(--font-zen-kaku), "Hiragino Kaku Gothic ProN", sans-serif;
-  --f-jp-display: var(--font-zen-kaku), "Hiragino Kaku Gothic ProN", sans-serif;
-  --f-hand: var(--font-zen-kurenaido), "Hiragino Kaku Gothic ProN", sans-serif;
-  --f-label: var(--font-space-grotesk), ui-monospace, monospace;
-  --f-mono: var(--font-space-grotesk), ui-monospace, monospace;
-  --f-body: var(--font-noto-sans-jp), "Hiragino Kaku Gothic ProN", sans-serif;
+  --f-body: var(--font-plex-jp), "Hiragino Kaku Gothic ProN", sans-serif;
+  --f-mono: var(--font-plex-mono), ui-monospace, monospace;
+  /* Legacy aliases — removed with the sections that reference them. */
+  --f-display: var(--f-body);
+  --f-jp-display: var(--f-body);
+  --f-hand: var(--f-body);
+  --f-label: var(--f-mono);
 
   --pad-x: clamp(20px, 5vw, 72px);
   --col: 12;
@@ -34,12 +40,7 @@
   --reveal-duration: 0.9s;
   --reveal-translate: 24px;
 
-  /* 方眼紙ベース */
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--f-body);
   font-feature-settings: "palt";

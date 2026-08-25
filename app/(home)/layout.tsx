@@ -1,50 +1,26 @@
-import {
-  Noto_Sans_JP,
-  Space_Grotesk,
-  Zen_Kaku_Gothic_New,
-  Zen_Kurenaido,
-} from "next/font/google"
+import { IBM_Plex_Mono, IBM_Plex_Sans_JP } from "next/font/google"
 import HomeNav from "@/components/home/HomeNav"
 import HomeFooter from "@/components/home/HomeFooter"
 import MotionProvider from "@/components/motion/MotionProvider"
 import "./home.css"
 
-// Latin-only label font: cheap to preload.
-const spaceGrotesk = Space_Grotesk({
+// Japanese subset is large — never preload; let the browser swap.
+const plexJp = IBM_Plex_Sans_JP({
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-jp",
+  display: "swap",
+  preload: false,
+})
+
+// Latin-only: cheap enough to preload.
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
   display: "swap",
 })
 
-// Japanese fonts: large subsets, never preload — let the browser swap.
-const zenKaku = Zen_Kaku_Gothic_New({
-  weight: ["400", "500", "700", "900"],
-  variable: "--font-zen-kaku",
-  display: "swap",
-  preload: false,
-})
-
-const zenKurenaido = Zen_Kurenaido({
-  weight: "400",
-  variable: "--font-zen-kurenaido",
-  display: "swap",
-  preload: false,
-})
-
-const notoSansJp = Noto_Sans_JP({
-  weight: ["400", "500", "700"],
-  variable: "--font-noto-sans-jp",
-  display: "swap",
-  preload: false,
-})
-
-const fontVariableClass = [
-  zenKaku.variable,
-  zenKurenaido.variable,
-  spaceGrotesk.variable,
-  notoSansJp.variable,
-].join(" ")
+const fontVariableClass = [plexJp.variable, plexMono.variable].join(" ")
 
 export default function HomeLayout({
   children,

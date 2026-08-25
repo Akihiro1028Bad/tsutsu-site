@@ -8,27 +8,35 @@ interface ThemeExtension {
 
 const extend = (config as { theme: { extend: ThemeExtension } }).theme.extend
 
-describe("Blueprint: tailwind.config.js — カラートークン", () => {
-  it("paper / ink / seal / blueprint / pencil を定義する", () => {
-    expect(extend.colors.paper).toBe("#F7F5F0")
-    expect(extend.colors.seal).toBe("#D43D2A")
-    expect(extend.colors.blueprint).toBe("#3D6EA5")
-    expect(extend.colors.pencil).toBe("#8A97A5")
+describe("事業サイト: tailwind.config.js — カラートークン", () => {
+  it("paper / ink / mute / rule / tint を定義する", () => {
+    expect(extend.colors.paper).toBe("#FFFFFF")
+    expect(extend.colors.mute).toBe("#8E9198")
+    expect(extend.colors.rule).toBe("#DEDFE2")
+    expect(extend.colors.tint).toBe("#F2F2F3")
   })
 
   it("ink は DEFAULT と soft を持つ", () => {
-    expect(extend.colors.ink).toEqual({ DEFAULT: "#1E2A3A", soft: "#5A6A7D" })
+    expect(extend.colors.ink).toEqual({ DEFAULT: "#0A0A0A", soft: "#55585E" })
+  })
+
+  it("アクセントカラーのトークンを持たない", () => {
+    expect(extend.colors).not.toHaveProperty("seal")
+    expect(extend.colors).not.toHaveProperty("blueprint")
   })
 })
 
-describe("Blueprint: tailwind.config.js — フォントファミリー", () => {
-  it("display / hand / label を定義する", () => {
-    expect(extend.fontFamily.display.join(",")).toContain("--font-zen-kaku")
-    expect(extend.fontFamily.hand.join(",")).toContain("--font-zen-kurenaido")
-    expect(extend.fontFamily.label.join(",")).toContain("--font-space-grotesk")
+describe("事業サイト: tailwind.config.js — フォントファミリー", () => {
+  it("sans は IBM Plex Sans JP の変数を先頭に持つ", () => {
+    expect(extend.fontFamily.sans[0]).toBe("var(--font-plex-jp)")
   })
 
-  it("sans は Noto Sans JP 変数を先頭に持つ(本文)", () => {
-    expect(extend.fontFamily.sans[0]).toBe("var(--font-noto-sans-jp)")
+  it("mono は IBM Plex Mono の変数を先頭に持つ", () => {
+    expect(extend.fontFamily.mono[0]).toBe("var(--font-plex-mono)")
+  })
+
+  it("旧方向の display / hand フォントを残さない", () => {
+    expect(extend.fontFamily).not.toHaveProperty("hand")
+    expect(extend.fontFamily).not.toHaveProperty("label")
   })
 })

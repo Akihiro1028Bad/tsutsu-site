@@ -1,55 +1,57 @@
 import { describe, it, expect } from "vitest"
 import { COLORS, FONT_STACKS } from "@/lib/home/tokens"
 
-describe("Blueprint: lib/home/tokens — カラーパレット", () => {
-  it("製図紙(ベース背景)を定義する", () => {
-    expect(COLORS.paper).toBe("#F7F5F0")
+describe("事業サイト: lib/home/tokens — カラー(モノクロ)", () => {
+  it("地は純白", () => {
+    expect(COLORS.paper).toBe("#FFFFFF")
   })
 
-  it("方眼グリッド線の色を定義する", () => {
-    expect(COLORS.paperGrid).toBe("rgba(30, 42, 58, 0.05)")
+  it("本文・構造罫の墨色", () => {
+    expect(COLORS.ink).toBe("#0A0A0A")
   })
 
-  it("製図インク(本文・見出し)を定義する", () => {
-    expect(COLORS.ink).toBe("#1E2A3A")
+  it("副文の色", () => {
+    expect(COLORS.inkSoft).toBe("#55585E")
   })
 
-  it("補助インク(淡色)を定義する", () => {
-    expect(COLORS.inkSoft).toBe("#5A6A7D")
+  it("注記・ラベルの色", () => {
+    expect(COLORS.mute).toBe("#8E9198")
   })
 
-  it("朱印(アクセント・CTA)を定義する", () => {
-    expect(COLORS.seal).toBe("#D43D2A")
+  it("行区切りの淡い罫", () => {
+    expect(COLORS.ruleThin).toBe("#DEDFE2")
   })
 
-  it("青図(リンク・図面線)を定義する", () => {
-    expect(COLORS.blueprint).toBe("#3D6EA5")
+  it("ホバー面の淡い地", () => {
+    expect(COLORS.tint).toBe("#F2F2F3")
   })
 
-  it("鉛筆(注釈・補助線)を定義する", () => {
-    expect(COLORS.pencil).toBe("#8A97A5")
-  })
-})
-
-describe("Blueprint: lib/home/tokens — フォントスタック", () => {
-  it("見出し: Zen Kaku Gothic New", () => {
-    expect(FONT_STACKS.display).toContain("Zen Kaku Gothic New")
-  })
-
-  it("手描き注釈: Zen Kurenaido", () => {
-    expect(FONT_STACKS.hand).toContain("Zen Kurenaido")
-  })
-
-  it("英字ラベル: Space Grotesk", () => {
-    expect(FONT_STACKS.label).toContain("Space Grotesk")
-  })
-
-  it("本文: Noto Sans JP", () => {
-    expect(FONT_STACKS.body).toContain("Noto Sans JP")
+  it("アクセントカラーを持たない(色は実績写真だけが持つ)", () => {
+    expect(COLORS).not.toHaveProperty("accent")
+    expect(COLORS).not.toHaveProperty("seal")
+    expect(COLORS).not.toHaveProperty("blueprint")
   })
 })
 
-describe("Blueprint: lib/home/tokens — 不変性", () => {
+describe("事業サイト: lib/home/tokens — フォントスタック", () => {
+  it("本文・見出しは IBM Plex Sans JP", () => {
+    expect(FONT_STACKS.body).toContain("IBM Plex Sans JP")
+  })
+
+  it("数値・英字ラベルは IBM Plex Mono", () => {
+    expect(FONT_STACKS.mono).toContain("IBM Plex Mono")
+  })
+
+  it("AI が既定で選ぶ書体を含まない", () => {
+    const all = Object.values(FONT_STACKS).join(" ")
+    expect(all).not.toContain("Zen Kaku")
+    expect(all).not.toContain("Zen Kurenaido")
+    expect(all).not.toContain("Space Grotesk")
+    expect(all).not.toContain("Noto Sans JP")
+  })
+})
+
+describe("事業サイト: lib/home/tokens — 不変性", () => {
   it("COLORS は凍結されている", () => {
     expect(Object.isFrozen(COLORS)).toBe(true)
   })

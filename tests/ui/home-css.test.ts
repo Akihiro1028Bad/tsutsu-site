@@ -11,29 +11,32 @@ describe("Phase 1: app/(home)/home.css — editorial base stylesheet", () => {
 
   const source = readFileSync(cssPath, "utf-8")
 
-  describe("CSS custom properties (blueprint palette)", () => {
-    it("declares --bg with the paper hex", () => {
-      expect(source).toMatch(/--bg:\s*#F7F5F0/i)
+  describe("CSS custom properties (business-site palette)", () => {
+    it("declares --bg as pure white", () => {
+      expect(source).toMatch(/--bg:\s*#FFFFFF/i)
     })
 
-    it("declares --ink with the drafting-ink hex", () => {
-      expect(source).toMatch(/--ink:\s*#1E2A3A/i)
+    it("declares --ink as the near-black used for text and structural rules", () => {
+      expect(source).toMatch(/--ink:\s*#0A0A0A/i)
     })
 
-    it("declares --accent with the seal hex", () => {
-      expect(source).toMatch(/--accent:\s*#D43D2A/i)
+    it("declares the thin rule and hover tint tokens", () => {
+      expect(source).toMatch(/--rule:\s*#DEDFE2/i)
+      expect(source).toMatch(/--tint:\s*#F2F2F3/i)
     })
 
-    it("declares --blueprint and --grid-line tokens", () => {
-      expect(source).toMatch(/--blueprint:\s*#3D6EA5/i)
-      expect(source).toMatch(/--grid-line:/)
+    it("declares font-family variables for body and mono", () => {
+      expect(source).toMatch(/--f-body:\s*var\(--font-plex-jp\)/)
+      expect(source).toMatch(/--f-mono:\s*var\(--font-plex-mono\)/)
     })
 
-    it("declares font-family variables for all four roles", () => {
-      expect(source).toMatch(/--f-display:/)
-      expect(source).toMatch(/--f-hand:/)
-      expect(source).toMatch(/--f-label:/)
-      expect(source).toMatch(/--f-body:/)
+    it("carries no accent colour — colour comes only from work images", () => {
+      expect(source).not.toMatch(/--accent:\s*#D43D2A/i)
+      expect(source).not.toMatch(/--blueprint:/)
+    })
+
+    it("drops the graph-paper background", () => {
+      expect(source).not.toMatch(/--grid-line:/)
     })
   })
 
