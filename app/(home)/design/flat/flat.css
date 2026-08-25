@@ -1,0 +1,310 @@
+/*
+ * 事業サイト候補案 — 面と影のキットを使わずに現行感を出す(/design/flat)。
+ * 使わないもの: カード / 角丸 / ドロップシャドウ / ピル / チップ /
+ *   3カード横並び / 色付きボタン影 / 黒い角丸CTAブロック。
+ * 現行感の担保: 文字の大きさとつめ、全面ブリード写真、追従する見出し、
+ *   構造としての太い罫。色は写真だけが持つ。noindex(評価用)。
+ */
+
+.fl {
+  padding-top: 64px;
+
+  --paper: #FFFFFF;
+  --ink: #0A0A0A;
+  --ink-2: #55585E;
+  --mute: #8E9198;
+  --rule: #0A0A0A;
+  --rule-thin: #DEDFE2;
+  --tint: #F2F2F3;
+
+  --f: var(--font-plex-jp), "Hiragino Kaku Gothic ProN", sans-serif;
+  --f-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --gut: clamp(16px, 4vw, 56px);
+
+  font-family: var(--f);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.fl .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fl .reveal.is-revealed { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fl .reveal { transition: none; }
+}
+
+/* ── 屋号バー ─────────────────────────── */
+.fl__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 24px;
+  padding: 16px var(--gut);
+  border-bottom: 1px solid var(--rule);
+}
+.fl__brand {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.fl__brand span {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--mute);
+  margin-left: 11px;
+}
+.fl__bar-meta { font-family: var(--f-mono); font-size: 11.5px; color: var(--ink-2); }
+
+/* ── ヒーロー ─────────────────────────── */
+.fl__hero { border-bottom: 1px solid var(--rule); }
+.fl__hero-type {
+  padding: clamp(40px, 7vw, 104px) var(--gut) clamp(28px, 4vw, 52px);
+  display: grid;
+  gap: clamp(18px, 2.4vw, 30px);
+  max-width: 1500px;
+}
+.fl__headline {
+  font-size: clamp(34px, 7.4vw, 108px);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.035em;
+  margin: 0;
+  text-wrap: balance;
+}
+.fl__sub {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 48px);
+  align-items: end;
+  border-top: 1px solid var(--rule-thin);
+  padding-top: clamp(16px, 2vw, 26px);
+}
+.fl__lede {
+  font-size: clamp(13.5px, 1.1vw, 15.5px);
+  line-height: 2.05;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 36em;
+}
+.fl__hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+  justify-self: start;
+}
+.fl .fl__cta {
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 16px 32px;
+  text-decoration: none;
+}
+.fl .fl__cta:hover { background: var(--ink-2); }
+.fl .fl__link {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 2px;
+}
+
+/* 全面ブリードの実績写真 */
+.fl__bleed { position: relative; }
+.fl__bleed img {
+  display: block;
+  width: 100%;
+  height: clamp(240px, 46vw, 620px);
+  object-fit: cover;
+}
+.fl__bleed-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding: 11px var(--gut);
+  border-top: 1px solid var(--rule);
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--ink-2);
+}
+.fl__bleed-meta b { font-family: var(--f); font-size: 13px; font-weight: 600; color: var(--ink); }
+
+/* ── セクション(追従見出し) ──────────── */
+.fl__sec {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  border-bottom: 1px solid var(--rule);
+}
+.fl__sec-label {
+  padding: clamp(22px, 3vw, 40px) var(--gut);
+  border-right: 1px solid var(--rule-thin);
+}
+.fl__sec-label div {
+  position: sticky;
+  top: 96px;
+}
+.fl__sec-label h2 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+.fl__sec-label p {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--mute);
+  margin: 5px 0 0;
+}
+.fl .fl__sec-more {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-thin);
+}
+.fl .fl__sec-more:hover { border-bottom-color: var(--ink); }
+.fl__sec-body { min-width: 0; }
+
+/* ── 事業内容(全幅の行) ──────────────── */
+.fl__svc {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 250px;
+  gap: clamp(14px, 2vw, 32px);
+  align-items: start;
+  padding: clamp(24px, 3vw, 40px) var(--gut) clamp(24px, 3vw, 40px) clamp(18px, 2.4vw, 34px);
+  border-bottom: 1px solid var(--rule-thin);
+}
+.fl__sec-body > .reveal:last-child .fl__svc { border-bottom: 0; }
+.fl__svc-no { font-family: var(--f-mono); font-size: 12px; color: var(--mute); padding-top: 9px; }
+.fl__svc-title {
+  font-size: clamp(20px, 2.5vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+  margin: 0;
+}
+.fl__svc-body {
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--ink-2);
+  margin: 12px 0 0;
+  max-width: 32em;
+}
+.fl .fl__svc-link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+}
+.fl__svc-meta {
+  display: grid;
+  grid-template-columns: 3.6em 1fr;
+  gap: 7px 12px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  padding-top: 8px;
+}
+.fl__svc-meta dt { font-family: var(--f-mono); font-size: 11px; color: var(--mute); }
+.fl__svc-meta dd { margin: 0; }
+
+/* ── お知らせ ────────────────────────── */
+.fl .fl__news-row {
+  display: grid;
+  grid-template-columns: 106px 1fr auto;
+  align-items: baseline;
+  gap: clamp(12px, 2vw, 26px);
+  padding: 17px var(--gut) 17px clamp(18px, 2.4vw, 34px);
+  border-bottom: 1px solid var(--rule-thin);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.16s ease;
+}
+.fl .fl__news-row:last-child { border-bottom: 0; }
+.fl .fl__news-row:hover { background: var(--tint); }
+.fl__news-date { font-family: var(--f-mono); font-size: 11.5px; color: var(--mute); }
+.fl__news-title { font-size: 14.5px; line-height: 1.7; font-weight: 500; }
+.fl__news-kind { font-family: var(--f-mono); font-size: 10.5px; color: var(--mute); }
+.fl__news-empty { padding: 20px var(--gut); font-size: 13.5px; color: var(--mute); }
+
+/* ── 事業者概要 ──────────────────────── */
+.fl__overview { margin: 0; display: grid; grid-template-columns: 150px 1fr; }
+.fl__overview dt,
+.fl__overview dd {
+  margin: 0;
+  padding: 15px var(--gut) 15px 0;
+  border-bottom: 1px solid var(--rule-thin);
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+.fl__overview dt {
+  padding-left: clamp(18px, 2.4vw, 34px);
+  color: var(--mute);
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  padding-top: 17px;
+}
+.fl__overview dt:nth-last-of-type(1),
+.fl__overview dd:nth-last-of-type(1) { border-bottom: 0; }
+
+/* ── 締め ───────────────────────────── */
+.fl__close {
+  padding: clamp(44px, 7vw, 108px) var(--gut);
+  display: grid;
+  gap: clamp(18px, 2.4vw, 28px);
+}
+.fl__close h2 {
+  font-size: clamp(26px, 4.6vw, 62px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.fl__close p {
+  font-size: 13.5px;
+  line-height: 2.05;
+  color: var(--ink-2);
+  margin: 0;
+  max-width: 34em;
+}
+
+/* ── Responsive ─────────────────────── */
+@media (max-width: 900px) {
+  .fl__sec { grid-template-columns: 1fr; }
+  .fl__sec-label {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule-thin);
+    padding-bottom: 16px;
+  }
+  .fl__sec-label div { position: static; }
+  .fl__svc { grid-template-columns: 40px minmax(0, 1fr); }
+  .fl__svc-meta { grid-column: 2; padding-top: 16px; }
+  .fl__sub { grid-template-columns: 1fr; align-items: start; }
+}
+@media (max-width: 640px) {
+  .fl .fl__news-row { grid-template-columns: 92px 1fr; }
+  .fl__news-kind { display: none; }
+  .fl__overview { grid-template-columns: 98px 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl .fl__cta,
+  .fl .fl__news-row { transition: none; }
+}
