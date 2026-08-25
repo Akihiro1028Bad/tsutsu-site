@@ -123,21 +123,6 @@ export default async function FlatDesignPage() {
           </div>
         </div>
 
-        <div className="fl__bleed">
-          <Image
-            src={work.image.src}
-            alt={work.image.alt}
-            width={work.image.width}
-            height={work.image.height}
-            priority
-          />
-        </div>
-        <div className="fl__bleed-meta">
-          <b>{work.title}</b>
-          <span>
-            {work.client} / {work.year} / {work.category}
-          </span>
-        </div>
       </div>
 
       {/* 事業内容 */}
@@ -171,6 +156,51 @@ export default async function FlatDesignPage() {
               </div>
             </RevealOnScroll>
           ))}
+        </div>
+      </section>
+
+      {/* 実績 */}
+      <section className="fl__sec">
+        <div className="fl__sec-label">
+          <div>
+            <h2>実績</h2>
+            <p>Works</p>
+            <Link className="fl__sec-more" href="/works">
+              一覧を見る
+            </Link>
+          </div>
+        </div>
+        <div className="fl__sec-body">
+          <RevealOnScroll>
+            <div className="fl__work">
+              <div className="fl__work-media">
+                <Image
+                  src={work.image.src}
+                  alt={work.image.alt}
+                  width={work.image.width}
+                  height={work.image.height}
+                />
+              </div>
+              <div className="fl__work-head">
+                <span className="fl__work-no">{work.indexNumber}</span>
+                <h3 className="fl__work-title">{work.title}</h3>
+              </div>
+              <p className="fl__work-body">{work.summary}</p>
+              <div className="fl__work-foot">
+                <span>
+                  {work.client} / {work.year} / {work.category}
+                </span>
+                <a
+                  className="fl__work-link"
+                  href={work.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  サイトを見る ↗
+                </a>
+              </div>
+            </div>
+          </RevealOnScroll>
         </div>
       </section>
 

@@ -120,27 +120,61 @@
   padding-bottom: 2px;
 }
 
-/* 全面ブリードの実績写真 */
-.fl__bleed { position: relative; }
-.fl__bleed img {
+/* ── 実績 ─────────────────────────────── */
+.fl__work {
+  padding: clamp(22px, 3vw, 38px) var(--gut) clamp(24px, 3vw, 40px)
+    clamp(18px, 2.4vw, 34px);
+}
+.fl__work-media { border: 1px solid var(--rule-thin); }
+.fl__work-media img {
   display: block;
   width: 100%;
-  height: clamp(200px, 24vw, 340px);
+  height: clamp(180px, 20vw, 300px);
   object-fit: cover;
 }
-.fl__bleed-meta {
+.fl__work-head {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  margin-top: 20px;
+}
+.fl__work-no { font-family: var(--f-mono); font-size: 12px; color: var(--mute); }
+.fl__work-title {
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+  margin: 0;
+}
+.fl__work-body {
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--ink-2);
+  margin: 11px 0 0;
+  max-width: 40em;
+}
+.fl__work-foot {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px 20px;
-  padding: 11px var(--gut);
-  border-top: 1px solid var(--rule);
+  gap: 10px 20px;
+  margin-top: 18px;
+  border-top: 1px solid var(--rule-thin);
+  padding-top: 15px;
   font-family: var(--f-mono);
   font-size: 11.5px;
   color: var(--ink-2);
 }
-.fl__bleed-meta b { font-family: var(--f); font-size: 13px; font-weight: 600; color: var(--ink); }
+.fl .fl__work-link {
+  font-family: var(--f);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+}
 
 /* ── セクション(追従見出し) ──────────── */
 .fl__sec {
