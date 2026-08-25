@@ -33,8 +33,12 @@ const VARIANTS: ReadonlyArray<Variant> = [
 
 export default function PreviewSwitcher() {
   const pathname = usePathname()
-  // Nested article-preview routes own their own switcher.
-  if (pathname?.startsWith("/design/article")) {
+  // Nested article-preview routes own their own switcher, and the
+  // 和モダン direction preview compares heroes in-page (no A/B/C tabs).
+  if (
+    pathname?.startsWith("/design/article") ||
+    pathname?.startsWith("/design/wa")
+  ) {
     return null
   }
   const activeId: Variant["id"] =
