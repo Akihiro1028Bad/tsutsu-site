@@ -24,23 +24,25 @@ export default function BusinessWorks() {
                 height={work.image.height}
               />
             </div>
-            <div className="biz-work__head">
-              <span className="biz-work__no">{work.indexNumber}</span>
-              <h3 className="biz-work__title">{work.title}</h3>
-            </div>
-            <p className="biz-work__body">{work.summary}</p>
-            <div className="biz-work__foot">
-              <span>
-                {work.client} / {work.year} / {work.category}
-              </span>
-              <a
-                className="biz-work__link"
-                href={work.externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                サイトを見る ↗
-              </a>
+            <div className="biz-work__content">
+              <div className="biz-work__head">
+                <span className="biz-work__no">{work.indexNumber}</span>
+                <h3 className="biz-work__title">{work.title}</h3>
+              </div>
+              <p className="biz-work__body">{work.summary}</p>
+              <div className="biz-work__foot">
+                <span>
+                  {work.client} / {work.year} / {work.category}
+                </span>
+                <a
+                  className="biz-work__link"
+                  href={work.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  サイトを見る ↗
+                </a>
+              </div>
             </div>
           </article>
         </RevealOnScroll>

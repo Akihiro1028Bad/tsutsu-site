@@ -190,24 +190,34 @@
 .home-root .biz-svc__meta dd { margin: 0; }
 
 /* ── 実績 ───────────────────────────── */
+/* 帯ではなく横組みの一件。比率は一覧行のサムネイルと同じ 3:2 に揃える。 */
 .home-root .biz-work {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(16px, 2.4vw, 32px);
+  align-items: start;
   padding: clamp(22px, 3vw, 38px) var(--biz-gut) clamp(24px, 3vw, 40px)
     clamp(18px, 2.4vw, 34px);
 }
 
-.home-root .biz-work__media { border: 1px solid var(--rule); }
+.home-root .biz-work__media {
+  border: 1px solid var(--rule);
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
 .home-root .biz-work__media img {
   display: block;
   width: 100%;
-  height: clamp(180px, 20vw, 300px);
+  height: 100%;
   object-fit: cover;
 }
+
+.home-root .biz-work__content { min-width: 0; }
 
 .home-root .biz-work__head {
   display: flex;
   align-items: baseline;
   gap: 13px;
-  margin-top: 20px;
 }
 .home-root .biz-work__no {
   font-family: var(--f-mono);
@@ -215,18 +225,17 @@
   color: var(--ink-mute);
 }
 .home-root .biz-work__title {
-  font-size: clamp(18px, 2.2vw, 28px);
+  font-size: clamp(17px, 1.8vw, 22px);
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.45;
+  letter-spacing: -0.015em;
+  line-height: 1.5;
   margin: 0;
 }
 .home-root .biz-work__body {
   font-size: 13.5px;
   line-height: 2;
   color: var(--ink-soft);
-  margin: 11px 0 0;
-  max-width: 40em;
+  margin: 10px 0 0;
 }
 .home-root .biz-work__foot {
   display: flex;
@@ -234,9 +243,9 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 10px 20px;
-  margin-top: 18px;
+  margin-top: 16px;
   border-top: 1px solid var(--rule);
-  padding-top: 15px;
+  padding-top: 13px;
   font-family: var(--f-mono);
   font-size: 11.5px;
   color: var(--ink-soft);
@@ -366,6 +375,13 @@
 }
 
 @media (max-width: 640px) {
+  /* 縦積みにすると 3:2 が全幅に効いて画像が伸びるため、幅を抑える。 */
+  .home-root .biz-work {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .home-root .biz-work__media { max-width: 340px; }
+
   .home-root .biz-row {
     grid-template-columns: 78px 1fr;
     column-gap: 14px;
