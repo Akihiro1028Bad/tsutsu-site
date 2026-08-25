@@ -125,7 +125,7 @@
 .fl__bleed img {
   display: block;
   width: 100%;
-  height: clamp(240px, 46vw, 620px);
+  height: clamp(200px, 24vw, 340px);
   object-fit: cover;
 }
 .fl__bleed-meta {
