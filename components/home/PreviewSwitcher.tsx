@@ -33,12 +33,10 @@ const VARIANTS: ReadonlyArray<Variant> = [
 
 export default function PreviewSwitcher() {
   const pathname = usePathname()
-  // Nested article-preview routes own their own switcher, and the
-  // 和モダン direction preview compares heroes in-page (no A/B/C tabs).
-  if (
-    pathname?.startsWith("/design/article") ||
-    pathname?.startsWith("/design/wa")
-  ) {
+  // Only the A/B/C style previews use this switcher. Other design routes
+  // (article previews, direction comparisons) compare variants in-page.
+  const isAbcPreview = VARIANTS.some((v) => pathname === v.href)
+  if (!isAbcPreview) {
     return null
   }
   const activeId: Variant["id"] =

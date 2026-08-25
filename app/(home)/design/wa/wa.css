@@ -4,6 +4,7 @@
  */
 
 .wa {
+  padding-top: 64px;
   --kinari: #F2EEE4;      /* 生成り — 和紙の地 */
   --kinari-fuka: #E8E2D4; /* 生成り(影) */
   --sumi: #1C2026;        /* 墨 */
@@ -80,7 +81,7 @@
   flex-wrap: wrap;
 }
 
-.wa__cta {
+.wa .wa__cta {
   font-family: var(--f-gothic);
   font-weight: 700;
   font-size: 14px;
@@ -91,9 +92,9 @@
   text-decoration: none;
   transition: background 0.25s ease;
 }
-.wa__cta:hover { background: var(--sumi); }
+.wa .wa__cta:hover { background: var(--sumi); }
 
-.wa__cta-ghost {
+.wa .wa__cta-ghost {
   font-family: var(--f-gothic);
   font-size: 14px;
   letter-spacing: 0.12em;
@@ -323,5 +324,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wa__cta { transition: none; }
+  .wa .wa__cta { transition: none; }
 }
