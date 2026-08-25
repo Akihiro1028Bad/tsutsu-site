@@ -12,6 +12,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { id: "services", label: "事業内容" },
   { id: "works", label: "実績" },
   { id: "notes", label: "お知らせ" },
+  { id: "blog", label: "ブログ" },
   { id: "about", label: "事業者概要" },
 ]
 

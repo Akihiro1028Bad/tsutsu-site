@@ -17,13 +17,13 @@ export default function BusinessNews({ items }: BusinessNewsProps) {
       moreLabel="一覧を見る"
     >
       {items.length === 0 ? (
-        <p className="biz-news__empty">現在お知らせはありません。</p>
+        <p className="biz-row__empty">現在お知らせはありません。</p>
       ) : (
         items.map((item) => (
-          <Link className="biz-news__row" href={item.href} key={item.id}>
-            <span className="biz-news__date">{item.dateDisplay}</span>
-            <span className="biz-news__title">{item.title}</span>
-            <span className="biz-news__kind">{item.kind}</span>
+          <Link className="biz-row" href={item.href} key={item.id}>
+            <span className="biz-row__date">{item.dateDisplay}</span>
+            <span className="biz-row__title">{item.title}</span>
+            <span className="biz-row__kind">{item.kind}</span>
           </Link>
         ))
       )}

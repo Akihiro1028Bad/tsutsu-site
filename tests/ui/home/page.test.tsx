@@ -59,11 +59,11 @@ beforeEach(() => {
 })
 
 describe("事業サイト: app/(home)/page.tsx — 統合", () => {
-  it("お知らせを3件取得する(ブログはホームに載せない)", async () => {
+  it("お知らせ3件とブログ4件を並行取得する", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     expect(getLatestAnnouncements).toHaveBeenCalledWith(3)
-    expect(getLatestBlogPosts).not.toHaveBeenCalled()
+    expect(getLatestBlogPosts).toHaveBeenCalledWith(4)
   })
 
   it("各アンカー #top/#services/#works/#notes/#about/#contact を持つ", async () => {
@@ -77,12 +77,12 @@ describe("事業サイト: app/(home)/page.tsx — 統合", () => {
     expect(document.getElementById("contact")).not.toBeNull()
   })
 
-  it("事業サイトの並び 事業内容 → 実績 → お知らせ → 事業者概要 → お問い合わせ", async () => {
+  it("事業サイトの並び 事業内容 → 実績 → お知らせ → ブログ → 事業者概要 → お問い合わせ", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     const sections = Array.from(document.querySelectorAll("section"))
     const ids = sections.map((s) => s.id)
-    expect(ids).toEqual(["services", "works", "notes", "about", "contact"])
+    expect(ids).toEqual(["services", "works", "notes", "blog", "about", "contact"])
   })
 
   it("main ランドマークは1つ、h1 も1つ", async () => {
@@ -92,20 +92,24 @@ describe("事業サイト: app/(home)/page.tsx — 統合", () => {
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1)
   })
 
-  it("microCMS のお知らせをお知らせセクションに流し込む", async () => {
+  it("microCMS のお知らせとブログを各セクションに流し込む", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
-    expect(screen.getByText("News headline")).toBeInTheDocument()
     expect(
       screen.getByRole("link", { name: /News headline/ })
     ).toHaveAttribute("href", "/announcements/n1")
+    expect(
+      screen.getByRole("link", { name: /Blog headline/ })
+    ).toHaveAttribute("href", "/blog/slug-one")
   })
 
-  it("お知らせが0件のときは不在メッセージを出す", async () => {
+  it("お知らせ・ブログが0件のときは不在メッセージを出す", async () => {
     vi.mocked(getLatestAnnouncements).mockResolvedValue([])
+    vi.mocked(getLatestBlogPosts).mockResolvedValue([])
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     expect(screen.getByText("現在お知らせはありません。")).toBeInTheDocument()
+    expect(screen.getByText("記事はまだありません。")).toBeInTheDocument()
   })
 
   it("メタデータ(タイトル・説明)を公開する", async () => {

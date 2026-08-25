@@ -3,10 +3,12 @@ import BusinessHero from "@/components/home/business/BusinessHero"
 import BusinessServices from "@/components/home/business/BusinessServices"
 import BusinessWorks from "@/components/home/business/BusinessWorks"
 import BusinessNews from "@/components/home/business/BusinessNews"
+import BusinessBlog from "@/components/home/business/BusinessBlog"
 import BusinessProfile from "@/components/home/business/BusinessProfile"
 import BusinessContact from "@/components/home/business/BusinessContact"
-import { toNewsListItem } from "@/lib/home/adapters"
+import { toBlogListItem, toNewsListItem } from "@/lib/home/adapters"
 import { getLatestAnnouncements } from "@/lib/utils/announcement-server"
+import { getLatestBlogPosts } from "@/lib/utils/blog-server"
 import "./business.css"
 
 const PAGE_TITLE = "tsutsu | Webサイト制作・AI導入支援・学習キャリア支援"
@@ -40,10 +42,15 @@ export const metadata: Metadata = {
 }
 
 const NEWS_ITEM_COUNT = 3
+const BLOG_ITEM_COUNT = 4
 
 export default async function Home() {
-  const announcements = await getLatestAnnouncements(NEWS_ITEM_COUNT)
+  const [announcements, blogPosts] = await Promise.all([
+    getLatestAnnouncements(NEWS_ITEM_COUNT),
+    getLatestBlogPosts(BLOG_ITEM_COUNT),
+  ])
   const newsItems = announcements.map(toNewsListItem)
+  const blogItems = blogPosts.map(toBlogListItem)
 
   return (
     <main data-style="business">
@@ -51,6 +58,7 @@ export default async function Home() {
       <BusinessServices />
       <BusinessWorks />
       <BusinessNews items={newsItems} />
+      <BusinessBlog items={blogItems} />
       <BusinessProfile />
       <BusinessContact />
     </main>

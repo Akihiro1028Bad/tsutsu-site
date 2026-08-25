@@ -21,6 +21,7 @@ const SITE_LINKS: FooterColumn = {
     { label: "事業内容", target: { kind: "section", id: "services" } },
     { label: "実績", target: { kind: "section", id: "works" } },
     { label: "お知らせ", target: { kind: "section", id: "notes" } },
+    { label: "ブログ", target: { kind: "section", id: "blog" } },
     { label: "事業者概要", target: { kind: "section", id: "about" } },
   ],
 }

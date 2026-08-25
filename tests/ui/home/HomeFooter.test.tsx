@@ -69,6 +69,9 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
       within(footer).getByRole("link", { name: /^お知らせ$/ })
     ).toHaveAttribute("href", "#notes")
     expect(
+      within(footer).getByRole("link", { name: /^ブログ$/ })
+    ).toHaveAttribute("href", "#blog")
+    expect(
       within(footer).getByRole("link", { name: /^事業者概要$/ })
     ).toHaveAttribute("href", "#about")
   })
@@ -122,6 +125,9 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     expect(
       within(footer).getByRole("link", { name: /^お知らせ$/ })
     ).toHaveAttribute("href", "/#notes")
+    expect(
+      within(footer).getByRole("link", { name: /^ブログ$/ })
+    ).toHaveAttribute("href", "/#blog")
     expect(
       within(footer).getByRole("link", { name: /^事業者概要$/ })
     ).toHaveAttribute("href", "/#about")

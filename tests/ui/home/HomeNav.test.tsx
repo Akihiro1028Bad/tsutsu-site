@@ -121,6 +121,7 @@ describe("Phase 2: HomeNav — structural rendering", () => {
       { name: /^事業内容$/, href: "#services" },
       { name: /^実績$/, href: "#works" },
       { name: /^お知らせ$/, href: "#notes" },
+      { name: /^ブログ$/, href: "#blog" },
       { name: /^事業者概要$/, href: "#about" },
       { name: /^お問い合わせ$/, href: "#contact" },
     ]
@@ -295,6 +296,7 @@ describe("HomeNav — cross-page navigation (non-home pathnames)", () => {
       { name: /^事業内容$/, href: "/#services" },
       { name: /^実績$/, href: "/#works" },
       { name: /^お知らせ$/, href: "/#notes" },
+      { name: /^ブログ$/, href: "/#blog" },
       { name: /^事業者概要$/, href: "/#about" },
       { name: /^お問い合わせ$/, href: "/#contact" },
     ]
