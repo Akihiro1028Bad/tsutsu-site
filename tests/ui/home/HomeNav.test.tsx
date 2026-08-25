@@ -108,22 +108,21 @@ describe("Phase 2: HomeNav — structural rendering", () => {
     expect(brand).toHaveAttribute("href", "#top")
   })
 
-  it("renders the seal mark (堤) inside the brand anchor instead of an image", () => {
+  it("renders the trade name as text, with no logo image", () => {
     render(<HomeNav />)
     const brand = screen.getByRole("link", { name: /tsutsu/i })
     expect(brand.querySelector("img")).toBeNull()
-    expect(brand.textContent).toContain("堤")
-    expect(brand.textContent).toContain("TSUTSU")
+    expect(brand.textContent).toContain("tsutsu")
   })
 
-  it("renders the four section anchors and the consult CTA", () => {
+  it("renders the four section anchors and the contact CTA", () => {
     render(<HomeNav />)
     const expected = [
-      { name: /^services$/i, href: "#services" },
-      { name: /^works$/i, href: "#works" },
-      { name: /^about$/i, href: "#about" },
-      { name: /^journal$/i, href: "#notes" },
-      { name: /相談する/, href: "#contact" },
+      { name: /^事業内容$/, href: "#services" },
+      { name: /^実績$/, href: "#works" },
+      { name: /^お知らせ$/, href: "#notes" },
+      { name: /^事業者概要$/, href: "#about" },
+      { name: /^お問い合わせ$/, href: "#contact" },
     ]
     for (const e of expected) {
       const link = screen.getByRole("link", { name: e.name })
@@ -176,7 +175,7 @@ describe("Phase 2: HomeNav — scroll spy", () => {
     expect(lastCallback).not.toBeNull()
     expect(lastObserver?.observe).toHaveBeenCalledWith(section)
     fireIntersection(section)
-    const worksLink = screen.getByRole("link", { name: /^works$/i })
+    const worksLink = screen.getByRole("link", { name: /^実績$/ })
     expect(worksLink).toHaveAttribute("aria-current", "true")
     section.remove()
   })
@@ -234,19 +233,19 @@ describe("Phase 10: HomeNav — mobile disclosure (C-1)", () => {
     await user.click(toggle)
     expect(toggle).toHaveAttribute("aria-expanded", "true")
 
-    const aboutLink = screen.getByRole("link", { name: /^about$/i })
+    const aboutLink = screen.getByRole("link", { name: /^事業内容$/ })
     await user.click(aboutLink)
     expect(toggle).toHaveAttribute("aria-expanded", "false")
   })
 
-  it("closes the panel when the consult CTA is clicked", async () => {
+  it("closes the panel when the contact CTA is clicked", async () => {
     const user = userEvent.setup()
     render(<HomeNav />)
     const toggle = screen.getByRole("button", { name: /menu|メニュー/i })
     await user.click(toggle)
     expect(toggle).toHaveAttribute("aria-expanded", "true")
 
-    const cta = screen.getByRole("link", { name: /相談する/ })
+    const cta = screen.getByRole("link", { name: /^お問い合わせ$/ })
     await user.click(cta)
     expect(toggle).toHaveAttribute("aria-expanded", "false")
   })
@@ -293,11 +292,11 @@ describe("HomeNav — cross-page navigation (non-home pathnames)", () => {
     vi.mocked(usePathname).mockReturnValue("/blog")
     render(<HomeNav />)
     const expectations = [
-      { name: /^services$/i, href: "/#services" },
-      { name: /^works$/i, href: "/#works" },
-      { name: /^about$/i, href: "/#about" },
-      { name: /^journal$/i, href: "/#notes" },
-      { name: /相談する/, href: "/#contact" },
+      { name: /^事業内容$/, href: "/#services" },
+      { name: /^実績$/, href: "/#works" },
+      { name: /^お知らせ$/, href: "/#notes" },
+      { name: /^事業者概要$/, href: "/#about" },
+      { name: /^お問い合わせ$/, href: "/#contact" },
     ]
     for (const e of expectations) {
       expect(screen.getByRole("link", { name: e.name })).toHaveAttribute(
@@ -312,9 +311,9 @@ describe("HomeNav — cross-page navigation (non-home pathnames)", () => {
     render(<HomeNav />)
     const brand = screen.getByRole("link", { name: /tsutsu/i })
     expect(brand).toHaveAttribute("href", "#top")
-    expect(screen.getByRole("link", { name: /^about$/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /^事業内容$/ })).toHaveAttribute(
       "href",
-      "#about"
+      "#services"
     )
   })
 })

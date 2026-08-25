@@ -16,17 +16,17 @@ interface FooterColumn {
 }
 
 const SITE_LINKS: FooterColumn = {
-  heading: "Site",
+  heading: "サイト",
   links: [
-    { label: "Services", target: { kind: "section", id: "services" } },
-    { label: "Works", target: { kind: "section", id: "works" } },
-    { label: "About", target: { kind: "section", id: "about" } },
-    { label: "Journal", target: { kind: "section", id: "notes" } },
+    { label: "事業内容", target: { kind: "section", id: "services" } },
+    { label: "実績", target: { kind: "section", id: "works" } },
+    { label: "お知らせ", target: { kind: "section", id: "notes" } },
+    { label: "事業者概要", target: { kind: "section", id: "about" } },
   ],
 }
 
 const CONTACT_LINKS: FooterColumn = {
-  heading: "Contact",
+  heading: "お問い合わせ",
   links: [
     { label: "hello@tsutsu.dev", target: { kind: "url", href: "mailto:hello@tsutsu.dev" } },
     { label: "問い合わせフォーム", target: { kind: "section", id: "contact" } },
@@ -50,9 +50,10 @@ export default function HomeFooter() {
     <footer className="home-footer">
       <div className="home-footer__grid">
         <div className="home-footer__brand">
-          <span className="home-footer__seal" aria-hidden="true">堤</span>
-          <span className="home-footer__brand-name">TSUTSU</span>
-          <div className="home-footer__tag">Freelance engineer — Tokyo</div>
+          <span className="home-footer__brand-name">tsutsu</span>
+          <div className="home-footer__tag">
+            Webサイト制作 / AI導入支援 / 学習・キャリア支援
+          </div>
         </div>
         <div className="home-footer__cols">
           {COLUMNS.map((col) => (
@@ -76,7 +77,7 @@ export default function HomeFooter() {
             </Suspense>{" "}
             tsutsu — all rights reserved
           </span>
-          <span>SCALE 1:1 — DRAWN &amp; BUILT IN TOKYO / JP</span>
+          <span>東京都 — 代表 堤 暁寛</span>
         </div>
       </div>
     </footer>

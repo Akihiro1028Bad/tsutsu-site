@@ -9,10 +9,10 @@ interface NavItem {
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
-  { id: "services", label: "Services" },
-  { id: "works", label: "Works" },
-  { id: "about", label: "About" },
-  { id: "notes", label: "Journal" },
+  { id: "services", label: "事業内容" },
+  { id: "works", label: "実績" },
+  { id: "notes", label: "お知らせ" },
+  { id: "about", label: "事業者概要" },
 ]
 
 /** Sections rendered on dark surfaces; nav switches to light text over them. */
@@ -91,8 +91,10 @@ export default function HomeNav() {
       data-menu-open={isOpen ? "true" : "false"}
     >
       <a className="home-nav__brand" href={brandHref} aria-label="tsutsu">
-        <span className="home-nav__seal" aria-hidden="true">堤</span>
-        <span className="home-nav__brand-name">TSUTSU</span>
+        <span className="home-nav__brand-name">tsutsu</span>
+        <span className="home-nav__brand-sub" aria-hidden="true">
+          Web · AI · Engineering
+        </span>
       </a>
 
       <button
@@ -132,7 +134,7 @@ export default function HomeNav() {
         href={sectionHref("contact")}
         onClick={() => setIsOpen(false)}
       >
-        相談する
+        お問い合わせ
       </a>
     </nav>
   )
