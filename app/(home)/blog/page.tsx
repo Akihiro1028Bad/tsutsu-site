@@ -33,13 +33,9 @@ export default async function BlogPage() {
   return (
     <main className="archive-page" data-style="modern">
       <header className="archive-page__head section-head section-head--hero">
-        <div className="section-head__rule">
-          <span>Archive</span>
-          <span>Notes</span>
-        </div>
         <div className="section-head__jp">
-          <h1>Notes.</h1>
-          <p className="section-head__en">ブログ</p>
+          <h1>ブログ</h1>
+          <p className="section-head__en">Notes</p>
         </div>
         <p className="section-head__lead">
           ふだん考えていること、書き留めたもの。

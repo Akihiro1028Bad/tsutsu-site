@@ -45,7 +45,7 @@ export default async function AnnouncementDetail({
       imageUrl={readImageUrl}
       categoryName={categoryName}
       formatDate={formatDate}
-      kicker="Announcements."
+      kicker="お知らせ"
       archive={{ href: "/announcements", label: "お知らせ一覧へ戻る" }}
       siblings={siblings}
       readingTimeMin={estimateReadingTimeMin(announcement.content)}

@@ -13,22 +13,24 @@ vi.mock("next/image", () => ({
 import WorksPage, { metadata } from "@/app/(home)/works/page"
 import { WORKS_FEATURED } from "@/lib/home/works-data"
 
-describe("Phase 9: /works — page head", () => {
-  it("renders a single H1 with the editorial heading", () => {
+describe("事業サイト: /works — page head", () => {
+  it("和文の見出しを H1 として1つだけ持つ", () => {
     render(<WorksPage />)
     const h1s = screen.getAllByRole("heading", { level: 1 })
     expect(h1s).toHaveLength(1)
-    expect(h1s[0].textContent).toMatch(/Works\./i)
+    expect(h1s[0].textContent).toMatch(/実績/)
   })
 
-  it("shows the 'Index of Works' eyebrow", () => {
+  it("大文字ラベル帯(Index of Works)を持たない", () => {
     render(<WorksPage />)
-    expect(screen.getByText(/Index of Works/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Index of Works/i)).toBeNull()
   })
 
-  it("renders the Japanese subtitle", () => {
-    render(<WorksPage />)
-    expect(screen.getByText(/制作実績一覧/)).toBeInTheDocument()
+  it("欧文のキャプションを従として添える", () => {
+    const { container } = render(<WorksPage />)
+    const caption = container.querySelector(".page-head__sub-jp") as HTMLElement
+    expect(caption).not.toBeNull()
+    expect(caption.textContent).toBe("Works")
   })
 
   it("shows the lead copy", () => {
@@ -56,7 +58,7 @@ describe("Phase 9: /works — page meta row", () => {
     const tally = document.querySelector(".tally") as HTMLElement
     expect(tally).not.toBeNull()
     expect(tally.textContent).toContain(count)
-    expect(tally.textContent).toMatch(/Selected project/)
+    expect(tally.textContent).toMatch(/件 \/ 2024/)
   })
 })
 

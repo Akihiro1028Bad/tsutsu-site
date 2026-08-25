@@ -453,17 +453,19 @@
 }
 
 /* ============================================================
-   Editorial section head (shared by Works/Services/About/Journal/Contact)
+   Page head — 事業サイトの調子(下層ページ共通)
+   和文を主・欧文を従にし、大文字ラベル帯は使わない。
    ============================================================ */
 .home-root .section-head {
   display: grid;
-  grid-template-columns: repeat(var(--col), 1fr);
-  column-gap: clamp(12px, 1.6vw, 28px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: end;
-  margin-bottom: clamp(48px, 7vw, 96px);
-  padding-top: clamp(28px, 4vw, 48px);
+  gap: clamp(16px, 3vw, 48px);
+  margin-bottom: clamp(32px, 5vw, 56px);
+  padding-top: clamp(24px, 3.5vw, 40px);
   position: relative;
 }
+
 .home-root .section-head--hero::before {
   content: "";
   position: absolute;
@@ -471,80 +473,48 @@
   right: calc(var(--pad-x) * -1);
   top: 0;
   height: 1px;
-  background: var(--rule);
+  background: var(--ink);
 }
-.home-root .section-head__rule {
-  grid-column: 1 / span 2;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: flex-start;
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-}
-.home-root .section-head__rule em {
-  display: block;
-  width: 1px;
-  height: 72px;
-  background: var(--rule);
-}
-.home-root .section-head__jp {
-  grid-column: 3 / span 7;
-}
+
+.home-root .section-head__jp h1,
 .home-root .section-head__jp h2 {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(64px, 8vw, 120px);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
+  font-family: var(--f-body);
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(28px, 4.4vw, 56px);
+  line-height: 1.35;
+  letter-spacing: -0.03em;
   color: var(--ink);
   margin: 0;
 }
+
 .home-root .section-head__en {
   display: block;
-  margin-top: 16px;
-  font-family: var(--f-jp-display);
-  font-weight: 500;
+  margin-top: 10px;
+  font-family: var(--f-mono);
+  font-weight: 400;
   font-style: normal;
-  font-size: clamp(16px, 1.4vw, 20px);
-  letter-spacing: 0.1em;
-  color: var(--ink-soft);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-mute);
 }
+
 .home-root .section-head__lead {
-  grid-column: 10 / -1;
   align-self: end;
-  font-family: var(--f-jp-display);
-  font-size: clamp(13px, 1vw, 15px);
+  font-family: var(--f-body);
+  font-size: clamp(13px, 1vw, 14.5px);
   color: var(--ink-soft);
-  line-height: 2;
-  border-left: 1px solid var(--rule);
-  padding-left: 16px;
+  line-height: 2.05;
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
   margin: 0;
+  max-width: 34em;
 }
+
 @media (max-width: 900px) {
-  .home-root .section-head__rule {
-    grid-column: 1 / -1;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 18px;
-  }
-  .home-root .section-head__rule em {
-    width: 40px;
-    height: 1px;
-  }
-  .home-root .section-head__jp,
-  .home-root .section-head__lead {
-    grid-column: 1 / -1;
-  }
-  .home-root .section-head__lead {
-    margin-top: 20px;
-    border-left: none;
-    padding-left: 0;
+  .home-root .section-head {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 }
 
@@ -1460,8 +1430,8 @@
   cursor: pointer;
 }
 .home-root .archive-page__btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
 }
 .home-root .archive-page__btn--ghost {
   background: transparent;
@@ -1509,8 +1479,9 @@
   margin: 0 0 clamp(20px, 2.6vw, 32px);
 }
 .home-root .article-page__meta-kicker {
-  font-family: var(--f-display);
-  font-style: italic;
+  font-family: var(--f-body);
+  font-style: normal;
+  font-weight: 500;
   font-size: 13px;
   letter-spacing: 0;
   text-transform: none;
@@ -2101,8 +2072,8 @@
   max-width: 28em;
   padding-top: clamp(16px, 2vw, 24px);
   border-top: 1px solid var(--rule);
-  font-family: var(--f-display);
-  font-style: italic;
+  font-family: var(--f-body);
+  font-style: normal;
   font-size: 14px;
   line-height: 1.75;
   color: var(--ink-soft);
@@ -3532,34 +3503,33 @@
 .home-root .page-head__title {
   grid-column: 1 / span 8;
   margin: 0;
-  /* Match the top-page section titles (data-style="modern"): Zen Kaku
-     sans, weight 600, normal style. */
   font-family: var(--f-body);
   font-style: normal;
   font-weight: 600;
-  font-size: clamp(40px, 5.4vw, 72px);
-  line-height: 1;
+  font-size: clamp(28px, 4.4vw, 56px);
+  line-height: 1.35;
   letter-spacing: -0.03em;
 }
+/* 欧文は従。一覧ページの section-head__en と同じ扱い。 */
 .home-root .page-head__sub-jp {
   display: block;
-  margin-top: 14px;
-  font-family: var(--f-jp-display);
+  margin-top: 10px;
+  font-family: var(--f-mono);
   font-style: normal;
-  font-weight: 500;
-  font-size: clamp(15px, 1.2vw, 18px);
-  letter-spacing: 0.08em;
-  color: var(--ink-soft);
+  font-weight: 400;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-mute);
 }
 .home-root .page-head__lead {
   grid-column: 9 / -1;
   align-self: end;
-  font-family: var(--f-jp-display);
-  font-size: clamp(13px, 1vw, 15px);
+  font-family: var(--f-body);
+  font-size: clamp(13px, 1vw, 14.5px);
   color: var(--ink-soft);
-  line-height: 1.9;
-  border-left: 1px solid var(--rule);
-  padding-left: 16px;
+  line-height: 2.05;
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
   margin: 0;
 }
 @media (max-width: 900px) {
@@ -3608,10 +3578,10 @@
   color: var(--ink);
 }
 .home-root .page-meta .tally em {
-  font-style: italic;
-  font-family: var(--f-display);
-  font-size: 14px;
-  color: var(--accent);
+  font-style: normal;
+  font-family: var(--f-mono);
+  font-size: 13px;
+  color: var(--ink);
   margin-right: 4px;
   letter-spacing: 0.02em;
 }
