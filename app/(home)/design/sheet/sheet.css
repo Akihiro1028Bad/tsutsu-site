@@ -299,3 +299,99 @@
   .sh .sh__cta,
   .sh .sh__cta-alt { transition: none; }
 }
+
+/* ── 見出し帯(会社サイトのセクション見出し) ── */
+.sh__band {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 11px clamp(16px, 2.2vw, 26px);
+  border-bottom: 1px solid var(--line);
+  background: var(--wash);
+}
+.sh__band h3 {
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+.sh__band span {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--mute);
+}
+.sh .sh__band-more {
+  margin-left: auto;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--gunjo);
+  text-decoration: none;
+}
+.sh .sh__band-more:hover { text-decoration: underline; }
+
+/* ── お知らせ ───────────────────────────── */
+.sh__news { border-bottom: 1px solid var(--ink); }
+.sh .sh__news-row {
+  display: grid;
+  grid-template-columns: 108px 92px 1fr;
+  align-items: center;
+  gap: clamp(10px, 1.6vw, 22px);
+  padding: 12px clamp(16px, 2.2vw, 26px);
+  border-bottom: 1px solid var(--line-2);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+.sh .sh__news-row:last-child { border-bottom: 0; }
+.sh .sh__news-row:hover { background: var(--wash); }
+.sh__news-date {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--mute);
+}
+.sh__news-kind {
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  padding: 3px 0;
+  text-align: center;
+}
+.sh__news-title {
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.sh__news-empty {
+  padding: 16px clamp(16px, 2.2vw, 26px);
+  font-size: 13px;
+  color: var(--mute);
+}
+
+/* ── 事業者概要 ─────────────────────────── */
+.sh__overview {
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  border-bottom: 1px solid var(--ink);
+}
+.sh__overview dt,
+.sh__overview dd {
+  margin: 0;
+  padding: 12px clamp(16px, 2.2vw, 26px);
+  border-bottom: 1px solid var(--line-2);
+  font-size: 13px;
+  line-height: 1.85;
+}
+.sh__overview dt {
+  background: var(--wash);
+  color: var(--ink-2);
+  font-weight: 500;
+  border-right: 1px solid var(--line);
+}
+.sh__overview dt:nth-last-of-type(1),
+.sh__overview dd:nth-last-of-type(1) { border-bottom: 0; }
+
+@media (max-width: 760px) {
+  .sh .sh__news-row { grid-template-columns: 92px 1fr; }
+  .sh__news-kind { display: none; }
+  .sh__overview { grid-template-columns: 104px 1fr; }
+}
