@@ -58,15 +58,15 @@ beforeEach(() => {
   vi.mocked(getLatestBlogPosts).mockResolvedValue(blogPosts)
 })
 
-describe("Phase 7: app/(home)/page.tsx — editorial integration", () => {
-  it("fetches four announcements and four blog posts in parallel", async () => {
+describe("事業サイト: app/(home)/page.tsx — 統合", () => {
+  it("お知らせを3件取得する(ブログはホームに載せない)", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
-    expect(getLatestAnnouncements).toHaveBeenCalledWith(4)
-    expect(getLatestBlogPosts).toHaveBeenCalledWith(4)
+    expect(getLatestAnnouncements).toHaveBeenCalledWith(3)
+    expect(getLatestBlogPosts).not.toHaveBeenCalled()
   })
 
-  it("renders the six editorial sections anchored at #top/#works/#services/#about/#notes/#contact", async () => {
+  it("各アンカー #top/#services/#works/#notes/#about/#contact を持つ", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     expect(document.getElementById("top")).not.toBeNull()
@@ -77,36 +77,38 @@ describe("Phase 7: app/(home)/page.tsx — editorial integration", () => {
     expect(document.getElementById("contact")).not.toBeNull()
   })
 
-  it("places the sections in design order: Works → Services → About → Journal → Contact", async () => {
+  it("事業サイトの並び 事業内容 → 実績 → お知らせ → 事業者概要 → お問い合わせ", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     const sections = Array.from(document.querySelectorAll("section"))
     const ids = sections.map((s) => s.id)
-    expect(ids).toEqual(["works", "services", "about", "notes", "contact"])
+    expect(ids).toEqual(["services", "works", "notes", "about", "contact"])
   })
 
-  it("wraps the editorial content in a single <main> landmark with one <h1>", async () => {
+  it("main ランドマークは1つ、h1 も1つ", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     expect(screen.getAllByRole("main")).toHaveLength(1)
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1)
   })
 
-  it("threads microCMS content into the Journal section", async () => {
+  it("microCMS のお知らせをお知らせセクションに流し込む", async () => {
     const { default: Page } = await import("@/app/(home)/page")
     render(await Page())
     expect(screen.getByText("News headline")).toBeInTheDocument()
-    expect(screen.getByText("Blog headline")).toBeInTheDocument()
-    // Ensure the slug-based href is correct (blog) and id-based href (news).
     expect(
       screen.getByRole("link", { name: /News headline/ })
     ).toHaveAttribute("href", "/announcements/n1")
-    expect(
-      screen.getByRole("link", { name: /Blog headline/ })
-    ).toHaveAttribute("href", "/blog/slug-one")
   })
 
-  it("exposes editorial metadata (title + description)", async () => {
+  it("お知らせが0件のときは不在メッセージを出す", async () => {
+    vi.mocked(getLatestAnnouncements).mockResolvedValue([])
+    const { default: Page } = await import("@/app/(home)/page")
+    render(await Page())
+    expect(screen.getByText("現在お知らせはありません。")).toBeInTheDocument()
+  })
+
+  it("メタデータ(タイトル・説明)を公開する", async () => {
     const { metadata } = await import("@/app/(home)/page")
     expect(metadata?.title).toBeTruthy()
     expect(metadata?.description).toBeTruthy()

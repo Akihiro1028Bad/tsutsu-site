@@ -21,15 +21,15 @@ const LEGACY_MODULES = [
 ] as const
 
 const NEW_HOME_MODULES = [
-  "@/components/home/HeroSection",
-  "@/components/home/WorksSection",
-  "@/components/home/ServicesSection",
-  "@/components/home/AboutSection",
-  "@/components/home/JournalSection",
-  "@/components/home/ContactSection",
+  "@/components/home/business/BusinessHero",
+  "@/components/home/business/BusinessServices",
+  "@/components/home/business/BusinessWorks",
+  "@/components/home/business/BusinessNews",
+  "@/components/home/business/BusinessProfile",
+  "@/components/home/business/BusinessContact",
 ] as const
 
-describe("Phase 7: app/(home)/page.tsx — leaves legacy imports behind", () => {
+describe("事業サイト: app/(home)/page.tsx — leaves legacy imports behind", () => {
   for (const mod of LEGACY_MODULES) {
     it(`does not import ${mod}`, () => {
       const escaped = mod.replace(/[/\-]/g, "\\$&")
