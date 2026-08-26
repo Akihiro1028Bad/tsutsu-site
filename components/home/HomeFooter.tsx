@@ -6,8 +6,8 @@ import FooterYear from "@/components/home/FooterYear"
 
 interface FooterLink {
   readonly label: string
-  /** Either a section id (e.g. `about`) routed via `sectionHref`, or an absolute URL (mailto:, https:). */
-  readonly target: { readonly kind: "section"; readonly id: string } | { readonly kind: "url"; readonly href: string }
+  /** Home-page section id (e.g. `about`), routed via `sectionHref`. */
+  readonly sectionId: string
 }
 
 interface FooterColumn {
@@ -18,19 +18,19 @@ interface FooterColumn {
 const SITE_LINKS: FooterColumn = {
   heading: "サイト",
   links: [
-    { label: "事業内容", target: { kind: "section", id: "services" } },
-    { label: "実績", target: { kind: "section", id: "works" } },
-    { label: "お知らせ", target: { kind: "section", id: "notes" } },
-    { label: "ブログ", target: { kind: "section", id: "blog" } },
-    { label: "事業者概要", target: { kind: "section", id: "about" } },
+    { label: "事業内容", sectionId: "services" },
+    { label: "実績", sectionId: "works" },
+    { label: "お知らせ", sectionId: "notes" },
+    { label: "ブログ", sectionId: "blog" },
+    { label: "事業者概要", sectionId: "about" },
   ],
 }
 
+// メールアドレスは画面に出さない(収集対策)。窓口はフォームに一本化する。
 const CONTACT_LINKS: FooterColumn = {
   heading: "お問い合わせ",
   links: [
-    { label: "hello@tsutsu.dev", target: { kind: "url", href: "mailto:hello@tsutsu.dev" } },
-    { label: "問い合わせフォーム", target: { kind: "section", id: "contact" } },
+    { label: "問い合わせフォーム", sectionId: "contact" },
   ],
 }
 
@@ -43,9 +43,6 @@ export default function HomeFooter() {
   // (e.g. /blog/[slug]) back to the home section, not just append a hash
   // to the current URL.
   const sectionHref = (id: string): string => (isHome ? `#${id}` : `/#${id}`)
-
-  const resolveHref = (link: FooterLink): string =>
-    link.target.kind === "section" ? sectionHref(link.target.id) : link.target.href
 
   return (
     <footer className="home-footer">
@@ -63,7 +60,7 @@ export default function HomeFooter() {
               <ul>
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <a href={resolveHref(link)}>{link.label}</a>
+                    <a href={sectionHref(link.sectionId)}>{link.label}</a>
                   </li>
                 ))}
               </ul>

@@ -61,6 +61,3 @@ export const BUSINESS_OVERVIEW: ReadonlyArray<OverviewRow> = Object.freeze([
     value: "C# / PHP(Laravel) / JavaScript / React / Next.js",
   }),
 ])
-
-/** 問い合わせ先メールアドレス(フッター・CTA と共用)。 */
-export const CONTACT_EMAIL = "hello@tsutsu.dev"

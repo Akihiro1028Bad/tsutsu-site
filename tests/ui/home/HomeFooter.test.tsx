@@ -97,14 +97,14 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     expect(within(footer).queryByRole("link", { name: /^zenn$/i })).toBeNull()
   })
 
-  it("renders Contact column links (mailto and form anchor)", () => {
+  it("窓口はフォームのみ。メールアドレスは画面に出さない", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
-    const mail = within(footer).getByRole("link", { name: /hello@tsutsu\.dev/i })
-    expect(mail).toHaveAttribute("href", expect.stringMatching(/^mailto:/))
     expect(
-      within(footer).getByRole("link", { name: /問い合わせ|contact/i })
+      within(footer).getByRole("link", { name: /問い合わせフォーム/ })
     ).toHaveAttribute("href", "#contact")
+    expect(footer.querySelector('a[href^="mailto:"]')).toBeNull()
+    expect(footer.textContent).not.toMatch(/@/)
   })
 
   it("renders the current year in the copyright meta row", () => {
@@ -132,12 +132,8 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
       within(footer).getByRole("link", { name: /^事業者概要$/ })
     ).toHaveAttribute("href", "/#about")
     expect(
-      within(footer).getByRole("link", { name: /問い合わせ|contact/i })
+      within(footer).getByRole("link", { name: /問い合わせフォーム/ })
     ).toHaveAttribute("href", "/#contact")
-    // mailto link must not be route-rewritten.
-    expect(
-      within(footer).getByRole("link", { name: /hello@tsutsu\.dev/i })
-    ).toHaveAttribute("href", "mailto:hello@tsutsu.dev")
   })
 
   it("uses h3 for column headings so the document doesn't skip heading levels", () => {

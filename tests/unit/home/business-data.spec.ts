@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest"
 import {
   BUSINESS_OVERVIEW,
   BUSINESS_SERVICES,
-  CONTACT_EMAIL,
 } from "@/lib/home/business-data"
 
 describe("事業サイト: business-data — 事業内容", () => {
@@ -51,11 +50,5 @@ describe("事業サイト: business-data — 事業者概要", () => {
 
   it("凍結されている", () => {
     expect(Object.isFrozen(BUSINESS_OVERVIEW)).toBe(true)
-  })
-})
-
-describe("事業サイト: business-data — 連絡先", () => {
-  it("問い合わせ先を公開する", () => {
-    expect(CONTACT_EMAIL).toBe("hello@tsutsu.dev")
   })
 })
