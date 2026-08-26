@@ -5,16 +5,17 @@ import {
 } from "@/lib/home/business-data"
 
 describe("事業サイト: business-data — 事業内容", () => {
-  it("3つの事業を順番に持つ", () => {
+  it("4つの事業を順番に持つ", () => {
     expect(BUSINESS_SERVICES.map((s) => s.title)).toEqual([
       "Webサイト制作",
+      "アプリ開発",
       "AI導入支援",
       "学習・キャリア支援",
     ])
   })
 
   it("通し番号は 01 から連番", () => {
-    expect(BUSINESS_SERVICES.map((s) => s.no)).toEqual(["01", "02", "03"])
+    expect(BUSINESS_SERVICES.map((s) => s.no)).toEqual(["01", "02", "03", "04"])
   })
 
   it("費用は確定していないため全て要相談", () => {

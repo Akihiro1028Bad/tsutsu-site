@@ -11,9 +11,9 @@ import { getLatestAnnouncements } from "@/lib/utils/announcement-server"
 import { getLatestBlogPosts } from "@/lib/utils/blog-server"
 import "./business.css"
 
-const PAGE_TITLE = "tsutsu | Webサイト制作・AI導入支援・学習キャリア支援"
+const PAGE_TITLE = "tsutsu | Webサイト制作・アプリ開発・AI導入支援・学習キャリア支援"
 const PAGE_DESCRIPTION =
-  "Webサイト・アプリケーションの受託開発、業務へのAI導入支援、エンジニアの学習・キャリア支援を行っています。ご相談から設計・実装・運用まで一貫して対応します。代表:堤 暁寛。"
+  "Webサイト制作、業務システム・アプリの開発、業務へのAI導入支援、エンジニアの学習・キャリア支援を行っています。ご相談から設計・実装・運用まで一貫して対応します。代表:堤 暁寛。"
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

@@ -25,6 +25,14 @@ export const BUSINESS_SERVICES: ReadonlyArray<BusinessService> = Object.freeze([
   }),
   Object.freeze({
     no: "02",
+    title: "アプリ開発",
+    body: "業務システムやWebアプリケーションを、要件の整理から設計・実装・運用まで承ります。既存システムの改修や機能追加にも対応します。",
+    target: "事業者・社内システム担当",
+    span: "1〜6ヶ月",
+    cost: "要相談",
+  }),
+  Object.freeze({
+    no: "03",
     title: "AI導入支援",
     body: "業務の棚卸しから始め、どこにAIを適用すれば効くのかを設計し、現場に定着するまで伴走します。ツールを入れて終わりにはしません。",
     target: "中小企業・個人事業主",
@@ -32,7 +40,7 @@ export const BUSINESS_SERVICES: ReadonlyArray<BusinessService> = Object.freeze([
     cost: "要相談",
   }),
   Object.freeze({
-    no: "03",
+    no: "04",
     title: "学習・キャリア支援",
     body: "未経験からエンジニアを目指す方へ、学習の設計と継続的な面談を提供します。コードだけでなく、進み方ごと支えます。",
     target: "未経験・初学者",
@@ -54,7 +62,7 @@ export const BUSINESS_OVERVIEW: ReadonlyArray<OverviewRow> = Object.freeze([
   Object.freeze({
     label: "事業内容",
     value:
-      "Webサイト・アプリケーションの受託開発 / 業務へのAI導入支援 / エンジニアの学習・キャリア支援",
+      "Webサイトの制作 / 業務システム・アプリケーションの受託開発 / 業務へのAI導入支援 / エンジニアの学習・キャリア支援",
   }),
   Object.freeze({
     label: "対応技術",

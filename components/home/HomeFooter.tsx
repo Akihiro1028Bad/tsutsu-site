@@ -50,7 +50,7 @@ export default function HomeFooter() {
         <div className="home-footer__brand">
           <span className="home-footer__brand-name">tsutsu</span>
           <div className="home-footer__tag">
-            Webサイト制作 / AI導入支援 / 学習・キャリア支援
+            Webサイト制作 / アプリ開発 / AI導入支援 / 学習・キャリア支援
           </div>
         </div>
         <div className="home-footer__cols">
