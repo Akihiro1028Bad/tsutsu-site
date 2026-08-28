@@ -103,10 +103,10 @@ export default function HomeNav() {
         className="home-nav__toggle"
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        aria-label={isOpen ? "メニューを閉じる / Close menu" : "メニュー / Menu"}
+        aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
         onClick={() => setIsOpen((v) => !v)}
       >
-        <span aria-hidden="true">{isOpen ? "✕" : "≡"}</span>
+        <span className="home-nav__bars" aria-hidden="true" />
       </button>
 
       <ul

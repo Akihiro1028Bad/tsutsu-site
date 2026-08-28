@@ -162,15 +162,49 @@
   background: var(--ink-soft);
 }
 
+/* 2本線のアイコン。開くと X に変形する。
+   枠は持たせない — 隣の塗りつぶし CTA と箱が競合するため。 */
 .home-root .home-nav__toggle {
   display: none;
   background: none;
-  border: 1px solid var(--rule);
+  border: 0;
   color: inherit;
-  font-size: 20px;
-  line-height: 1;
-  padding: 6px 10px;
+  padding: 10px 0 10px 16px;
   cursor: pointer;
+  line-height: 0;
+}
+
+.home-root .home-nav__bars {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 12px;
+}
+
+.home-root .home-nav__bars::before,
+.home-root .home-nav__bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.home-root .home-nav__bars::before { top: 0; }
+.home-root .home-nav__bars::after { bottom: 0; }
+
+/* 線の中心間は 10.5px。半分ずつ寄せて交差させる。 */
+.home-root .home-nav[data-menu-open="true"] .home-nav__bars::before {
+  transform: translateY(5.25px) rotate(45deg);
+}
+.home-root .home-nav[data-menu-open="true"] .home-nav__bars::after {
+  transform: translateY(-5.25px) rotate(-45deg);
+}
+
+.home-root .home-nav__toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
 }
 
 /* Dark surface (contact) */
@@ -245,15 +279,20 @@
     border-top: 1px solid var(--rule);
   }
 
+  /* タップ領域を確保しつつ、開いた面の文字を本文と同じ大きさに。 */
   .home-root .home-nav__list a {
     display: block;
-    padding: 13px 0;
+    padding: 16px 0;
+    font-size: 15px;
+    border-bottom: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home-root .home-nav,
-  .home-root .home-nav__list {
+  .home-root .home-nav__list,
+  .home-root .home-nav__bars::before,
+  .home-root .home-nav__bars::after {
     transition: none;
   }
 }
