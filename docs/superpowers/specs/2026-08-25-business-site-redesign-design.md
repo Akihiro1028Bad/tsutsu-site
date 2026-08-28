@@ -108,7 +108,8 @@
 - `app/(home)/home.css` の CSS 変数は**名前を維持して値を差し替え**、未改修
   セクションが壊れないようにする
 - TDD(テスト先行、カバレッジ 100% 維持)
-- 参照実装: `app/(home)/design/flat/`(承認済みプレビュー)
+- 実装: `components/home/business/` + `app/(home)/business.css`
+  (方向性の検討に使った `app/(home)/design/**` は適用後に削除済み)
 
 ## 8. スコープ外
 
