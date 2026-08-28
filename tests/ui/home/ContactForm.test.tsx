@@ -46,10 +46,10 @@ describe("Phase 6: ContactForm — rendering", () => {
     expect(screen.getByLabelText(/Message/i)).toBeInTheDocument()
   })
 
-  it("renders a submit button with the editorial copy", () => {
+  it("送信ボタンを和文で描画する", () => {
     render(<ContactForm />)
     expect(
-      screen.getByRole("button", { name: /send inquiry/i })
+      screen.getByRole("button", { name: /^送信する$/ })
     ).toBeInTheDocument()
   })
 
@@ -73,7 +73,7 @@ describe("Phase 6: ContactForm — submission", () => {
       "スポット・単発案件"
     )
     await user.type(screen.getByLabelText(/Message/i), "はじめまして。")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
 
@@ -102,7 +102,7 @@ describe("Phase 6: ContactForm — submission", () => {
     await user.type(screen.getByLabelText(/Company/i), "RST Agency")
     await user.type(screen.getByLabelText(/Email/i), "a@b.co")
     await user.type(screen.getByLabelText(/Message/i), "hi")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
     const body = JSON.parse(fetchMock.mock.calls[0][1]?.body as string)
@@ -116,7 +116,7 @@ describe("Phase 6: ContactForm — submission", () => {
 
     // missing name & message — type only an invalid email
     await user.type(screen.getByLabelText(/Email/i), "broken")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     expect(fetchMock).not.toHaveBeenCalled()
     expect(screen.getByRole("status").textContent).toMatch(/.+/)
@@ -130,7 +130,7 @@ describe("Phase 6: ContactForm — submission", () => {
     await user.type(screen.getByLabelText(/Name/i), "x")
     await user.type(screen.getByLabelText(/Email/i), "a@b.co")
     await user.type(screen.getByLabelText(/Message/i), "hi")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     await waitFor(() =>
       expect(screen.getByRole("status").textContent).toMatch(/送信に失敗/)
@@ -150,7 +150,7 @@ describe("Phase 6: ContactForm — submission", () => {
     await user.type(screen.getByLabelText(/Name/i), "x")
     await user.type(screen.getByLabelText(/Email/i), "a@b.co")
     await user.type(screen.getByLabelText(/Message/i), "hi")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     await waitFor(() =>
       expect(screen.getByRole("status").textContent).toMatch(/送信/)
@@ -165,7 +165,7 @@ describe("Phase 6: ContactForm — submission", () => {
     await user.type(screen.getByLabelText(/Name/i), "x")
     await user.type(screen.getByLabelText(/Email/i), "a@b.co")
     await user.type(screen.getByLabelText(/Message/i), "hi")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     await waitFor(() =>
       expect(screen.getByRole("status").textContent).toMatch(/network down/)
@@ -180,7 +180,7 @@ describe("Phase 6: ContactForm — submission", () => {
     await user.type(screen.getByLabelText(/Name/i), "x")
     await user.type(screen.getByLabelText(/Email/i), "a@b.co")
     await user.type(screen.getByLabelText(/Message/i), "hi")
-    await user.click(screen.getByRole("button", { name: /send inquiry/i }))
+    await user.click(screen.getByRole("button", { name: /送信する/ }))
 
     await waitFor(() =>
       expect(screen.getByRole("status").textContent).toMatch(/送信に失敗/)

@@ -3116,26 +3116,26 @@
   grid-template-columns: 1fr 1fr;
   gap: 28px;
 }
+/* 和文ラベル前提。ヒーローの .biz-cta と同じ調子に揃える。 */
 .home-root .contact-form__submit {
   justify-self: start;
   margin-top: 16px;
-  padding: 18px 36px;
+  padding: 16px 34px;
   border: 1px solid var(--ink);
   background: var(--ink);
   color: var(--bg);
-  font-family: var(--f-mono);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  font-family: var(--f-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.2s ease, border-color 0.2s ease;
   display: inline-flex;
-  gap: 14px;
   align-items: center;
 }
 .home-root .contact-form__submit:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--ink-soft);
+  border-color: var(--ink-soft);
 }
 .home-root .contact-form__submit:disabled {
   opacity: 0.6;

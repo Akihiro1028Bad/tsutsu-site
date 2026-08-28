@@ -160,7 +160,7 @@ export default function ContactForm() {
           className="contact-form__submit"
           disabled={isSending}
         >
-          Send inquiry <span aria-hidden="true">↗</span>
+          送信する
         </button>
       </MagneticLink>
 
