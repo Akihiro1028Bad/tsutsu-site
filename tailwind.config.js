@@ -8,6 +8,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Business-site design tokens (spec: 2026-08-25-business-site-redesign)
+        // Monochrome: colour comes only from the work screenshots.
+        paper: '#FFFFFF',
+        ink: { DEFAULT: '#0A0A0A', soft: '#55585E' },
+        mute: '#8E9198',
+        rule: '#DEDFE2',
+        tint: '#F2F2F3',
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -46,8 +53,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-noto-sans-jp)', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'sans-serif'],
-        serif: ['var(--font-noto-serif-jp)', 'Hiragino Mincho ProN', 'Yu Mincho', 'Meiryo', 'serif'],
+        sans: ['var(--font-plex-jp)', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', 'sans-serif'],
+        mono: ['var(--font-plex-mono)', 'ui-monospace', 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',
@@ -114,7 +121,7 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
-            fontFamily: 'var(--font-noto-sans-jp), "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif',
+            fontFamily: 'var(--font-plex-jp), "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif',
             fontFeatureSettings: '"rlig" 1, "calt" 1',
             maxWidth: 'none',
             // 見出しのスタイル

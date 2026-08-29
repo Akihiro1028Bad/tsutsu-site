@@ -13,7 +13,7 @@ describe("Phase 3: lib/home/works-data — featured works dataset", () => {
     expect(hero?.image.alt).toBeTruthy()
   })
 
-  it("each work exposes the fields the WorksCard depends on", () => {
+  it("実績カードが必要とするフィールドを揃えている", () => {
     for (const w of WORKS_FEATURED) {
       expect(w.id).toMatch(/^[a-z0-9-]+$/)
       expect(w.indexNumber).toMatch(/^\d{3}$/)

@@ -11,28 +11,32 @@ describe("Phase 1: app/(home)/home.css — editorial base stylesheet", () => {
 
   const source = readFileSync(cssPath, "utf-8")
 
-  describe("CSS custom properties", () => {
-    it("declares --bg with an oklch value", () => {
-      expect(source).toMatch(/--bg:\s*oklch\(/)
+  describe("CSS custom properties (business-site palette)", () => {
+    it("declares --bg as pure white", () => {
+      expect(source).toMatch(/--bg:\s*#FFFFFF/i)
     })
 
-    it("declares --ink with an oklch value", () => {
-      expect(source).toMatch(/--ink:\s*oklch\(/)
+    it("declares --ink as the near-black used for text and structural rules", () => {
+      expect(source).toMatch(/--ink:\s*#0A0A0A/i)
     })
 
-    it("declares --accent with an oklch value", () => {
-      expect(source).toMatch(/--accent:\s*oklch\(/)
+    it("declares the thin rule and hover tint tokens", () => {
+      expect(source).toMatch(/--rule:\s*#DEDFE2/i)
+      expect(source).toMatch(/--tint:\s*#F2F2F3/i)
     })
 
-    it("declares hairline --rule token", () => {
-      expect(source).toMatch(/--rule:\s*oklch\(/)
+    it("declares font-family variables for body and mono", () => {
+      expect(source).toMatch(/--f-body:\s*var\(--font-plex-jp\)/)
+      expect(source).toMatch(/--f-mono:\s*var\(--font-plex-mono\)/)
     })
 
-    it("declares font-family variables for all four families", () => {
-      expect(source).toMatch(/--f-display:/)
-      expect(source).toMatch(/--f-jp-display:/)
-      expect(source).toMatch(/--f-body:/)
-      expect(source).toMatch(/--f-mono:/)
+    it("carries no accent colour — colour comes only from work images", () => {
+      expect(source).not.toMatch(/--accent:\s*#D43D2A/i)
+      expect(source).not.toMatch(/--blueprint:/)
+    })
+
+    it("drops the graph-paper background", () => {
+      expect(source).not.toMatch(/--grid-line:/)
     })
   })
 

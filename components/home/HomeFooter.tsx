@@ -1,14 +1,13 @@
 "use client"
 
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Suspense } from "react"
 import FooterYear from "@/components/home/FooterYear"
 
 interface FooterLink {
   readonly label: string
-  /** Either a section id (e.g. `about`) routed via `sectionHref`, or an absolute URL (mailto:, https:). */
-  readonly target: { readonly kind: "section"; readonly id: string } | { readonly kind: "url"; readonly href: string }
+  /** Home-page section id (e.g. `about`), routed via `sectionHref`. */
+  readonly sectionId: string
 }
 
 interface FooterColumn {
@@ -17,20 +16,21 @@ interface FooterColumn {
 }
 
 const SITE_LINKS: FooterColumn = {
-  heading: "Site",
+  heading: "サイト",
   links: [
-    { label: "About", target: { kind: "section", id: "about" } },
-    { label: "Works", target: { kind: "section", id: "works" } },
-    { label: "Services", target: { kind: "section", id: "services" } },
-    { label: "Notes", target: { kind: "section", id: "notes" } },
+    { label: "事業内容", sectionId: "services" },
+    { label: "実績", sectionId: "works" },
+    { label: "お知らせ", sectionId: "notes" },
+    { label: "ブログ", sectionId: "blog" },
+    { label: "事業者概要", sectionId: "about" },
   ],
 }
 
+// メールアドレスは画面に出さない(収集対策)。窓口はフォームに一本化する。
 const CONTACT_LINKS: FooterColumn = {
-  heading: "Contact",
+  heading: "お問い合わせ",
   links: [
-    { label: "hello@tsutsu.dev", target: { kind: "url", href: "mailto:hello@tsutsu.dev" } },
-    { label: "問い合わせフォーム", target: { kind: "section", id: "contact" } },
+    { label: "問い合わせフォーム", sectionId: "contact" },
   ],
 }
 
@@ -44,22 +44,14 @@ export default function HomeFooter() {
   // to the current URL.
   const sectionHref = (id: string): string => (isHome ? `#${id}` : `/#${id}`)
 
-  const resolveHref = (link: FooterLink): string =>
-    link.target.kind === "section" ? sectionHref(link.target.id) : link.target.href
-
   return (
     <footer className="home-footer">
       <div className="home-footer__grid">
         <div className="home-footer__brand">
-          <Image
-            src="/logo.png"
-            alt="tsutsu"
-            width={56}
-            height={56}
-            unoptimized
-            className="home-footer__logo"
-          />
-          <div className="home-footer__tag">Freelance engineer — Tokyo</div>
+          <span className="home-footer__brand-name">tsutsu</span>
+          <div className="home-footer__tag">
+            Webサイト制作 / アプリ開発 / AI導入支援 / 学習・キャリア支援
+          </div>
         </div>
         <div className="home-footer__cols">
           {COLUMNS.map((col) => (
@@ -68,7 +60,7 @@ export default function HomeFooter() {
               <ul>
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <a href={resolveHref(link)}>{link.label}</a>
+                    <a href={sectionHref(link.sectionId)}>{link.label}</a>
                   </li>
                 ))}
               </ul>
@@ -83,7 +75,7 @@ export default function HomeFooter() {
             </Suspense>{" "}
             tsutsu — all rights reserved
           </span>
-          <span>Designed &amp; built in Tokyo / JP</span>
+          <span>東京都 — 代表 堤 暁寛</span>
         </div>
       </div>
     </footer>

@@ -49,28 +49,37 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     expect(screen.getByRole("contentinfo")).toBeInTheDocument()
   })
 
-  it("renders the brand logo image", () => {
+  it("renders the trade name as text, with no logo image", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
-    const logo = within(footer).getByRole("img", { name: /tsutsu/i }) as HTMLImageElement
-    expect(logo.getAttribute("src")).toBe("/logo.png")
+    expect(within(footer).queryByRole("img")).toBeNull()
+    expect(footer.textContent).toContain("tsutsu")
   })
 
-  it("renders the Site column links (About, Works, Services, Notes)", () => {
+  it("renders the site column links in Japanese", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
     expect(
-      within(footer).getByRole("link", { name: /^about$/i })
-    ).toHaveAttribute("href", "#about")
-    expect(
-      within(footer).getByRole("link", { name: /^works$/i })
-    ).toHaveAttribute("href", "#works")
-    expect(
-      within(footer).getByRole("link", { name: /^services$/i })
+      within(footer).getByRole("link", { name: /^事業内容$/ })
     ).toHaveAttribute("href", "#services")
     expect(
-      within(footer).getByRole("link", { name: /^notes$/i })
+      within(footer).getByRole("link", { name: /^実績$/ })
+    ).toHaveAttribute("href", "#works")
+    expect(
+      within(footer).getByRole("link", { name: /^お知らせ$/ })
     ).toHaveAttribute("href", "#notes")
+    expect(
+      within(footer).getByRole("link", { name: /^ブログ$/ })
+    ).toHaveAttribute("href", "#blog")
+    expect(
+      within(footer).getByRole("link", { name: /^事業者概要$/ })
+    ).toHaveAttribute("href", "#about")
+  })
+
+  it("renders the business meta row", () => {
+    render(<HomeFooter />)
+    const footer = screen.getByRole("contentinfo")
+    expect(footer.textContent).toContain("東京都")
   })
 
   it("does not render a Social column (no SNS accounts)", () => {
@@ -88,14 +97,14 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     expect(within(footer).queryByRole("link", { name: /^zenn$/i })).toBeNull()
   })
 
-  it("renders Contact column links (mailto and form anchor)", () => {
+  it("窓口はフォームのみ。メールアドレスは画面に出さない", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
-    const mail = within(footer).getByRole("link", { name: /hello@tsutsu\.dev/i })
-    expect(mail).toHaveAttribute("href", expect.stringMatching(/^mailto:/))
     expect(
-      within(footer).getByRole("link", { name: /問い合わせ|contact/i })
+      within(footer).getByRole("link", { name: /問い合わせフォーム/ })
     ).toHaveAttribute("href", "#contact")
+    expect(footer.querySelector('a[href^="mailto:"]')).toBeNull()
+    expect(footer.textContent).not.toMatch(/@/)
   })
 
   it("renders the current year in the copyright meta row", () => {
@@ -108,24 +117,23 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     render(<HomeFooter />)
     const footer = screen.getByRole("contentinfo")
     expect(
-      within(footer).getByRole("link", { name: /^about$/i })
-    ).toHaveAttribute("href", "/#about")
-    expect(
-      within(footer).getByRole("link", { name: /^works$/i })
-    ).toHaveAttribute("href", "/#works")
-    expect(
-      within(footer).getByRole("link", { name: /^services$/i })
+      within(footer).getByRole("link", { name: /^事業内容$/ })
     ).toHaveAttribute("href", "/#services")
     expect(
-      within(footer).getByRole("link", { name: /^notes$/i })
+      within(footer).getByRole("link", { name: /^実績$/ })
+    ).toHaveAttribute("href", "/#works")
+    expect(
+      within(footer).getByRole("link", { name: /^お知らせ$/ })
     ).toHaveAttribute("href", "/#notes")
     expect(
-      within(footer).getByRole("link", { name: /問い合わせ|contact/i })
-    ).toHaveAttribute("href", "/#contact")
-    // mailto link must not be route-rewritten.
+      within(footer).getByRole("link", { name: /^ブログ$/ })
+    ).toHaveAttribute("href", "/#blog")
     expect(
-      within(footer).getByRole("link", { name: /hello@tsutsu\.dev/i })
-    ).toHaveAttribute("href", "mailto:hello@tsutsu.dev")
+      within(footer).getByRole("link", { name: /^事業者概要$/ })
+    ).toHaveAttribute("href", "/#about")
+    expect(
+      within(footer).getByRole("link", { name: /問い合わせフォーム/ })
+    ).toHaveAttribute("href", "/#contact")
   })
 
   it("uses h3 for column headings so the document doesn't skip heading levels", () => {
@@ -133,7 +141,7 @@ describe("Phase 2: HomeFooter — content & a11y", () => {
     const footer = screen.getByRole("contentinfo")
     const h3s = within(footer).getAllByRole("heading", { level: 3 })
     const labels = h3s.map((h) => h.textContent)
-    expect(labels).toEqual(expect.arrayContaining(["Site", "Contact"]))
+    expect(labels).toEqual(expect.arrayContaining(["サイト", "お問い合わせ"]))
     expect(labels).not.toContain("Social")
     // No stray h4/h5 in the footer
     expect(

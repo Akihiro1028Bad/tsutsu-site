@@ -41,14 +41,9 @@ export default function WorksPage() {
     <>
       <header className="page-head">
         <div className="page-head__grid">
-          <div className="page-head__eyebrow">
-            <span>§</span>
-            <em aria-hidden="true" />
-            <span>Index of Works</span>
-          </div>
           <h1 className="page-head__title">
-            Works.
-            <span className="page-head__sub-jp">— 制作実績一覧</span>
+            実績
+            <span className="page-head__sub-jp">Works</span>
           </h1>
           <p className="page-head__lead">
             携わった仕事の一覧です。
@@ -65,7 +60,7 @@ export default function WorksPage() {
           <span aria-current="page">Works</span>
         </nav>
         <div className="tally">
-          <em>{count}</em> Selected project / 2024 –
+          <em>{count}</em> 件 / 2024 –
         </div>
       </div>
 

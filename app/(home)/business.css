@@ -1,0 +1,399 @@
+/*
+ * 事業サイトのホーム用スタイル(spec: 2026-08-25-business-site-redesign)。
+ * home.css のトークンを使い、面 / 角丸 / 影 / ピルを使わない。
+ * 現行感は文字の大きさとつめ、実績写真、追従する見出し、罫の太さの差で出す。
+ */
+
+.home-root .biz-hero,
+.home-root .biz-sec,
+.home-root .biz-contact {
+  /* home.css の汎用 section 余白を打ち消す(詳細度 0,2,0 > 0,1,1) */
+  padding: 0;
+}
+
+.home-root {
+  --biz-gut: clamp(16px, 4vw, 56px);
+}
+
+/* ── ヒーロー ─────────────────────────── */
+.home-root .biz-hero {
+  border-bottom: 1px solid var(--ink);
+  padding-top: 64px;
+}
+
+.home-root .biz-hero__type {
+  padding: clamp(40px, 7vw, 104px) var(--biz-gut) clamp(28px, 4vw, 52px);
+  display: grid;
+  gap: clamp(18px, 2.4vw, 30px);
+  max-width: 1500px;
+}
+
+.home-root .biz-hero__headline {
+  font-size: clamp(34px, 7.4vw, 108px);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.035em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.home-root .biz-hero__sub {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 48px);
+  align-items: end;
+  border-top: 1px solid var(--rule);
+  padding-top: clamp(16px, 2vw, 26px);
+}
+
+.home-root .biz-hero__lede {
+  font-size: clamp(13.5px, 1.1vw, 15.5px);
+  line-height: 2.05;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 36em;
+}
+
+/* ── 共通のボタン / リンク ─────────────── */
+.home-root .biz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+  justify-self: start;
+}
+
+.home-root .biz-cta {
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 16px 32px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.home-root .biz-cta:hover { background: var(--ink-soft); }
+
+.home-root .biz-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 2px;
+}
+
+/* ── セクション枠(追従ラベル) ─────────── */
+.home-root .biz-sec {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  border-bottom: 1px solid var(--ink);
+}
+
+.home-root .biz-sec__label {
+  padding: clamp(22px, 3vw, 40px) var(--biz-gut);
+  border-right: 1px solid var(--rule);
+}
+
+.home-root .biz-sec__label > div {
+  position: sticky;
+  top: 96px;
+}
+
+.home-root .biz-sec__label h2 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.home-root .biz-sec__label p {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  margin: 5px 0 0;
+}
+
+.home-root .biz-sec__more {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+.home-root .biz-sec__more:hover { border-bottom-color: var(--ink); }
+
+.home-root .biz-sec__body { min-width: 0; }
+
+/* ── 事業内容 ────────────────────────── */
+.home-root .biz-svc {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 250px;
+  gap: clamp(14px, 2vw, 32px);
+  align-items: start;
+  padding: clamp(24px, 3vw, 40px) var(--biz-gut) clamp(24px, 3vw, 40px)
+    clamp(18px, 2.4vw, 34px);
+  border-bottom: 1px solid var(--rule);
+}
+.home-root .biz-sec__body > .reveal:last-child .biz-svc { border-bottom: 0; }
+
+.home-root .biz-svc__no {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--ink-mute);
+  padding-top: 9px;
+}
+
+.home-root .biz-svc__title {
+  font-size: clamp(20px, 2.5vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.home-root .biz-svc__body {
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--ink-soft);
+  margin: 12px 0 0;
+  max-width: 32em;
+}
+
+.home-root .biz-svc__link {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+}
+
+.home-root .biz-svc__meta {
+  display: grid;
+  grid-template-columns: 3.6em 1fr;
+  gap: 7px 12px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  padding-top: 8px;
+  margin: 0;
+}
+.home-root .biz-svc__meta dt {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+.home-root .biz-svc__meta dd { margin: 0; }
+
+/* ── 実績 ───────────────────────────── */
+/* 帯ではなく横組みの一件。比率は一覧行のサムネイルと同じ 3:2 に揃える。 */
+.home-root .biz-work {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(16px, 2.4vw, 32px);
+  align-items: start;
+  padding: clamp(22px, 3vw, 38px) var(--biz-gut) clamp(24px, 3vw, 40px)
+    clamp(18px, 2.4vw, 34px);
+}
+
+.home-root .biz-work__media {
+  border: 1px solid var(--rule);
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
+.home-root .biz-work__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-root .biz-work__content { min-width: 0; }
+
+.home-root .biz-work__head {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+}
+.home-root .biz-work__no {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+.home-root .biz-work__title {
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.5;
+  margin: 0;
+}
+.home-root .biz-work__body {
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--ink-soft);
+  margin: 10px 0 0;
+}
+.home-root .biz-work__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin-top: 16px;
+  border-top: 1px solid var(--rule);
+  padding-top: 13px;
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+.home-root .biz-work__link {
+  font-family: var(--f-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+}
+
+/* ── 一覧行(お知らせ・ブログ共用) ────── */
+.home-root .biz-row {
+  display: grid;
+  grid-template-columns: 108px 106px 1fr auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 26px);
+  padding: 17px var(--biz-gut) 17px clamp(18px, 2.4vw, 34px);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.16s ease;
+}
+.home-root .biz-row:last-child { border-bottom: 0; }
+.home-root .biz-row:hover { background: var(--tint); }
+/* アイキャッチ。未設定の記事でも枠を確保して行を揃える。 */
+.home-root .biz-row__thumb {
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--tint);
+  border: 1px solid var(--rule);
+}
+.home-root .biz-row__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-root .biz-row__date {
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  color: var(--ink-mute);
+}
+.home-root .biz-row__title {
+  font-size: 14.5px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.home-root .biz-row__kind {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+.home-root .biz-row__empty {
+  padding: 20px var(--biz-gut);
+  font-size: 13.5px;
+  color: var(--ink-mute);
+}
+
+/* ── 事業者概要 ──────────────────────── */
+.home-root .biz-overview {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+}
+.home-root .biz-overview dt,
+.home-root .biz-overview dd {
+  margin: 0;
+  padding: 15px var(--biz-gut) 15px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13.5px;
+  line-height: 1.9;
+}
+.home-root .biz-overview dt {
+  padding-left: clamp(18px, 2.4vw, 34px);
+  color: var(--ink-mute);
+  font-family: var(--f-mono);
+  font-size: 11.5px;
+  padding-top: 17px;
+}
+.home-root .biz-overview dt:nth-last-of-type(1),
+.home-root .biz-overview dd:nth-last-of-type(1) { border-bottom: 0; }
+
+/* ── お問い合わせ ────────────────────── */
+.home-root .biz-contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(28px, 5vw, 72px);
+  padding: clamp(44px, 7vw, 96px) var(--biz-gut);
+  max-width: 1500px;
+}
+.home-root .biz-contact__intro { display: grid; gap: 18px; align-content: start; }
+.home-root .biz-contact__title {
+  font-size: clamp(26px, 4.2vw, 54px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.home-root .biz-contact__body {
+  font-size: 13.5px;
+  line-height: 2.05;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 32em;
+}
+.home-root .biz-contact__intro .biz-link { justify-self: start; }
+
+/* ── Responsive ─────────────────────── */
+@media (max-width: 900px) {
+  .home-root .biz-sec { grid-template-columns: 1fr; }
+  .home-root .biz-sec__label {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 16px;
+  }
+  .home-root .biz-sec__label > div { position: static; }
+  .home-root .biz-svc { grid-template-columns: 40px minmax(0, 1fr); }
+  .home-root .biz-svc__meta { grid-column: 2; padding-top: 16px; }
+  .home-root .biz-hero__sub { grid-template-columns: 1fr; align-items: start; }
+  .home-root .biz-contact { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  /* 縦積みにすると 3:2 が全幅に効いて画像が伸びるため、幅を抑える。 */
+  .home-root .biz-work {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .home-root .biz-work__media { max-width: 340px; }
+
+  .home-root .biz-row {
+    grid-template-columns: 78px 1fr;
+    column-gap: 14px;
+    row-gap: 4px;
+    align-items: center;
+  }
+  .home-root .biz-row__thumb { grid-row: span 2; }
+  .home-root .biz-row__kind { display: none; }
+  .home-root .biz-overview { grid-template-columns: 98px 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-root .biz-cta,
+  .home-root .biz-row { transition: none; }
+}

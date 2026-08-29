@@ -12,28 +12,20 @@ vi.mock("@/components/home/HomeFooter", () => ({
 // Mock next/font/google so the font loader returns deterministic CSS variable
 // class names. We assert on those class names below.
 vi.mock("next/font/google", () => ({
-  DM_Serif_Display: () => ({
-    className: "__f-dm-serif",
-    variable: "__v-f-display",
-  }),
-  Shippori_Mincho: () => ({
-    className: "__f-shippori",
-    variable: "__v-f-jp-display",
-  }),
-  Zen_Kaku_Gothic_New: () => ({
-    className: "__f-zen-kaku",
+  IBM_Plex_Sans_JP: () => ({
+    className: "__f-plex-jp",
     variable: "__v-f-body",
   }),
-  Space_Mono: () => ({
-    className: "__f-space-mono",
+  IBM_Plex_Mono: () => ({
+    className: "__f-plex-mono",
     variable: "__v-f-mono",
   }),
 }))
 
 import HomeLayout from "@/app/(home)/layout"
 
-describe("Phase 1: (home) layout — font wiring", () => {
-  it("applies all four next/font variable class names to a home-root wrapper", () => {
+describe("Blueprint: (home) layout — font wiring", () => {
+  it("applies both next/font variable class names to a home-root wrapper", () => {
     render(
       <HomeLayout>
         <main data-testid="child" />
@@ -41,8 +33,6 @@ describe("Phase 1: (home) layout — font wiring", () => {
     )
     const wrapper = screen.getByTestId("child").closest(".home-root") as HTMLElement
     expect(wrapper).toBeInTheDocument()
-    expect(wrapper.className).toContain("__v-f-display")
-    expect(wrapper.className).toContain("__v-f-jp-display")
     expect(wrapper.className).toContain("__v-f-body")
     expect(wrapper.className).toContain("__v-f-mono")
   })

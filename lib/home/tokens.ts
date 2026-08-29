@@ -1,30 +1,35 @@
 /**
- * Editorial design tokens for the (home) Route Group.
+ * Business-site design tokens for the (home) Route Group.
  *
- * Mirrors the CSS custom properties declared in `app/(home)/home.css`
- * so server / client modules can read the same values without parsing
- * stylesheets. Frozen at module load to enforce immutability.
+ * Monochrome by design: the palette carries no accent colour, because the
+ * only colour on the page comes from the work screenshots. Mirrors the CSS
+ * custom properties declared in `app/(home)/home.css` so server / client
+ * modules can read the same values without parsing stylesheets.
+ * Frozen at module load to enforce immutability.
  */
 
 export const COLORS = Object.freeze({
-  bg: "oklch(0.98 0.005 85)",
-  bgSoft: "oklch(0.955 0.008 85)",
-  ink: "oklch(0.2 0.012 260)",
-  inkSoft: "oklch(0.35 0.012 260)",
-  inkMute: "oklch(0.55 0.01 260)",
-  rule: "oklch(0.88 0.008 85)",
-  // Terracotta accent (final design override).
-  accent: "oklch(0.55 0.16 30)",
-  accentSoft: "oklch(0.94 0.05 30)",
+  /** 地 */
+  paper: "#FFFFFF",
+  /** 本文・見出し・構造罫 */
+  ink: "#0A0A0A",
+  /** 副文 */
+  inkSoft: "#55585E",
+  /** 注記・ラベル */
+  mute: "#8E9198",
+  /** 行区切り */
+  ruleThin: "#DEDFE2",
+  /** ホバー面 */
+  tint: "#F2F2F3",
 })
 
 export type ColorToken = keyof typeof COLORS
 
 export const FONT_STACKS = Object.freeze({
-  display: '"DM Serif Display", "Shippori Mincho", serif',
-  jpDisplay: '"Shippori Mincho", "Zen Kaku Gothic New", serif',
-  body: '"Zen Kaku Gothic New", system-ui, sans-serif',
-  mono: '"Space Mono", ui-monospace, monospace',
+  /** 本文・見出し */
+  body: '"IBM Plex Sans JP", "Hiragino Kaku Gothic ProN", sans-serif',
+  /** 数値・英字ラベル */
+  mono: '"IBM Plex Mono", ui-monospace, monospace',
 })
 
 export type FontStack = keyof typeof FONT_STACKS

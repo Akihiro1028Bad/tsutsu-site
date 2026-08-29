@@ -35,7 +35,7 @@ export default function MensEstheServicePage() {
   })
 
   return (
-    <main className="font-serif">
+    <main className="font-sans">
       <StructuredData data={structuredData} />
       <HeroSection serviceInfo={serviceInfo} />
       <FixedBackgroundWrapper>

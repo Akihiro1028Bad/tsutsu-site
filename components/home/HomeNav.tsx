@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -10,15 +9,23 @@ interface NavItem {
 }
 
 const NAV_ITEMS: readonly NavItem[] = [
-  { id: "about", label: "About" },
-  { id: "works", label: "Works" },
-  { id: "services", label: "Services" },
-  { id: "notes", label: "Notes" },
-  { id: "contact", label: "Contact" },
+  { id: "services", label: "事業内容" },
+  { id: "works", label: "実績" },
+  { id: "notes", label: "お知らせ" },
+  { id: "blog", label: "ブログ" },
+  { id: "about", label: "事業者概要" },
 ]
 
-/** Sections rendered on dark surfaces; nav switches to light text over them. */
-const DARK_SECTIONS: ReadonlySet<string> = new Set(["services"])
+/**
+ * Observed section ids for the scroll spy.
+ *
+ * Every home section sits on the paper background, so the nav has no
+ * surface-dependent colour switching: `contact` is not observed and no
+ * `data-theme` is emitted. Re-introduce both together if a dark section
+ * is ever added under the fixed nav.
+ */
+const OBSERVED_IDS: readonly string[] = NAV_ITEMS.map((item) => item.id)
+
 const PANEL_ID = "home-nav-panel"
 
 export default function HomeNav() {
@@ -31,9 +38,9 @@ export default function HomeNav() {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const sections = NAV_ITEMS.map((item) => ({
-      id: item.id,
-      el: document.getElementById(item.id),
+    const sections = OBSERVED_IDS.map((id) => ({
+      id,
+      el: document.getElementById(id),
     })).filter((entry): entry is { id: string; el: HTMLElement } =>
       entry.el !== null
     )
@@ -79,25 +86,17 @@ export default function HomeNav() {
     return () => document.removeEventListener("keydown", onKey)
   }, [])
 
-  const theme = DARK_SECTIONS.has(activeId ?? "") ? "dark" : "light"
-
   return (
     <nav
       className="home-nav"
       aria-label="Global navigation"
-      data-theme={theme}
       data-menu-open={isOpen ? "true" : "false"}
     >
       <a className="home-nav__brand" href={brandHref} aria-label="tsutsu">
-        <Image
-          src="/logo.png"
-          alt="tsutsu"
-          width={88}
-          height={88}
-          priority
-          unoptimized
-          className="home-nav__logo"
-        />
+        <span className="home-nav__brand-name">tsutsu</span>
+        <span className="home-nav__brand-sub" aria-hidden="true">
+          Web · AI · Engineering
+        </span>
       </a>
 
       <button
@@ -105,10 +104,10 @@ export default function HomeNav() {
         className="home-nav__toggle"
         aria-expanded={isOpen}
         aria-controls={PANEL_ID}
-        aria-label={isOpen ? "メニューを閉じる / Close menu" : "メニュー / Menu"}
+        aria-label={isOpen ? "メニューを閉じる" : "メニューを開く"}
         onClick={() => setIsOpen((v) => !v)}
       >
-        <span aria-hidden="true">{isOpen ? "✕" : "≡"}</span>
+        <span className="home-nav__bars" aria-hidden="true" />
       </button>
 
       <ul
@@ -132,6 +131,13 @@ export default function HomeNav() {
         })}
       </ul>
 
+      <a
+        className="home-nav__cta"
+        href={sectionHref("contact")}
+        onClick={() => setIsOpen(false)}
+      >
+        お問い合わせ
+      </a>
     </nav>
   )
 }

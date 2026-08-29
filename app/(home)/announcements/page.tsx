@@ -33,13 +33,9 @@ export default async function AnnouncementsPage() {
   return (
     <main className="archive-page" data-style="modern">
       <header className="archive-page__head section-head section-head--hero">
-        <div className="section-head__rule">
-          <span>Archive</span>
-          <span>News</span>
-        </div>
         <div className="section-head__jp">
-          <h1>Announcements.</h1>
-          <p className="section-head__en">お知らせ</p>
+          <h1>お知らせ</h1>
+          <p className="section-head__en">News</p>
         </div>
         <p className="section-head__lead">
           これまでのアップデートと、ちいさなお知らせ。

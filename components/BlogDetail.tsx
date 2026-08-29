@@ -82,7 +82,7 @@ export default async function BlogDetail({ post, siblings, isPreview }: BlogDeta
         imageUrl={heroImageUrl}
         categoryName={categoryName}
         formatDate={formatDate}
-        kicker="Notes."
+        kicker="ブログ"
         archive={{ href: "/blog", label: "記事一覧へ戻る" }}
         siblings={siblings}
         readingTimeMin={estimateReadingTimeMin(post.content)}
