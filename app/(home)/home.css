@@ -23,15 +23,12 @@
   /* No accent colour: legacy `--accent` resolves to ink so un-migrated
      sections render monochrome rather than breaking. */
   --accent: #0A0A0A;
-  --accent-soft: #F2F2F3;
 
   --f-body: var(--font-plex-jp), "Hiragino Kaku Gothic ProN", sans-serif;
   --f-mono: var(--font-plex-mono), ui-monospace, monospace;
-  /* Legacy aliases — removed with the sections that reference them. */
+  /* 下層ページがまだ参照しているエイリアス。移行完了時に削除する。 */
   --f-display: var(--f-body);
   --f-jp-display: var(--f-body);
-  --f-hand: var(--f-body);
-  --f-label: var(--f-mono);
 
   --pad-x: clamp(20px, 5vw, 72px);
   --col: 12;

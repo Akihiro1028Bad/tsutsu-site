@@ -53,7 +53,7 @@ export default async function Home() {
   const blogItems = blogPosts.map(toBlogListItem)
 
   return (
-    <main data-style="business">
+    <main>
       <BusinessHero />
       <BusinessServices />
       <BusinessWorks />

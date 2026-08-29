@@ -15,8 +15,7 @@ export default function BusinessBlog({ items }: BusinessBlogProps) {
       id="blog"
       title="ブログ"
       caption="Notes"
-      moreHref="/blog"
-      moreLabel="一覧を見る"
+      more={{ href: "/blog", label: "一覧を見る" }}
     >
       {items.length === 0 ? (
         <p className="biz-row__empty">記事はまだありません。</p>

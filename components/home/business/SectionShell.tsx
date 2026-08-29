@@ -7,9 +7,11 @@ interface SectionShellProps {
   readonly title: string
   /** Latin caption shown under the title. */
   readonly caption: string
-  /** Optional "see all" destination. */
-  readonly moreHref?: string
-  readonly moreLabel?: string
+  /**
+   * Optional "see all" link. href and label travel together so a link can
+   * never render without an accessible name.
+   */
+  readonly more?: { readonly href: string; readonly label: string }
   readonly children: React.ReactNode
 }
 
@@ -22,8 +24,7 @@ export default function SectionShell({
   id,
   title,
   caption,
-  moreHref,
-  moreLabel,
+  more,
   children,
 }: SectionShellProps) {
   return (
@@ -32,9 +33,9 @@ export default function SectionShell({
         <div>
           <h2>{title}</h2>
           <p>{caption}</p>
-          {moreHref ? (
-            <Link className="biz-sec__more" href={moreHref}>
-              {moreLabel}
+          {more ? (
+            <Link className="biz-sec__more" href={more.href}>
+              {more.label}
             </Link>
           ) : null}
         </div>

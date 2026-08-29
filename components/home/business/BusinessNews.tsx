@@ -13,8 +13,7 @@ export default function BusinessNews({ items }: BusinessNewsProps) {
       id="notes"
       title="お知らせ"
       caption="News"
-      moreHref="/announcements"
-      moreLabel="一覧を見る"
+      more={{ href: "/announcements", label: "一覧を見る" }}
     >
       {items.length === 0 ? (
         <p className="biz-row__empty">現在お知らせはありません。</p>
