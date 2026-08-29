@@ -34,5 +34,11 @@ jobs:
       - name: テスト実行（カバレッジ 100% 検証）
         run: pnpm test
 
+      # ビルド時に microCMS から記事一覧を取得する(generateStaticParams)ため、
+      # 認証情報が必要。以前はコミット済みの .env から供給されていたが、
+      # .env を追跡から外したのでリポジトリ Secrets から渡す。
       - name: プロダクションビルド
         run: pnpm build
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
