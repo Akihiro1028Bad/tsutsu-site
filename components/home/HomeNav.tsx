@@ -16,11 +16,15 @@ const NAV_ITEMS: readonly NavItem[] = [
   { id: "about", label: "事業者概要" },
 ]
 
-/** Sections rendered on dark surfaces; nav switches to light text over them. */
-const DARK_SECTIONS: ReadonlySet<string> = new Set(["contact"])
-
-/** All observed section ids: nav items + the contact section (theme driver). */
-const OBSERVED_IDS: readonly string[] = [...NAV_ITEMS.map((i) => i.id), "contact"]
+/**
+ * Observed section ids for the scroll spy.
+ *
+ * Every home section sits on the paper background, so the nav has no
+ * surface-dependent colour switching: `contact` is not observed and no
+ * `data-theme` is emitted. Re-introduce both together if a dark section
+ * is ever added under the fixed nav.
+ */
+const OBSERVED_IDS: readonly string[] = NAV_ITEMS.map((item) => item.id)
 
 const PANEL_ID = "home-nav-panel"
 
@@ -82,13 +86,10 @@ export default function HomeNav() {
     return () => document.removeEventListener("keydown", onKey)
   }, [])
 
-  const theme = DARK_SECTIONS.has(activeId ?? "") ? "dark" : "light"
-
   return (
     <nav
       className="home-nav"
       aria-label="Global navigation"
-      data-theme={theme}
       data-menu-open={isOpen ? "true" : "false"}
     >
       <a className="home-nav__brand" href={brandHref} aria-label="tsutsu">

@@ -138,25 +138,21 @@ describe("Phase 2: HomeNav — structural rendering", () => {
   })
 })
 
-describe("Blueprint: HomeNav — theme switching", () => {
-  it("starts with the light theme when no section is active", () => {
+describe("事業サイト: HomeNav — 暗色テーマを持たない", () => {
+  // ホームの全セクションが白地になったため、面に応じて配色を反転させる
+  // 仕組みは不要になった(フッターは監視対象外で、固定ナビの下に来ない)。
+  it("data-theme 属性を出力しない", () => {
     render(<HomeNav />)
-    expect(screen.getByRole("navigation")).toHaveAttribute("data-theme", "light")
+    expect(screen.getByRole("navigation")).not.toHaveAttribute("data-theme")
   })
 
-  it("switches to the dark theme when the Contact section becomes active", () => {
+  it("Contact セクションを監視しない(配色を切り替える必要がないため)", () => {
     const contact = placeSection("contact")
-    render(<HomeNav />)
-    fireIntersection(contact)
-    expect(screen.getByRole("navigation")).toHaveAttribute("data-theme", "dark")
-    contact.remove()
-  })
-
-  it("stays on the light theme when a non-dark section is active", () => {
     const services = placeSection("services")
     render(<HomeNav />)
-    fireIntersection(services)
-    expect(screen.getByRole("navigation")).toHaveAttribute("data-theme", "light")
+    expect(lastObserver?.observe).toHaveBeenCalledWith(services)
+    expect(lastObserver?.observe).not.toHaveBeenCalledWith(contact)
+    contact.remove()
     services.remove()
   })
 })
